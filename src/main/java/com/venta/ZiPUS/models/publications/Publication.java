@@ -18,11 +18,12 @@ public class Publication {
     @Column(name = "PUB_ID")
     private long pub_ID;
 
-    @Column(name = "PUB_TYPE")
-    private String pubType;
+    @ManyToOne
+    @JoinColumn(name="PUB_TYPE_ID")
+    private PublicationType pubType;
 
-    @Column(name = "PUB_TYPE_GROUP")
-    private String pubTypeGroup;
+//    @Column(name = "PUB_TYPE_GROUP")
+//    private String pubTypeGroup;
 
     @Column(name = "Language")
     private String language;
@@ -39,7 +40,7 @@ public class Publication {
     @Column(name = "Name_Of_Collection")
     private String nameOfCollection;
 
-    public Publication(String pubType, String language) {
+    public Publication(String pubTypeValue, String language) {
 
     }
 
@@ -49,7 +50,7 @@ public class Publication {
         return "Publication{" +
                 "pub_ID=" + pub_ID +
                 ", pubType='" + pubType + '\'' +
-                ", pubTypeGroup='" + pubTypeGroup + '\'' +
+//                ", pubTypeGroup='" + pubTypeGroup + '\'' +
                 ", language='" + language + '\'' +
                 ", scDataBases=" + scDataBases +
                 ", nameOfBook='" + nameOfBook + '\'' +
@@ -58,32 +59,32 @@ public class Publication {
                 '}';
     }
 
-    private String getPublicationGroup(String pubType) throws Exception {
-        String groupName = null;
-        switch (pubType) {
-            case "Mācību grāmata":
-            case "Publikācija zinātnisko rakstu krājumā":
-            case "Nodaļa zinātniskā monogrāfijā":
-            case "Zinātniskā monogrāfija":
-                groupName = "book";
-                break;
-            case "Publikācija zinātniskos žurnālos":
-                groupName = "journal";
-                break;
-            case "Raksts pilna teksta konferenču raksta krājumā":
-            case "Raksts konferenču tēžu krājumā":
-                groupName = "conference";
-                break;
-        }
-        if (groupName == null) {
-            throw new Exception("Illegal publication type");
-        }
+    private String getPublicationGroup(PublicationType pubType) throws Exception {
+        String groupName = "";
+//        switch (pubType) {
+//            case "Mācību grāmata":
+//            case "Publikācija zinātnisko rakstu krājumā":
+//            case "Nodaļa zinātniskā monogrāfijā":
+//            case "Zinātniskā monogrāfija":
+//                groupName = "book";
+//                break;
+//            case "Publikācija zinātniskos žurnālos":
+//                groupName = "journal";
+//                break;
+//            case "Raksts pilna teksta konferenču raksta krājumā":
+//            case "Raksts konferenču tēžu krājumā":
+//                groupName = "conference";
+//                break;
+//        }
+//        if (groupName == null) {
+//            throw new Exception("Illegal publication type");
+//        }
         return groupName;
     }
 
     public void setPublicationGroupByType() throws Exception {
         try {
-            pubTypeGroup = getPublicationGroup(pubType);
+//            pubTypeGroup = getPublicationGroup(pubType);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }

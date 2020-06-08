@@ -1,6 +1,6 @@
 package com.venta.ZiPUS.models.publications.pubTypeGroups;
 
-import com.venta.ZiPUS.models.publications.pubTypes.PublicationTypeModel;
+import com.venta.ZiPUS.models.publications.pubTypes.PublicationType;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -9,7 +9,7 @@ import java.util.Collection;
 @Table
 @Entity(name = "Pub_type_groups")
 @NoArgsConstructor
-public class PublicationTypeGroupModel {
+public class PublicationTypeGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "BOOK_GROUP_TYPE_ID")
@@ -19,9 +19,9 @@ public class PublicationTypeGroupModel {
     private String pugTypeGroupName;
 
     @OneToMany(mappedBy = "publicationGroup")
-    private Collection<PublicationTypeModel> publicationTypes;
+    private Collection<PublicationType> publicationTypes;
 
-    public PublicationTypeGroupModel(String pugTypeGroupName) {
+    public PublicationTypeGroup(String pugTypeGroupName) {
         this.pugTypeGroupName = pugTypeGroupName;
     }
 }
