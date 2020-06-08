@@ -1,14 +1,13 @@
 package com.venta.ZiPUS;
 
-import com.venta.ZiPUS.models.publications.pubTypes.PublicationTypeModelBook;
-import com.venta.ZiPUS.models.publications.pubTypes.PublicationTypeModelConference;
-import com.venta.ZiPUS.models.publications.pubTypes.PublicationTypeModelMagazine;
-import com.venta.ZiPUS.models.publications.pubTypes.constants.PublicationTypeTitleConferences;
+import com.venta.ZiPUS.models.publications.pubTypeGroups.PublicationTypeGroupModel;
+import com.venta.ZiPUS.models.publications.pubTypeGroups.constants.PublicationTypeGroupTitles;
+import com.venta.ZiPUS.models.publications.pubTypes.PublicationTypeModel;
+import com.venta.ZiPUS.models.publications.pubTypes.constants.PublicationTypeTitlesConferences;
 import com.venta.ZiPUS.models.publications.pubTypes.constants.PublicationTypeTitlesBook;
 import com.venta.ZiPUS.models.publications.pubTypes.constants.PublicationTypeTitlesMagazine;
-import com.venta.ZiPUS.repositories.IPublicationTypeBookRepo;
-import com.venta.ZiPUS.repositories.IPublicationTypeConferenceRepo;
-import com.venta.ZiPUS.repositories.IPublicationTypeMagazineRepo;
+import com.venta.ZiPUS.repositories.pubTypeGroups.IPublicationTypeGroupsRepo;
+import com.venta.ZiPUS.repositories.pubTypes.IPublicationTypeRepo;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -18,13 +17,11 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Application {
     @Autowired
-    IPublicationTypeBookRepo publicationTypeRepoBook;
+    IPublicationTypeRepo publicationTypeRepo;
 
     @Autowired
-    IPublicationTypeConferenceRepo publicationTypeRepoConference;
+    IPublicationTypeGroupsRepo publicationTypeGroupsRepo;
 
-    @Autowired
-    IPublicationTypeMagazineRepo publicationTypeMagazine;
     public static void main(String[] args) {
 
         SpringApplication.run(Application.class, args);
@@ -33,13 +30,20 @@ public class Application {
     @Bean
     InitializingBean sendDatabase() {
         return () -> {
-            publicationTypeRepoBook.save(new PublicationTypeModelBook(PublicationTypeTitlesBook.EDUCATIONAL_BOOK));
-            publicationTypeRepoBook.save(new PublicationTypeModelBook(PublicationTypeTitlesBook.PUB_IN_SC_PAPER_COLLECTION));
-            publicationTypeRepoBook.save(new PublicationTypeModelBook(PublicationTypeTitlesBook.SECTION_IN_SC_MONOGRAPH));
-            publicationTypeRepoBook.save(new PublicationTypeModelBook(PublicationTypeTitlesBook.SC_MONOGRAPH));
-            publicationTypeRepoConference.save(new PublicationTypeModelConference(PublicationTypeTitleConferences.ARTICLE_IN_CONFERENCE_COLLECTION));
-            publicationTypeRepoConference.save(new PublicationTypeModelConference(PublicationTypeTitleConferences.ARTICLE_IN_THESIS_COLLECTION));
-            publicationTypeMagazine.save(new PublicationTypeModelMagazine(PublicationTypeTitlesMagazine.PUB_IN_SC_MAGAZINE));
+            PublicationTypeGroupModel pubGroupTypeBook = new PublicationTypeGroupModel(PublicationTypeGroupTitles.GROUP_BOOK);
+            PublicationTypeGroupModel pubGroupTypeConference = new PublicationTypeGroupModel(PublicationTypeGroupTitles.GROUP_CONFERENCE);
+            PublicationTypeGroupModel pubGroupTypeMagazine = new PublicationTypeGroupModel(PublicationTypeGroupTitles.GROUP_MAGAZINE);
+            publicationTypeGroupsRepo.save(pubGroupTypeBook);
+            publicationTypeGroupsRepo.save(pubGroupTypeConference);
+            publicationTypeGroupsRepo.save(pubGroupTypeMagazine);
+
+            publicationTypeRepo.save(new PublicationTypeModel(PublicationTypeTitlesBook.EDUCATIONAL_BOOK, pubGroupTypeBook));
+            publicationTypeRepo.save(new PublicationTypeModel(PublicationTypeTitlesBook.PUB_IN_SC_PAPER_COLLECTION, pubGroupTypeBook));
+            publicationTypeRepo.save(new PublicationTypeModel(PublicationTypeTitlesBook.SECTION_IN_SC_MONOGRAPH, pubGroupTypeBook));
+            publicationTypeRepo.save(new PublicationTypeModel(PublicationTypeTitlesBook.SC_MONOGRAPH, pubGroupTypeBook));
+            publicationTypeRepo.save(new PublicationTypeModel(PublicationTypeTitlesConferences.ARTICLE_IN_CONFERENCE_COLLECTION, pubGroupTypeConference));
+            publicationTypeRepo.save(new PublicationTypeModel(PublicationTypeTitlesConferences.ARTICLE_IN_THESIS_COLLECTION, pubGroupTypeConference));
+            publicationTypeRepo.save(new PublicationTypeModel(PublicationTypeTitlesMagazine.PUB_IN_SC_MAGAZINE, pubGroupTypeMagazine));
         };
     }
 }

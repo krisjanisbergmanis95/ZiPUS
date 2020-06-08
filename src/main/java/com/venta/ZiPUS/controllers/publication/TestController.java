@@ -6,18 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class TestController {
-//    @Autowired
-//    IPublicationTypeBookRepo publicationTypeBookRepo;
-
     @GetMapping("/test/publications") // endpoint for localhost:8080
     public String showHelloPage() {
-        System.out.println("111111111111");
-
-//        publicationTypeBookRepo.save("Mācību grāmata");
-//        publicationTypeBookRepo.save("Publikācija zinātnisko rakstu krājumā");
-//        publicationTypeBookRepo.save("Nodaļa zinātniskā monogrāfijā");
-//        publicationTypeBookRepo.save("Zinātniskā monogrāfija");
-        System.out.println("111111111111");
         Publication p1 = new Publication("Mācību grāmata", "english");
         try {
             p1.setPublicationGroupByType();
