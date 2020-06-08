@@ -1,8 +1,10 @@
 package com.venta.ZiPUS.models.publications;
 
 import com.venta.ZiPUS.models.publications.pubTypes.*;
+import com.venta.ZiPUS.repositories.pubTypes.IPublicationTypeRepo;
 import lombok.*;
 import org.apache.tomcat.jni.Error;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,7 +13,6 @@ import java.util.ArrayList;
 @Entity(name = "Publication_Table")
 @Getter
 @Setter
-@NoArgsConstructor
 public class Publication {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,10 +41,13 @@ public class Publication {
     @Column(name = "Name_Of_Collection")
     private String nameOfCollection;
 
-    public Publication(String pubTypeValue, String language) {
-
+    public Publication() {
+//        this.pubType = pub
     }
 
+    public Publication(PublicationType pubType, String language) {
+
+    }
 
     @Override
     public String toString() {

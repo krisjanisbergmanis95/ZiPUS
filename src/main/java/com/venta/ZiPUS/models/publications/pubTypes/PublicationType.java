@@ -13,7 +13,7 @@ public class PublicationType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "PUBLICATION_TYPE_ID")
-    private long bookTypeId;
+    private long pubTypeId;
 
     @Column(name= "Publication_Type_Value")
     private String publicationTypeValue;
@@ -28,5 +28,15 @@ public class PublicationType {
     public PublicationType(String publicationTypeValue, PublicationTypeGroup publicationGroup) {
         this.publicationTypeValue = publicationTypeValue;
         this.publicationGroup = publicationGroup;
+    }
+
+    @Override
+    public String toString() {
+        return "PublicationType{" +
+                "bookTypeId=" + pubTypeId +
+                ", publicationTypeValue='" + publicationTypeValue + '\'' +
+                ", publications=" + publications +
+                ", publicationGroup=" + publicationGroup +
+                '}';
     }
 }
