@@ -29,6 +29,12 @@ public class Publication {
             inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
     private Collection<PublicationType> dataBases;
 
+    @ManyToMany
+    @JoinTable(name = "Publishment_Publication",
+            joinColumns = @JoinColumn(name = "PUBISHMENT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
+    private Collection<PublicationType> publishments;
+
     @Column(name = "Language")
     private String language;
 

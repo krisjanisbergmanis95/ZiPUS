@@ -8,9 +8,12 @@ import com.venta.ZiPUS.models.publications.pubTypes.PublicationType;
 import com.venta.ZiPUS.models.publications.pubTypes.constants.PublicationTypeTitlesConferences;
 import com.venta.ZiPUS.models.publications.pubTypes.constants.PublicationTypeTitlesBook;
 import com.venta.ZiPUS.models.publications.pubTypes.constants.PublicationTypeTitlesMagazine;
+import com.venta.ZiPUS.models.publishments.PublishmentType;
+import com.venta.ZiPUS.models.publishments.constants.PublishmentTypeNames;
 import com.venta.ZiPUS.repositories.dataBases.IDataBaseRepo;
 import com.venta.ZiPUS.repositories.pubTypeGroups.IPublicationTypeGroupsRepo;
 import com.venta.ZiPUS.repositories.pubTypes.IPublicationTypeRepo;
+import com.venta.ZiPUS.repositories.publishments.IPublishmentRepo;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +30,9 @@ public class Application {
 
     @Autowired
     IDataBaseRepo dataBaseRepo;
+
+    @Autowired
+    IPublishmentRepo publishmentRepo;
 
     public static void main(String[] args) {
 
@@ -59,6 +65,10 @@ public class Application {
             dataBaseRepo.save(new DataBase(DataBaseNames.SCOPUS));
             dataBaseRepo.save(new DataBase(DataBaseNames.SPRINGER_LINK));
             dataBaseRepo.save(new DataBase(DataBaseNames.THOMSON_WEB_OF_SC));
+
+            publishmentRepo.save(new PublishmentType(PublishmentTypeNames.INTERNATIONAL_REVIEW));
+            publishmentRepo.save(new PublishmentType(PublishmentTypeNames.NATIONAL_REVIEW));
+            publishmentRepo.save(new PublishmentType(PublishmentTypeNames.OTHER));
         };
     }
 }
