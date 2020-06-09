@@ -1,13 +1,17 @@
 package com.venta.ZiPUS.models.publications.pubTypeGroups;
 
 import com.venta.ZiPUS.models.publications.pubTypes.PublicationType;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Collection;
 
 @Table
 @Entity(name = "Pub_type_groups")
+@Getter
+@Setter
 @NoArgsConstructor
 public class PublicationTypeGroup {
     @Id
@@ -23,5 +27,13 @@ public class PublicationTypeGroup {
 
     public PublicationTypeGroup(String pugTypeGroupName) {
         this.pugTypeGroupName = pugTypeGroupName;
+    }
+
+    @Override
+    public String toString() {
+        return "PublicationTypeGroup{" +
+                "groupTypeId=" + groupTypeId +
+                ", pugTypeGroupName='" + pugTypeGroupName + '\'' +
+                '}';
     }
 }

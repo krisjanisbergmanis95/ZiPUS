@@ -1,13 +1,17 @@
 package com.venta.ZiPUS.models.publications.pubTypes;
 import com.venta.ZiPUS.models.publications.Publication;
 import com.venta.ZiPUS.models.publications.pubTypeGroups.PublicationTypeGroup;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Collection;
 
 @Table
 @Entity(name = "Publication_Types")
+@Getter
+@Setter
 @NoArgsConstructor
 public class PublicationType {
     @Id

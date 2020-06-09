@@ -1,10 +1,7 @@
 package com.venta.ZiPUS.models.publications;
 
 import com.venta.ZiPUS.models.publications.pubTypes.*;
-import com.venta.ZiPUS.repositories.pubTypes.IPublicationTypeRepo;
 import lombok.*;
-import org.apache.tomcat.jni.Error;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.ArrayList;
