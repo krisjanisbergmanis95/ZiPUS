@@ -22,7 +22,7 @@ public class PublicationType {
     @Column(name= "Publication_Type_Value")
     private String publicationTypeValue;
 
-    @OneToMany(mappedBy = "pubType")
+    @ManyToMany(mappedBy = "pubType")
     private Collection<Publication> publications;
 
     @ManyToOne

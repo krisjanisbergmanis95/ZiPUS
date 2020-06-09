@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 
 @Table
 @Entity(name = "Publication_Table")
@@ -16,12 +17,11 @@ public class Publication {
     @Column(name = "PUB_ID")
     private long pub_ID;
 
-    @ManyToOne
-    @JoinColumn(name="PUB_TYPE_ID")
-    private PublicationType pubType;
-
-//    @Column(name = "PUB_TYPE_GROUP")
-//    private String pubTypeGroup;
+    @ManyToMany
+    @JoinTable(name = "Professor_Course",
+            joinColumns = @JoinColumn(name = "PUB_TYPE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
+    private Collection<PublicationType> pubType;
 
     @Column(name = "Language")
     private String language;
@@ -39,7 +39,6 @@ public class Publication {
     private String nameOfCollection;
 
     public Publication() {
-//        this.pubType = pub
     }
 
     public Publication(PublicationType pubType, String language) {
@@ -51,43 +50,11 @@ public class Publication {
         return "Publication{" +
                 "pub_ID=" + pub_ID +
                 ", pubType='" + pubType + '\'' +
-//                ", pubTypeGroup='" + pubTypeGroup + '\'' +
                 ", language='" + language + '\'' +
                 ", scDataBases=" + scDataBases +
                 ", nameOfBook='" + nameOfBook + '\'' +
                 ", nameOfMagazine='" + nameOfMagazine + '\'' +
                 ", nameOfCollection='" + nameOfCollection + '\'' +
                 '}';
-    }
-
-    private String getPublicationGroup(PublicationType pubType) throws Exception {
-        String groupName = "";
-//        switch (pubType) {
-//            case "Mācību grāmata":
-//            case "Publikācija zinātnisko rakstu krājumā":
-//            case "Nodaļa zinātniskā monogrāfijā":
-//            case "Zinātniskā monogrāfija":
-//                groupName = "book";
-//                break;
-//            case "Publikācija zinātniskos žurnālos":
-//                groupName = "journal";
-//                break;
-//            case "Raksts pilna teksta konferenču raksta krājumā":
-//            case "Raksts konferenču tēžu krājumā":
-//                groupName = "conference";
-//                break;
-//        }
-//        if (groupName == null) {
-//            throw new Exception("Illegal publication type");
-//        }
-        return groupName;
-    }
-
-    public void setPublicationGroupByType() throws Exception {
-        try {
-//            pubTypeGroup = getPublicationGroup(pubType);
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
     }
 }
