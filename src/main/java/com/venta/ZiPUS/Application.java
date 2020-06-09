@@ -1,11 +1,14 @@
 package com.venta.ZiPUS;
 
+import com.venta.ZiPUS.models.dataBases.DataBase;
+import com.venta.ZiPUS.models.dataBases.constants.DataBaseNames;
 import com.venta.ZiPUS.models.publications.pubTypeGroups.PublicationTypeGroup;
 import com.venta.ZiPUS.models.publications.pubTypeGroups.constants.PublicationTypeGroupTitles;
 import com.venta.ZiPUS.models.publications.pubTypes.PublicationType;
 import com.venta.ZiPUS.models.publications.pubTypes.constants.PublicationTypeTitlesConferences;
 import com.venta.ZiPUS.models.publications.pubTypes.constants.PublicationTypeTitlesBook;
 import com.venta.ZiPUS.models.publications.pubTypes.constants.PublicationTypeTitlesMagazine;
+import com.venta.ZiPUS.repositories.dataBases.IDataBaseRepo;
 import com.venta.ZiPUS.repositories.pubTypeGroups.IPublicationTypeGroupsRepo;
 import com.venta.ZiPUS.repositories.pubTypes.IPublicationTypeRepo;
 import org.springframework.beans.factory.InitializingBean;
@@ -21,6 +24,9 @@ public class Application {
 
     @Autowired
     IPublicationTypeGroupsRepo publicationTypeGroupsRepo;
+
+    @Autowired
+    IDataBaseRepo dataBaseRepo;
 
     public static void main(String[] args) {
 
@@ -44,6 +50,15 @@ public class Application {
             publicationTypeRepo.save(new PublicationType(PublicationTypeTitlesConferences.ARTICLE_IN_CONFERENCE_COLLECTION, pubGroupTypeConference));
             publicationTypeRepo.save(new PublicationType(PublicationTypeTitlesConferences.ARTICLE_IN_THESIS_COLLECTION, pubGroupTypeConference));
             publicationTypeRepo.save(new PublicationType(PublicationTypeTitlesMagazine.PUB_IN_SC_MAGAZINE, pubGroupTypeMagazine));
+
+            dataBaseRepo.save(new DataBase(DataBaseNames.EBSCO));
+            dataBaseRepo.save(new DataBase(DataBaseNames.ENGINEERING_VILLAGE_2));
+            dataBaseRepo.save(new DataBase(DataBaseNames.ERIH));
+            dataBaseRepo.save(new DataBase(DataBaseNames.GOOGLE_SCHOLAR));
+            dataBaseRepo.save(new DataBase(DataBaseNames.IEEE_XPLORE));
+            dataBaseRepo.save(new DataBase(DataBaseNames.SCOPUS));
+            dataBaseRepo.save(new DataBase(DataBaseNames.SPRINGER_LINK));
+            dataBaseRepo.save(new DataBase(DataBaseNames.THOMSON_WEB_OF_SC));
         };
     }
 }

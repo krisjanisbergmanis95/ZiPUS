@@ -18,10 +18,16 @@ public class Publication {
     private long pub_ID;
 
     @ManyToMany
-    @JoinTable(name = "Professor_Course",
+    @JoinTable(name = "Pub_Type_Pub",
             joinColumns = @JoinColumn(name = "PUB_TYPE_ID"),
             inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
-    private Collection<PublicationType> pubType;
+    private Collection<PublicationType> pubTypes;
+
+    @ManyToMany
+    @JoinTable(name = "Data_Base_Pub",
+            joinColumns = @JoinColumn(name = "DB_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
+    private Collection<PublicationType> dataBases;
 
     @Column(name = "Language")
     private String language;
@@ -49,7 +55,7 @@ public class Publication {
     public String toString() {
         return "Publication{" +
                 "pub_ID=" + pub_ID +
-                ", pubType='" + pubType + '\'' +
+                ", pubType='" + pubTypes + '\'' +
                 ", language='" + language + '\'' +
                 ", scDataBases=" + scDataBases +
                 ", nameOfBook='" + nameOfBook + '\'' +

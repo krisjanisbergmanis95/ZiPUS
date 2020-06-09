@@ -22,11 +22,11 @@ public class PublicationType {
     @Column(name= "Publication_Type_Value")
     private String publicationTypeValue;
 
-    @ManyToMany(mappedBy = "pubType")
+    @ManyToMany(mappedBy = "pubTypes")
     private Collection<Publication> publications;
 
     @ManyToOne
-    @JoinColumn(name="BOOK_GROUP_TYPE_ID")
+    @JoinColumn(name="GROUP_TYPE_ID")
     public PublicationTypeGroup publicationGroup;
 
     public PublicationType(String publicationTypeValue, PublicationTypeGroup publicationGroup) {

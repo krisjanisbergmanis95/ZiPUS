@@ -16,7 +16,7 @@ import java.util.Collection;
 public class PublicationTypeGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "BOOK_GROUP_TYPE_ID")
+    @Column(name = "GROUP_TYPE_ID")
     private long groupTypeId;
 
     @Column(name = "Pup_Type_Group_Name")
