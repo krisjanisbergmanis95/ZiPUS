@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 @Table
 @Entity(name = "Publication_Table")
@@ -38,17 +39,82 @@ public class Publication {
     @Column(name = "Language")
     private String language;
 
-    @Column(name = "Sc_Data_Bases")
-    private ArrayList<String> scDataBases;
+    @Column(name = "Publication_Title_Origin")
+    private String publicationTitleOrigin;
+
+    @Column(name = "Publication_Title_English")
+    private String publicationTitleEnglish;
+
+    @Column(name = "Annotation")
+    private String annotation;
+
+    @Column(name = "Annotation_English")
+    private String annotationEnglish;
+
+    @Column(name = "Field_Of_Research")
+    private String fieldOfResearch;
+
+//TODO Autora modelis kur ir vārds uzvārds darba vieta + papildus info par autoru
+//    @Column(name="Authors")
+//    private ArrayList<String> authors;
+
+    @Column(name = "Key_Words")
+    private ArrayList<String> keyWords;
+
+    @Column(name = "Publisher")
+    private String publisher;
+
+    @Column(name = "Published_Year")
+    private Date publishedYear;
+
+    @Column(name = "Pages")
+    private int pages;
+
+    @Column(name = "ISBN_ISSN")
+    private String isbnISSN;
+
+    //TODO OtherDB
+
+    @Column(name = "HyperLink")
+    private String HyperLink;
+
+    @Column(name = "Notes")
+    private String notes;
+
+    //TODO FILE TO IMPORT
 
     @Column(name = "Name_Of_Book")
     private String nameOfBook;
 
+    @Column(name = "Place_Published")
+    private String placePublished;
+
     @Column(name = "Name_Of_Magazine")
     private String nameOfMagazine;
 
+    @Column(name = "Editors")
+    private ArrayList<String> editors;
+
+    @Column(name = "Serial_Number")
+    private String serialNumber;
+
     @Column(name = "Name_Of_Collection")
     private String nameOfCollection;
+
+    @Column(name = "Date")
+    private Date date;
+
+    @Column(name = "Volume")//Sējums
+    private String volume;
+
+    @Column(name = "Country")
+    private String country;
+
+    @Column(name = "City")
+    private String city;
+
+    @Column(name = "Conference_Name")
+    private String conferenceName;
 
     public Publication() {
     }
@@ -63,7 +129,6 @@ public class Publication {
                 "pub_ID=" + pub_ID +
                 ", pubType='" + pubTypes + '\'' +
                 ", language='" + language + '\'' +
-                ", scDataBases=" + scDataBases +
                 ", nameOfBook='" + nameOfBook + '\'' +
                 ", nameOfMagazine='" + nameOfMagazine + '\'' +
                 ", nameOfCollection='" + nameOfCollection + '\'' +
