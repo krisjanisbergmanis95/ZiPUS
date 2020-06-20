@@ -17,7 +17,7 @@ public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "AUTHOR_ID")
-    private long dbID;
+    private long authorId;
 
     @Column(name= "Name")
     private String name;
@@ -26,7 +26,7 @@ public class Author {
     private String surname;
 
     @Column(name="Works_In_VeA")
-    private boolean worksInVea;
+    private boolean workingInVea;
 
     @Column(name="Institution")
     private String institution;
@@ -34,15 +34,27 @@ public class Author {
     @ManyToMany(mappedBy = "authors")
     private Collection<Publication> publications;
 
-    public Author(String name, String surname, boolean worksInVea) {
+    public Author(String name, String surname, boolean workingInVea) {
         this.name = name;
         this.surname = surname;
-        this.worksInVea = worksInVea;
+        this.workingInVea = workingInVea;
     }
-    public Author(String name, String surname, boolean worksInVea, String institution) {
+    public Author(String name, String surname, boolean workingInVea, String institution) {
         this.name = name;
         this.surname = surname;
-        this.worksInVea = worksInVea;
+        this.workingInVea = workingInVea;
         this.institution = institution;
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "authorId=" + authorId +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", workingInVea=" + workingInVea +
+                ", institution='" + institution + '\'' +
+                ", publications=" + publications +
+                '}';
     }
 }

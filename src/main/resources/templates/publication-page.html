@@ -1,31 +1,98 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
-<title>
-    THIS PAGE IS WORK IN PROGRESS
-</title>
+    <title>
+        THIS PAGE IS WORK IN PROGRESS
+    </title>
 
-<body>
-<ul>
-    <li th:unless="${publication.getPubType() == null}">
-        <label>Publikācijas tips</label>
-        <span th:text="${publication.getPubType().getPublicationTypeValue()}"></span>
-    </li>
-    <li th:unless="${publication.getLanguage() == null}">
-        <label>Publikācijas valoda</label>
-        <span th:text="${publication.getLanguage()}"></span>
-    </li>
-    <li th:unless="${publication.getPublicationTitleOrigin() == null}">
-        <label>Publikācijas nosaukums oriģinālvalodā</label>
-        <span th:text="${publication.getPublicationTitleOrigin()}"></span>
-    </li>
-    <li th:unless="${publication.getDataBases() == null || publication.getDataBases().size() < 1}">
-        <label>Datu bāzes</label>
-        <table th:each="db: ${publication.getDataBases()}">
-            <tr>
-                <td th:text="${db.getDataBaseName()}"/>
-            </tr>
-        </table>
-    </li>
-</ul>
-</body>
+    <body>
+        <ul>
+            <li th:unless="${publication.getPubType() == null}">
+                <label>Publikācijas tips</label>
+                <span th:text="${publication.getPubType().getPublicationTypeValue()}"></span>
+            </li>
+            <li th:unless="${publication.getLanguage() == null}">
+                <label>Publikācijas valoda</label>
+                <span th:text="${publication.getLanguage()}"></span>
+            </li>
+            <li th:unless="${publication.getPublicationTitleOrigin() == null}">
+                <label>Publikācijas nosaukums oriģinālvalodā</label>
+                <span th:text="${publication.getPublicationTitleOrigin()}"></span>
+            </li>
+            <li th:unless="${publication.getPublicationTitleEnglish() == null}">
+                <label>Nosaukums oriģinālvalodā</label>
+                <span th:text="${publication.getPublicationTitleEnglish()}"></span>
+            </li>
+            <li th:unless="${publication.getAnnotation() == null}">
+                <label>Anotācija</label>
+                <span th:text="${publication.getAnnotation()}"></span>
+            </li>
+            <li th:unless="${publication.getAnnotation() == null}">
+                <label>Anotācija angļu valodā</label>
+                <span th:text="${publication.getAnnotationEnglish()}"></span>
+            </li>
+            <li th:unless="${publication.getFieldOfResearch() == null}">
+                <label>Pētniecības nozare</label>
+                <span th:text="${publication.getFieldOfResearch()}"></span>
+            </li>
+            <li th:unless="${publication.getAuthors() == null || publication.getAuthors().size() < 1}">
+                <label>Autori</label>
+                <table th:each="author: ${publication.getAuthors()}">
+                    <tr>
+                        <th>Vārds</th>
+                        <th>Uzvārds</th>
+                        <th>Strādā Vea</th>
+                    </tr>
+                    <tr>
+                        <td th:text="${author.getName()}"/>
+                        <td th:text="${author.getSurname()}"/>
+                        <td th:text="${author.isWorkingInVea() ? 'Jā' : 'Nē'}"/>
+                    </tr>
+                </table>
+            </li>
+            <li th:unless="${publication.getKeyWords() == null || publication.getKeyWords().size() < 1}">
+                <label>Atslēgas vārdi</label>
+                <table th:each="keyWord: ${publication.getKeyWords()}">
+                    <tr>
+                        <td th:text="${keyWord}"/>
+                    </tr>
+                </table>
+            </li>
+            <li th:unless="${publication.getPublisher() == null}">
+                <label>Izdevējs</label>
+                <span th:text="${publication.getPublisher()}"></span>
+            </li>
+            <li th:unless="${publication.getPublishedYear() == null}">
+                <label>Publikācijas gads</label>
+                <span th:text="${publication.getPublishedYear()}"></span>
+            </li>
+            <li th:unless="${publication.getPages().equals(null)}">
+                <label>Lapaspušu skaits</label>
+                <span th:text="${publication.getPages()}"></span>
+            </li>
+            <li th:unless="${publication.getIsbnISSN() == null}">
+                <label>ISBN/ISSN</label>
+                <span th:text="${publication.getIsbnISSN()}"></span>
+            </li>
+            <li th:unless="${publication.getPublishment() == null}">
+                <label>Izdevuma veids</label>
+                <span th:text="${publication.getPublishment().getPublishmentTypeName()}"></span>
+            </li>
+            <li th:unless="${publication.getDataBases() == null || publication.getDataBases().size() < 1}">
+                <label>Datu bāzes</label>
+                <table th:each="db: ${publication.getDataBases()}">
+                    <tr>
+                        <td th:text="${db.getDataBaseName()}"/>
+                    </tr>
+                </table>
+            </li>
+            <li th:unless="${publication.getHyperLink() == null}">
+                <label>Saite uz publikāciju</label>
+                <span th:text="${publication.getHyperLink()}"></span>
+            </li>
+            <li th:unless="${publication.getNotes() == null}">
+                <label>Piezīmes</label>
+                <span th:text="${publication.getNotes()}"></span>
+            </li>
+        </ul>
+    </body>
 </html>
