@@ -1,13 +1,23 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <title>
-	Publication page.
-	WIP by Gatis
+    THIS PAGE IS WORK IN PROGRESS
 </title>
-<header>
-	<h1/>
-	Hi
 
-	</h1>
-</header>
+<body>
+<ul>
+    <li th:unless="${publication.getPubType() == null}">
+        <label>Publikācijas tips</label>
+        <span th:text="${publication.getPubType().getPublicationTypeValue()}"></span>
+    </li>
+    <li th:unless="${publication.getLanguage() == null}">
+        <label>Publikācijas valoda</label>
+        <span th:text="${publication.getLanguage()}"></span>
+    </li>
+    <li th:unless="${publication.getPublicationTitleOrigin() == null}">
+        <label>Publikācijas nosaukums oriģinālvalodā</label>
+        <span th:text="${publication.getPublicationTitleOrigin()}"></span>
+    </li>
+</ul>
+</body>
 </html>

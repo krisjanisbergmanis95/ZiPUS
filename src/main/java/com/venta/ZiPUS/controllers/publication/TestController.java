@@ -65,8 +65,13 @@ public class TestController {
     @GetMapping("/publications/add-pubs") // endpoint for localhost:8080
     public String createTestPubs() {
         PublicationType publicationType2 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesConferences.ARTICLE_IN_CONFERENCE_COLLECTION);
-        Publication p1 = new Publication(publicationType2, "Eng");
+        PublicationType publicationType3 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesMagazine.PUB_IN_SC_MAGAZINE);
+        Publication p1 = new Publication(publicationType2, "English");
+        Publication p2 = new Publication(publicationType2, "Latviešu", "Pētījums par thymeleaf");
         publicationRepo.save(p1);
+        publicationRepo.save(p2);
+
+
         return "hellopage";// this should show html "Hello my dude"
     }
 }

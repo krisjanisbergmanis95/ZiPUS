@@ -3,13 +3,10 @@ package com.venta.ZiPUS.models.publications;
 import com.venta.ZiPUS.models.Authors.Author;
 import com.venta.ZiPUS.models.publications.pubTypeGroups.PublicationTypeGroup;
 import com.venta.ZiPUS.models.publications.pubTypes.*;
-import com.venta.ZiPUS.repositories.pubTypeGroups.IPublicationTypeGroupsRepo;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
@@ -29,6 +26,10 @@ public class Publication {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "PUB_ID")
     private long pub_ID;
+
+    @ManyToOne
+    @JoinColumn(name = "GROUP_TYPE_ID")
+    private PublicationTypeGroup publicationGroup;
 
 //    @ManyToMany
 //    @JoinTable(name = "Pub_Type_Pub",
@@ -104,42 +105,40 @@ public class Publication {
 
     //TODO FILE TO IMPORT
 
-    @Column(name = "Name_Of_Book")
-    private String nameOfBook;
+//    @Column(name = "Name_Of_Book")
+//    private String nameOfBook;
+//
+//    @Column(name = "Place_Published")
+//    private String placePublished;
 
-    @Column(name = "Place_Published")
-    private String placePublished;
+//    @Column(name = "Name_Of_Magazine")
+//    private String nameOfMagazine;
+//
+//    @Column(name = "Editors")
+//    private ArrayList<String> editors;
+//
+//    @Column(name = "Serial_Number")
+//    private String serialNumber;
+//
+//    @Column(name = "Name_Of_Collection")
+//    private String nameOfCollection;
 
-    @Column(name = "Name_Of_Magazine")
-    private String nameOfMagazine;
+//    @Column(name = "Date")
+//    private Date date;
+//
+//    @Column(name = "Volume")//Sējums
+//    private String volume;
+//
+//    @Column(name = "Country")
+//    private String country;
+//
+//    @Column(name = "City")
+//    private String city;
+//
+//    @Column(name = "Conference_Name")
+//    private String conferenceName;
 
-    @Column(name = "Editors")
-    private ArrayList<String> editors;
 
-    @Column(name = "Serial_Number")
-    private String serialNumber;
-
-    @Column(name = "Name_Of_Collection")
-    private String nameOfCollection;
-
-    @Column(name = "Date")
-    private Date date;
-
-    @Column(name = "Volume")//Sējums
-    private String volume;
-
-    @Column(name = "Country")
-    private String country;
-
-    @Column(name = "City")
-    private String city;
-
-    @Column(name = "Conference_Name")
-    private String conferenceName;
-
-    @ManyToOne
-    @JoinColumn(name = "GROUP_TYPE_ID")
-    private PublicationTypeGroup publicationGroup;
 
     public Publication() {
     }
@@ -150,15 +149,27 @@ public class Publication {
         this.language = language;
     }
 
+    public Publication(PublicationType pubType, String language, String publicationTitleOrigin) {
+        this.pubType = pubType;
+        this.publicationGroup = pubType.getPublicationGroup();
+        this.language = language;
+        this.publicationTitleOrigin = publicationTitleOrigin;
+    }
+
+    public PublicationType getPubType() {
+        return pubType;
+    }
+
+    public String getPublicationTitleOrigin() {
+        return publicationTitleOrigin;
+    }
+
     @Override
     public String toString() {
         return "Publication{" +
                 "pub_ID=" + pub_ID +
                 ", pubType='" + pubType + '\'' +
                 ", language='" + language + '\'' +
-                ", nameOfBook='" + nameOfBook + '\'' +
-                ", nameOfMagazine='" + nameOfMagazine + '\'' +
-                ", nameOfCollection='" + nameOfCollection + '\'' +
                 '}';
     }
 }

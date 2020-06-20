@@ -28,6 +28,9 @@ public class Author {
     @Column(name="Works_In_VeA")
     private boolean worksInVea;
 
+    @Column(name="Institution")
+    private String institution;
+
     @ManyToMany(mappedBy = "authors")
     private Collection<Publication> publications;
 
@@ -35,5 +38,11 @@ public class Author {
         this.name = name;
         this.surname = surname;
         this.worksInVea = worksInVea;
+    }
+    public Author(String name, String surname, boolean worksInVea, String institution) {
+        this.name = name;
+        this.surname = surname;
+        this.worksInVea = worksInVea;
+        this.institution = institution;
     }
 }

@@ -38,6 +38,38 @@ public class PublicationType {
         this.publicationGroup = publicationGroup;
     }
 
+    public long getPubTypeId() {
+        return pubTypeId;
+    }
+
+    public void setPubTypeId(long pubTypeId) {
+        this.pubTypeId = pubTypeId;
+    }
+
+    public String getPublicationTypeValue() {
+        return publicationTypeValue;
+    }
+
+    public void setPublicationTypeValue(String publicationTypeValue) {
+        this.publicationTypeValue = publicationTypeValue;
+    }
+
+    public Collection<Publication> getPublications() {
+        return publications;
+    }
+
+    public void setPublications(Collection<Publication> publications) {
+        this.publications = publications;
+    }
+
+    public PublicationTypeGroup getPublicationGroup() {
+        return publicationGroup;
+    }
+
+    public void setPublicationGroup(PublicationTypeGroup publicationGroup) {
+        this.publicationGroup = publicationGroup;
+    }
+
     @Override
     public String toString() {
         return "PublicationType{" +
