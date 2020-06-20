@@ -21,8 +21,6 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 public class Publication {
-//    @Autowired
-//    IPublicationTypeGroupsRepo publicationTypeGroupsRepo;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -77,8 +75,6 @@ public class Publication {
     @Column(name = "Field_Of_Research")
     private String fieldOfResearch;
 
-    //    @Column(name="Authors")
-//    private ArrayList<String> authors;
     @ManyToMany
     @JoinTable(name = "Author_Publication",
             joinColumns = @JoinColumn(name = "AUTHOR_ID"),
@@ -110,41 +106,19 @@ public class Publication {
 
     //TODO FILE TO IMPORT
 
-//    @Column(name = "Name_Of_Book")
-//    private String nameOfBook;
-//
-//    @Column(name = "Place_Published")
-//    private String placePublished;
+    @OneToOne
+    @JoinColumn(name = "PUB_BOOK_ID")
+    private PublicationBook publicationBook;
 
-//    @Column(name = "Name_Of_Magazine")
-//    private String nameOfMagazine;
-//
-//    @Column(name = "Editors")
-//    private ArrayList<String> editors;
-//
-//    @Column(name = "Serial_Number")
-//    private String serialNumber;
-//
-//    @Column(name = "Name_Of_Collection")
-//    private String nameOfCollection;
+    @OneToOne
+    @JoinColumn(name = "PUB_MAGAZINE_ID")
+    private PublicationMagazine publicationMagazine;
 
-//    @Column(name = "Date")
-//    private Date date;
-//
-//    @Column(name = "Volume")//Sējums
-//    private String volume;
-//
-//    @Column(name = "Country")
-//    private String country;
-//
-//    @Column(name = "City")
-//    private String city;
-//
-//    @Column(name = "Conference_Name")
-//    private String conferenceName;
+    @OneToOne
+    @JoinColumn(name = "PUB_SC_ID")
+    private PublicationConference publicationConference;
 
-
-    public Publication(PublicationType pubType, String language) {
+    public Publication(PublicationType pubType, String language) {//TODO REMOVE THIS CONSTRUCTOR
         this.pubType = pubType;
         this.publicationGroup = pubType.getPublicationGroup();
         this.language = language;
@@ -166,7 +140,8 @@ public class Publication {
                        PublishmentType publishment,
                        ArrayList<DataBase> dataBases,
                        String hyperLink,
-                       String notes
+                       String notes,
+                       PublicationBook publicationBook
     ) {
         this.pubType = pubType;
         this.publicationGroup = pubType.getPublicationGroup();
@@ -187,6 +162,87 @@ public class Publication {
         //TODO cita datu bāze
         this.hyperLink = hyperLink;
         this.notes = notes;
+        this.publicationBook = publicationBook;
+    }
+    public Publication(PublicationType pubType,
+                       String language,
+                       String publicationTitleOrigin,
+                       String publicationTitleEnglish,
+                       String annotation,
+                       String annotationEnglish,
+                       String fieldOfResearch,
+                       ArrayList<Author> authors,
+                       ArrayList<String> keyWords,
+                       String publisher,
+                       int publishedYear,
+                       int pages,
+                       String isbnISSN,
+                       PublishmentType publishment,
+                       ArrayList<DataBase> dataBases,
+                       String hyperLink,
+                       String notes,
+                       PublicationMagazine publicationMagazine
+    ) {
+        this.pubType = pubType;
+        this.publicationGroup = pubType.getPublicationGroup();
+        this.language = language;
+        this.publicationTitleOrigin = publicationTitleOrigin;
+        this.publicationTitleEnglish = publicationTitleEnglish;
+        this.annotation = annotation;
+        this.annotationEnglish = annotationEnglish;
+        this.fieldOfResearch = fieldOfResearch;
+        this.authors = authors;
+        this.keyWords = keyWords;
+        this.publisher = publisher;
+        this.publishedYear = publishedYear;
+        this.pages = pages;
+        this.isbnISSN = isbnISSN;
+        this.publishment = publishment;
+        this.dataBases = dataBases;
+        //TODO cita datu bāze
+        this.hyperLink = hyperLink;
+        this.notes = notes;
+        this.publicationMagazine = publicationMagazine;
+    }
+    public Publication(PublicationType pubType,
+                       String language,
+                       String publicationTitleOrigin,
+                       String publicationTitleEnglish,
+                       String annotation,
+                       String annotationEnglish,
+                       String fieldOfResearch,
+                       ArrayList<Author> authors,
+                       ArrayList<String> keyWords,
+                       String publisher,
+                       int publishedYear,
+                       int pages,
+                       String isbnISSN,
+                       PublishmentType publishment,
+                       ArrayList<DataBase> dataBases,
+                       String hyperLink,
+                       String notes,
+                       PublicationConference publicationConference
+    ) {
+        this.pubType = pubType;
+        this.publicationGroup = pubType.getPublicationGroup();
+        this.language = language;
+        this.publicationTitleOrigin = publicationTitleOrigin;
+        this.publicationTitleEnglish = publicationTitleEnglish;
+        this.annotation = annotation;
+        this.annotationEnglish = annotationEnglish;
+        this.fieldOfResearch = fieldOfResearch;
+        this.authors = authors;
+        this.keyWords = keyWords;
+        this.publisher = publisher;
+        this.publishedYear = publishedYear;
+        this.pages = pages;
+        this.isbnISSN = isbnISSN;
+        this.publishment = publishment;
+        this.dataBases = dataBases;
+        //TODO cita datu bāze
+        this.hyperLink = hyperLink;
+        this.notes = notes;
+        this.publicationConference = publicationConference;
     }
 
     @Override
