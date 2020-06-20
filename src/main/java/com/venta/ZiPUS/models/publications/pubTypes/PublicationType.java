@@ -38,14 +38,6 @@ public class PublicationType {
         this.publicationGroup = publicationGroup;
     }
 
-    public long getPubTypeId() {
-        return pubTypeId;
-    }
-
-    public void setPubTypeId(long pubTypeId) {
-        this.pubTypeId = pubTypeId;
-    }
-
     public String getPublicationTypeValue() {
         return publicationTypeValue;
     }

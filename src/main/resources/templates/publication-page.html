@@ -18,6 +18,14 @@
         <label>Publikācijas nosaukums oriģinālvalodā</label>
         <span th:text="${publication.getPublicationTitleOrigin()}"></span>
     </li>
+    <li th:unless="${publication.getDataBases() == null || publication.getDataBases().size() < 1}">
+        <label>Datu bāzes</label>
+        <table th:each="db: ${publication.getDataBases()}">
+            <tr>
+                <td th:text="${db.getDataBaseName()}"/>
+            </tr>
+        </table>
+    </li>
 </ul>
 </body>
 </html>

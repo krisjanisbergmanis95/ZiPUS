@@ -1,6 +1,7 @@
 package com.venta.ZiPUS.models.publications;
 
 import com.venta.ZiPUS.models.Authors.Author;
+import com.venta.ZiPUS.models.dataBases.DataBase;
 import com.venta.ZiPUS.models.publications.pubTypeGroups.PublicationTypeGroup;
 import com.venta.ZiPUS.models.publications.pubTypes.*;
 import lombok.*;
@@ -45,7 +46,7 @@ public class Publication {
     @JoinTable(name = "Data_Base_Pub",
             joinColumns = @JoinColumn(name = "DB_ID"),
             inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
-    private Collection<PublicationType> dataBases;
+    private Collection<DataBase> dataBases;
 
     @ManyToMany
     @JoinTable(name = "Publishment_Publication",
@@ -149,11 +150,12 @@ public class Publication {
         this.language = language;
     }
 
-    public Publication(PublicationType pubType, String language, String publicationTitleOrigin) {
+    public Publication(PublicationType pubType, String language, String publicationTitleOrigin, ArrayList<DataBase> dataBases) {
         this.pubType = pubType;
         this.publicationGroup = pubType.getPublicationGroup();
         this.language = language;
         this.publicationTitleOrigin = publicationTitleOrigin;
+        this.dataBases = dataBases;
     }
 
     public PublicationType getPubType() {
@@ -162,6 +164,142 @@ public class Publication {
 
     public String getPublicationTitleOrigin() {
         return publicationTitleOrigin;
+    }
+
+    public PublicationTypeGroup getPublicationGroup() {
+        return publicationGroup;
+    }
+
+    public void setPublicationGroup(PublicationTypeGroup publicationGroup) {
+        this.publicationGroup = publicationGroup;
+    }
+
+    public void setPubType(PublicationType pubType) {
+        this.pubType = pubType;
+    }
+
+    public Collection<DataBase> getDataBases() {
+        return dataBases;
+    }
+
+    public void setDataBases(Collection<DataBase> dataBases) {
+        this.dataBases = dataBases;
+    }
+
+    public Collection<PublicationType> getPublishments() {
+        return publishments;
+    }
+
+    public void setPublishments(Collection<PublicationType> publishments) {
+        this.publishments = publishments;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setPublicationTitleOrigin(String publicationTitleOrigin) {
+        this.publicationTitleOrigin = publicationTitleOrigin;
+    }
+
+    public String getPublicationTitleEnglish() {
+        return publicationTitleEnglish;
+    }
+
+    public void setPublicationTitleEnglish(String publicationTitleEnglish) {
+        this.publicationTitleEnglish = publicationTitleEnglish;
+    }
+
+    public String getAnnotation() {
+        return annotation;
+    }
+
+    public void setAnnotation(String annotation) {
+        this.annotation = annotation;
+    }
+
+    public String getAnnotationEnglish() {
+        return annotationEnglish;
+    }
+
+    public void setAnnotationEnglish(String annotationEnglish) {
+        this.annotationEnglish = annotationEnglish;
+    }
+
+    public String getFieldOfResearch() {
+        return fieldOfResearch;
+    }
+
+    public void setFieldOfResearch(String fieldOfResearch) {
+        this.fieldOfResearch = fieldOfResearch;
+    }
+
+    public Collection<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Collection<Author> authors) {
+        this.authors = authors;
+    }
+
+    public ArrayList<String> getKeyWords() {
+        return keyWords;
+    }
+
+    public void setKeyWords(ArrayList<String> keyWords) {
+        this.keyWords = keyWords;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public Date getPublishedYear() {
+        return publishedYear;
+    }
+
+    public void setPublishedYear(Date publishedYear) {
+        this.publishedYear = publishedYear;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
+    public String getIsbnISSN() {
+        return isbnISSN;
+    }
+
+    public void setIsbnISSN(String isbnISSN) {
+        this.isbnISSN = isbnISSN;
+    }
+
+    public String getHyperLink() {
+        return HyperLink;
+    }
+
+    public void setHyperLink(String hyperLink) {
+        HyperLink = hyperLink;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     @Override
