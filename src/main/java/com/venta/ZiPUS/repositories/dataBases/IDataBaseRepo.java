@@ -7,4 +7,5 @@ import java.util.ArrayList;
 
 public interface IDataBaseRepo extends CrudRepository<DataBase, Long> {
     ArrayList<DataBase> findAll();
+    DataBase findByDataBaseName(String name);
 }

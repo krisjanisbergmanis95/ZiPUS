@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<title>
+    THIS PAGE IS WORK IN PROGRESS
+</title>
+
+<body>
+<ul>
+    <li th:unless="${publication.getPubType() == null}">
+        <label>Publikācijas tips</label>
+        <span th:text="${publication.getPubType().getPublicationTypeValue()}"></span>
+    </li>
+    <li th:unless="${publication.getLanguage() == null}">
+        <label>Publikācijas valoda</label>
+        <span th:text="${publication.getLanguage()}"></span>
+    </li>
+    <li th:unless="${publication.getPublicationTitleOrigin() == null}">
+        <label>Publikācijas nosaukums oriģinālvalodā</label>
+        <span th:text="${publication.getPublicationTitleOrigin()}"></span>
+    </li>
+    <li th:unless="${publication.getDataBases() == null || publication.getDataBases().size() < 1}">
+        <label>Datu bāzes</label>
+        <table th:each="db: ${publication.getDataBases()}">
+            <tr>
+                <td th:text="${db.getDataBaseName()}"/>
+            </tr>
+        </table>
+    </li>
+</ul>
+</body>
+</html>

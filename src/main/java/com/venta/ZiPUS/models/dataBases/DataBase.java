@@ -10,8 +10,6 @@ import java.util.Collection;
 
 @Table
 @Entity(name = "Data_Bases")
-@Getter
-@Setter
 @NoArgsConstructor
 public class DataBase {
 
@@ -28,5 +26,21 @@ public class DataBase {
 
     public DataBase(String dataBaseName) {
         this.dataBaseName = dataBaseName;
+    }
+
+    public String getDataBaseName() {
+        return dataBaseName;
+    }
+
+    public void setDataBaseName(String dataBaseName) {
+        this.dataBaseName = dataBaseName;
+    }
+
+    public Collection<Publication> getPublications() {
+        return publications;
+    }
+
+    public void setPublications(Collection<Publication> publications) {
+        this.publications = publications;
     }
 }
