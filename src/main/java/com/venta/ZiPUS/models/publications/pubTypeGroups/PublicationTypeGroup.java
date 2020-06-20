@@ -1,5 +1,6 @@
 package com.venta.ZiPUS.models.publications.pubTypeGroups;
 
+import com.venta.ZiPUS.models.publications.Publication;
 import com.venta.ZiPUS.models.publications.pubTypes.PublicationType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,9 @@ public class PublicationTypeGroup {
 
     @Column(name = "Pup_Type_Group_Name")
     private String pugTypeGroupName;
+
+    @OneToMany(mappedBy = "publicationGroup")
+    private Collection<Publication> publications;
 
     @OneToMany(mappedBy = "publicationGroup")
     private Collection<PublicationType> publicationTypes;

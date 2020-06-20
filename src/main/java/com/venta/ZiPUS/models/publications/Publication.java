@@ -1,28 +1,44 @@
 package com.venta.ZiPUS.models.publications;
 
+import com.venta.ZiPUS.models.Authors.Author;
+import com.venta.ZiPUS.models.publications.pubTypeGroups.PublicationTypeGroup;
 import com.venta.ZiPUS.models.publications.pubTypes.*;
+import com.venta.ZiPUS.repositories.pubTypeGroups.IPublicationTypeGroupsRepo;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
+/**
+ * Pievienot jaunu one-to-one nulable ar katru grupas veidu, un būs klāt tikai tie lauki kas nav null.
+ * ja magazine ==null tad neko nerādīs
+ */
 @Table
 @Entity(name = "Publication_Table")
 @Getter
 @Setter
 public class Publication {
+//    @Autowired
+//    IPublicationTypeGroupsRepo publicationTypeGroupsRepo;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "PUB_ID")
     private long pub_ID;
 
-    @ManyToMany
-    @JoinTable(name = "Pub_Type_Pub",
-            joinColumns = @JoinColumn(name = "PUB_TYPE_ID"),
-            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
-    private Collection<PublicationType> pubTypes;
+//    @ManyToMany
+//    @JoinTable(name = "Pub_Type_Pub",
+//            joinColumns = @JoinColumn(name = "PUB_TYPE_ID"),
+//            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
+//    private Collection<PublicationType> pubTypes;
+
+    @ManyToOne
+    @JoinColumn(name = "Pub_Type")
+    private PublicationType pubType;
 
     @ManyToMany
     @JoinTable(name = "Data_Base_Pub",
@@ -54,9 +70,14 @@ public class Publication {
     @Column(name = "Field_Of_Research")
     private String fieldOfResearch;
 
-//TODO Autora modelis kur ir vārds uzvārds darba vieta + papildus info par autoru
+    //TODO Autora modelis kur ir vārds uzvārds darba vieta + papildus info par autoru
 //    @Column(name="Authors")
 //    private ArrayList<String> authors;
+    @ManyToMany
+    @JoinTable(name = "Author_Publication",
+            joinColumns = @JoinColumn(name = "AUTHOR_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
+    private Collection<Author> authors;
 
     @Column(name = "Key_Words")
     private ArrayList<String> keyWords;
@@ -116,18 +137,24 @@ public class Publication {
     @Column(name = "Conference_Name")
     private String conferenceName;
 
+    @ManyToOne
+    @JoinColumn(name = "GROUP_TYPE_ID")
+    private PublicationTypeGroup publicationGroup;
+
     public Publication() {
     }
 
     public Publication(PublicationType pubType, String language) {
-
+        this.pubType = pubType;
+        this.publicationGroup = pubType.getPublicationGroup();
+        this.language = language;
     }
 
     @Override
     public String toString() {
         return "Publication{" +
                 "pub_ID=" + pub_ID +
-                ", pubType='" + pubTypes + '\'' +
+                ", pubType='" + pubType + '\'' +
                 ", language='" + language + '\'' +
                 ", nameOfBook='" + nameOfBook + '\'' +
                 ", nameOfMagazine='" + nameOfMagazine + '\'' +

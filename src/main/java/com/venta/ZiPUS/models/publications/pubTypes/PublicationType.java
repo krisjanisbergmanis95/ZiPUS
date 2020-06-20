@@ -1,4 +1,5 @@
 package com.venta.ZiPUS.models.publications.pubTypes;
+
 import com.venta.ZiPUS.models.publications.Publication;
 import com.venta.ZiPUS.models.publications.pubTypeGroups.PublicationTypeGroup;
 import lombok.Getter;
@@ -19,14 +20,17 @@ public class PublicationType {
     @Column(name = "PUBLICATION_TYPE_ID")
     private long pubTypeId;
 
-    @Column(name= "Publication_Type_Value")
+    @Column(name = "Publication_Type_Value")
     private String publicationTypeValue;
 
-    @ManyToMany(mappedBy = "pubTypes")
-    private Collection<Publication> publications;
+    //    @ManyToMany(mappedBy = "pubTypes")
+//    private Collection<Publication> publications;
+    @OneToMany(mappedBy = "pubType")
+    public Collection<Publication> publications;
+
 
     @ManyToOne
-    @JoinColumn(name="GROUP_TYPE_ID")
+    @JoinColumn(name = "GROUP_TYPE_ID")
     public PublicationTypeGroup publicationGroup;
 
     public PublicationType(String publicationTypeValue, PublicationTypeGroup publicationGroup) {
@@ -39,7 +43,7 @@ public class PublicationType {
         return "PublicationType{" +
                 "bookTypeId=" + pubTypeId +
                 ", publicationTypeValue='" + publicationTypeValue + '\'' +
-                ", publications=" + publications +
+//                ", publications=" + publications +
                 ", publicationGroup=" + publicationGroup +
                 '}';
     }
