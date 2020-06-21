@@ -7,4 +7,5 @@ import java.util.ArrayList;
 
 public interface IPublishmentRepo extends CrudRepository<PublishmentType, Long> {
     ArrayList<PublishmentType> findAll();
+    PublishmentType findByPublishmentTypeName(String name);
 }

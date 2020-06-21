@@ -4,12 +4,12 @@ import com.venta.ZiPUS.models.Authors.Author;
 import com.venta.ZiPUS.models.dataBases.DataBase;
 import com.venta.ZiPUS.models.publications.pubTypeGroups.PublicationTypeGroup;
 import com.venta.ZiPUS.models.publications.pubTypes.*;
+import com.venta.ZiPUS.models.publishments.PublishmentType;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * Pievienot jaunu one-to-one nulable ar katru grupas veidu, un būs klāt tikai tie lauki kas nav null.
@@ -19,9 +19,8 @@ import java.util.Date;
 @Entity(name = "Publication_Table")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Publication {
-//    @Autowired
-//    IPublicationTypeGroupsRepo publicationTypeGroupsRepo;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,11 +47,15 @@ public class Publication {
             inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
     private Collection<DataBase> dataBases;
 
-    @ManyToMany
-    @JoinTable(name = "Publishment_Publication",
-            joinColumns = @JoinColumn(name = "PUBISHMENT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
-    private Collection<PublicationType> publishments;
+//    @ManyToMany
+//    @JoinTable(name = "Publishment_Publication",
+//            joinColumns = @JoinColumn(name = "PUBISHMENT_ID"),
+//            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
+//    private Collection<PublicationType> publishments;
+
+    @ManyToOne
+    @JoinColumn(name = "PUBLISHMENT_ID")
+    private PublishmentType publishment;
 
     @Column(name = "Language")
     private String language;
@@ -72,9 +75,6 @@ public class Publication {
     @Column(name = "Field_Of_Research")
     private String fieldOfResearch;
 
-    //TODO Autora modelis kur ir vārds uzvārds darba vieta + papildus info par autoru
-//    @Column(name="Authors")
-//    private ArrayList<String> authors;
     @ManyToMany
     @JoinTable(name = "Author_Publication",
             joinColumns = @JoinColumn(name = "AUTHOR_ID"),
@@ -88,7 +88,7 @@ public class Publication {
     private String publisher;
 
     @Column(name = "Published_Year")
-    private Date publishedYear;
+    private int publishedYear;
 
     @Column(name = "Pages")
     private int pages;
@@ -99,207 +99,150 @@ public class Publication {
     //TODO OtherDB
 
     @Column(name = "HyperLink")
-    private String HyperLink;
+    private String hyperLink;
 
     @Column(name = "Notes")
     private String notes;
 
     //TODO FILE TO IMPORT
 
-//    @Column(name = "Name_Of_Book")
-//    private String nameOfBook;
-//
-//    @Column(name = "Place_Published")
-//    private String placePublished;
+    @OneToOne
+    @JoinColumn(name = "PUB_BOOK_ID")
+    private PublicationBook publicationBook;
 
-//    @Column(name = "Name_Of_Magazine")
-//    private String nameOfMagazine;
-//
-//    @Column(name = "Editors")
-//    private ArrayList<String> editors;
-//
-//    @Column(name = "Serial_Number")
-//    private String serialNumber;
-//
-//    @Column(name = "Name_Of_Collection")
-//    private String nameOfCollection;
+    @OneToOne
+    @JoinColumn(name = "PUB_MAGAZINE_ID")
+    private PublicationMagazine publicationMagazine;
 
-//    @Column(name = "Date")
-//    private Date date;
-//
-//    @Column(name = "Volume")//Sējums
-//    private String volume;
-//
-//    @Column(name = "Country")
-//    private String country;
-//
-//    @Column(name = "City")
-//    private String city;
-//
-//    @Column(name = "Conference_Name")
-//    private String conferenceName;
+    @OneToOne
+    @JoinColumn(name = "PUB_SC_ID")
+    private PublicationConference publicationConference;
 
-
-
-    public Publication() {
-    }
-
-    public Publication(PublicationType pubType, String language) {
+    public Publication(PublicationType pubType, String language) {//TODO REMOVE THIS CONSTRUCTOR
         this.pubType = pubType;
         this.publicationGroup = pubType.getPublicationGroup();
         this.language = language;
     }
 
-    public Publication(PublicationType pubType, String language, String publicationTitleOrigin, ArrayList<DataBase> dataBases) {
+    public Publication(PublicationType pubType,
+                       String language,
+                       String publicationTitleOrigin,
+                       String publicationTitleEnglish,
+                       String annotation,
+                       String annotationEnglish,
+                       String fieldOfResearch,
+                       ArrayList<Author> authors,
+                       ArrayList<String> keyWords,
+                       String publisher,
+                       int publishedYear,
+                       int pages,
+                       String isbnISSN,
+                       PublishmentType publishment,
+                       ArrayList<DataBase> dataBases,
+                       String hyperLink,
+                       String notes,
+                       PublicationBook publicationBook
+    ) {
         this.pubType = pubType;
         this.publicationGroup = pubType.getPublicationGroup();
         this.language = language;
         this.publicationTitleOrigin = publicationTitleOrigin;
-        this.dataBases = dataBases;
-    }
-
-    public PublicationType getPubType() {
-        return pubType;
-    }
-
-    public String getPublicationTitleOrigin() {
-        return publicationTitleOrigin;
-    }
-
-    public PublicationTypeGroup getPublicationGroup() {
-        return publicationGroup;
-    }
-
-    public void setPublicationGroup(PublicationTypeGroup publicationGroup) {
-        this.publicationGroup = publicationGroup;
-    }
-
-    public void setPubType(PublicationType pubType) {
-        this.pubType = pubType;
-    }
-
-    public Collection<DataBase> getDataBases() {
-        return dataBases;
-    }
-
-    public void setDataBases(Collection<DataBase> dataBases) {
-        this.dataBases = dataBases;
-    }
-
-    public Collection<PublicationType> getPublishments() {
-        return publishments;
-    }
-
-    public void setPublishments(Collection<PublicationType> publishments) {
-        this.publishments = publishments;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    public void setPublicationTitleOrigin(String publicationTitleOrigin) {
-        this.publicationTitleOrigin = publicationTitleOrigin;
-    }
-
-    public String getPublicationTitleEnglish() {
-        return publicationTitleEnglish;
-    }
-
-    public void setPublicationTitleEnglish(String publicationTitleEnglish) {
         this.publicationTitleEnglish = publicationTitleEnglish;
-    }
-
-    public String getAnnotation() {
-        return annotation;
-    }
-
-    public void setAnnotation(String annotation) {
         this.annotation = annotation;
-    }
-
-    public String getAnnotationEnglish() {
-        return annotationEnglish;
-    }
-
-    public void setAnnotationEnglish(String annotationEnglish) {
         this.annotationEnglish = annotationEnglish;
-    }
-
-    public String getFieldOfResearch() {
-        return fieldOfResearch;
-    }
-
-    public void setFieldOfResearch(String fieldOfResearch) {
         this.fieldOfResearch = fieldOfResearch;
-    }
-
-    public Collection<Author> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(Collection<Author> authors) {
         this.authors = authors;
-    }
-
-    public ArrayList<String> getKeyWords() {
-        return keyWords;
-    }
-
-    public void setKeyWords(ArrayList<String> keyWords) {
         this.keyWords = keyWords;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
         this.publisher = publisher;
-    }
-
-    public Date getPublishedYear() {
-        return publishedYear;
-    }
-
-    public void setPublishedYear(Date publishedYear) {
         this.publishedYear = publishedYear;
-    }
-
-    public int getPages() {
-        return pages;
-    }
-
-    public void setPages(int pages) {
         this.pages = pages;
-    }
-
-    public String getIsbnISSN() {
-        return isbnISSN;
-    }
-
-    public void setIsbnISSN(String isbnISSN) {
         this.isbnISSN = isbnISSN;
-    }
-
-    public String getHyperLink() {
-        return HyperLink;
-    }
-
-    public void setHyperLink(String hyperLink) {
-        HyperLink = hyperLink;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
+        this.publishment = publishment;
+        this.dataBases = dataBases;
+        //TODO cita datu bāze
+        this.hyperLink = hyperLink;
         this.notes = notes;
+        this.publicationBook = publicationBook;
+    }
+    public Publication(PublicationType pubType,
+                       String language,
+                       String publicationTitleOrigin,
+                       String publicationTitleEnglish,
+                       String annotation,
+                       String annotationEnglish,
+                       String fieldOfResearch,
+                       ArrayList<Author> authors,
+                       ArrayList<String> keyWords,
+                       String publisher,
+                       int publishedYear,
+                       int pages,
+                       String isbnISSN,
+                       PublishmentType publishment,
+                       ArrayList<DataBase> dataBases,
+                       String hyperLink,
+                       String notes,
+                       PublicationMagazine publicationMagazine
+    ) {
+        this.pubType = pubType;
+        this.publicationGroup = pubType.getPublicationGroup();
+        this.language = language;
+        this.publicationTitleOrigin = publicationTitleOrigin;
+        this.publicationTitleEnglish = publicationTitleEnglish;
+        this.annotation = annotation;
+        this.annotationEnglish = annotationEnglish;
+        this.fieldOfResearch = fieldOfResearch;
+        this.authors = authors;
+        this.keyWords = keyWords;
+        this.publisher = publisher;
+        this.publishedYear = publishedYear;
+        this.pages = pages;
+        this.isbnISSN = isbnISSN;
+        this.publishment = publishment;
+        this.dataBases = dataBases;
+        //TODO cita datu bāze
+        this.hyperLink = hyperLink;
+        this.notes = notes;
+        this.publicationMagazine = publicationMagazine;
+    }
+    public Publication(PublicationType pubType,
+                       String language,
+                       String publicationTitleOrigin,
+                       String publicationTitleEnglish,
+                       String annotation,
+                       String annotationEnglish,
+                       String fieldOfResearch,
+                       ArrayList<Author> authors,
+                       ArrayList<String> keyWords,
+                       String publisher,
+                       int publishedYear,
+                       int pages,
+                       String isbnISSN,
+                       PublishmentType publishment,
+                       ArrayList<DataBase> dataBases,
+                       String hyperLink,
+                       String notes,
+                       PublicationConference publicationConference
+    ) {
+        this.pubType = pubType;
+        this.publicationGroup = pubType.getPublicationGroup();
+        this.language = language;
+        this.publicationTitleOrigin = publicationTitleOrigin;
+        this.publicationTitleEnglish = publicationTitleEnglish;
+        this.annotation = annotation;
+        this.annotationEnglish = annotationEnglish;
+        this.fieldOfResearch = fieldOfResearch;
+        this.authors = authors;
+        this.keyWords = keyWords;
+        this.publisher = publisher;
+        this.publishedYear = publishedYear;
+        this.pages = pages;
+        this.isbnISSN = isbnISSN;
+        this.publishment = publishment;
+        this.dataBases = dataBases;
+        //TODO cita datu bāze
+        this.hyperLink = hyperLink;
+        this.notes = notes;
+        this.publicationConference = publicationConference;
     }
 
     @Override
