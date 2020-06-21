@@ -147,7 +147,7 @@ public class TestController {
                 "Just additional notes",
                 pb1);
 
-        Publication p3 = new Publication(publicationType3,
+        Publication p3 = new Publication(publicationType2,
                 "Latviešu",
                 "Pētījums par thymeleaf žurnālam",
                 "Research about thymeleaf to journal",

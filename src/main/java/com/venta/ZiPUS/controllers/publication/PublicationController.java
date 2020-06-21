@@ -31,6 +31,7 @@ public class PublicationController {
     @GetMapping(value = "/{id}") // id for added publication
     public String getPublicationById(@PathVariable(name = "id") long id, Model model) {
         Publication temp = publicationRepo.findById(id);
+
         model.addAttribute("publication", temp);
         return "publication-page";//add-publication-page
     }
