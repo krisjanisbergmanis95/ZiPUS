@@ -1,6 +1,5 @@
 package com.venta.ZiPUS.controllers.user;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.venta.ZiPUS.models.User.User;
 import com.venta.ZiPUS.repositories.user.IUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +58,7 @@ public class UserController {
     @GetMapping("/users/{id}")
     public String showProductById(@PathVariable(name = "id") int id, Model model) {
         if (id >= 0 && id < users.size()) {
-            model.addAttribute("variableProd", users.get(id));
+            model.addAttribute("variableUser", users.get(id));
             return "user-profile";
         } else {
             return "error";

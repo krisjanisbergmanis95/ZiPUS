@@ -1,16 +1,11 @@
 package com.venta.ZiPUS.models.User;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 @Table
 @Entity(name = "User_Table")
@@ -43,6 +38,9 @@ public class User {
     @Column(name = "U_Type")
     private String type;  //TODO types
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public User(String name, String surname, String username, String email, String password, String type) {
         super();
