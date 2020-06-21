@@ -1,0 +1,35 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+		table, th, td {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+<h2>
+    All users
+</h2>
+<table>
+    <tr>
+        <th>E-mail</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Type</th>
+
+    </tr>
+    <tr th:each="p: ${user}">
+        <td th:text="${p.getEmail()}"/>
+        <td th:text="${p.getName()}"/>
+        <td th:text="${p.getSurname()}"/>
+        <td th:text="${p.getUsername()}"/>
+        <td th:text="${p.getPassword()}"/>
+        <td th:text="${p.getType()}"/>
+
+    </tr>
+</table>
+<a href="/register">Register a new user</a>
+</body>
+</html>

@@ -1,0 +1,72 @@
+package com.venta.ZiPUS.controllers.user;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
+import com.venta.ZiPUS.models.User.User;
+import com.venta.ZiPUS.repositories.user.IUserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+
+@Controller
+public class UserController {
+
+    private static ArrayList<User> users = new ArrayList<>();
+
+    @Autowired
+    IUserRepo userRepo;
+
+    @GetMapping("/users")
+    public String userspage (Model model)
+    {
+        System.out.println("Working?");
+
+        User u1 = new User("liga","ozola","lozol","gmail", "parole123", "student");
+        users.add(u1);
+
+        System.out.println(users.size());
+
+
+        model.addAttribute("user", users);
+
+        return "userpage";
+
+    }
+
+    @GetMapping("/register")
+    public String registerUser (User user)
+    {
+        return "register-user";
+    }
+
+    @PostMapping("/register")
+    public String insertProductPost(@Valid User user, BindingResult result) {
+        System.out.println(user);
+        if (!result.hasErrors()) {
+            users.add(user);
+            return "redirect:/users";
+        } else {
+            return "redirect:/register";
+        }
+    }
+
+    @GetMapping("/users/{id}")
+    public String showProductById(@PathVariable(name = "id") int id, Model model) {
+        if (id >= 0 && id < users.size()) {
+            model.addAttribute("variableProd", users.get(id));
+            return "user-profile";
+        } else {
+            return "error";
+        }
+    }
+
+
+
+
+}

@@ -44,17 +44,20 @@ public class User {
     private String type;  //TODO types
 
 
-    public User(String name, String surname, String username, String email) {
+    public User(String name, String surname, String username, String email, String password, String type) {
+        super();
         this.name = name;
         this.surname = surname;
         this.username = username;
         this.email = email;
+        this.password = password;
+        this.type = type;
     }
 
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
+
+
+
+
 
     @Override
     public String toString() {
