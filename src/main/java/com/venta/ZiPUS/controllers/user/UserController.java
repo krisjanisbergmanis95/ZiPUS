@@ -26,7 +26,7 @@ public class UserController {
     {
         System.out.println("Working?");
 
-        User u1 = new User("liga","ozola","lozol","gmail", "parole123", "student");
+        User u1 = new User("liga","ozola","lozol","lg@gmail.com", "parole123", "student");
         users.add(u1);
 
         System.out.println(users.size());
@@ -54,6 +54,8 @@ public class UserController {
             return "redirect:/register";
         }
     }
+
+
 
     @GetMapping("/users/{id}")
     public String showProductById(@PathVariable(name = "id") int id, Model model) {

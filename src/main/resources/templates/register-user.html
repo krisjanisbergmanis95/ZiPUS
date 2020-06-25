@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<b>___Registration___</b>
+<legend>ZiPUS Registration</legend>
 
 <form action="#" th:action="@{/register}" th:object="${user}" method="post">
     <table>
@@ -31,7 +31,7 @@
         </tr>
         <tr>
 
-            <td> <b>Password</b> <input type="text" th:field="*{password}" required></td>
+            <td> <b>Password</b> <input type="password" th:field="*{password}" required></td>
             <td th:if="${#fields.hasErrors('password')}" th:error="*{password}"></td>
         </tr>
         <tr>
