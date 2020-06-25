@@ -38,9 +38,14 @@ public class User {
     @Column(name = "U_Type")
     private String type;  //TODO types
 
-    public void setPassword(String password) {
+
+
+    public void setPassword(String password)  {
         this.password = password;
+        
     }
+
+
 
     public User(String name, String surname, String username, String email, String password, String type) {
         super();
@@ -51,6 +56,8 @@ public class User {
         this.password = password;
         this.type = type;
     }
+
+
 
 
 

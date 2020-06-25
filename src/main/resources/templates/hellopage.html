@@ -1,44 +1,26 @@
-<html>
-
-<title>
-	test page
-</title>
-<header>
-	<h1/>
-	<p>
-		<button onclick="document.getElementById('id01').style.display='block'">Login</button>
-
-
-	<div id="id01" class="modal">
-		<span onclick="document.getElementById('id01').style.display='none'"
-
-
-
-		<form class="modal-content animate" action="/action_page.php">
-
-
-			<div class="container">
-				<label for="uname"><b>Username</b></label>
-				<input type="text" placeholder="Enter Username" name="uname" required>
-
-				<label for="psw"><b>Password</b></label>
-				<input type="password" placeholder="Enter Password" name="psw" required>
-
-				<button type="submit">Login</button>
-				<label>
-					<input type="checkbox" checked="checked" name="remember"> Remember me
-				</label>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+	<title tiles:fragment="title">Messages : Create</title>
+</head>
+<body>
+<div tiles:fragment="content">
+	<form name="f" th:action="@{/login}" method="post">
+		<fieldset>
+			<legend>ZiPUS login</legend>
+			<div th:if="${param.error}" class="alert alert-error">
+				Invalid username and password.
 			</div>
 
-			<div class="container" style="background-color:#f1f1f1">
-				<button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-				<span class="psw"><a href="#">Forgot password?</a></span>
+			<label for="username">Username</label>
+			<input type="text" id="username" name="username"/>
+			<label for="password">Password</label>
+			<input type="password" id="password" name="password"/>
+			<div class="form-actions">
+				<button type="submit" class="btn">Log in</button>
+				<a href="/register">Register</a>
 			</div>
-		</form>
-	</div>
-
-	</p>
-
-	</h1>
-</header>
+		</fieldset>
+	</form>
+</div>
+</body>
 </html>
