@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Table
 @Entity(name = "User_Table")
@@ -37,8 +39,31 @@ public class User {
     @Column(name = "U_Email")
     private String email;
 
-    @Column(name = "U_Type")
-    private String type;  //TODO types
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name = "User_Authority",
+            joinColumns = @JoinColumn(name = "rId"),
+            inverseJoinColumns = @JoinColumn(name = "uID"))
+    private Collection<UserAuthority> authorities;
+
+    public User(String username, String password, UserAuthority... roles) {
+        this.username = username;
+        this.password = password;
+        //creation of authorities. copied algorithm from InMemoryUserDetailsManager constructor
+        this.authorities = new ArrayList<>();
+        UserAuthority[] tempArgsArray = roles;
+        int tempArgsArrayLength = roles.length;
+
+        for(int i = 0; i < tempArgsArrayLength; ++i) {
+            UserAuthority authority = tempArgsArray[i];
+            this.authorities.add(authority);
+        }
+    }
+
+    public User(String username, String password, ArrayList<UserAuthority> roles) {
+        this.username = username;
+        this.password = password;
+        this.authorities = roles;
+    }
 
 
     public void setPassword(String password) {
@@ -53,12 +78,10 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.type = type;
     }
 
     @Override
     public String toString() {
-        return "User [name=" + name + ", surname=" + surname + ", username=" + username + ", email=" + email + ", type="
-                + type + "]";
+        return "User [name=" + name + ", surname=" + surname + ", username=" + username + ", email=" + email + "]";
     }
 }
