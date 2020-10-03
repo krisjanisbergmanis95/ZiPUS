@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 import com.venta.zipus.services.IStorageService;
-import com.venta.zipus.storage.StorageFileNotFoundException;
+import com.venta.zipus.localstorage.StorageFileNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;

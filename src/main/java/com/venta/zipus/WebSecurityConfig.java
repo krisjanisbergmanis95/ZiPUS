@@ -38,9 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) {
         try {
             http.authorizeRequests()
-                    .antMatchers("/product/showAllProducts").permitAll()
-                    .antMatchers("/product/insertOneProduct").hasAuthority(ADMIN)
-                    .antMatchers("/customer/showMyProducts/**").hasAnyAuthority(ADMIN, USER)
+                    .antMatchers("/register").permitAll()
+//                    .antMatchers("/product/insertOneProduct").hasAuthority(ADMIN)
+//                    .antMatchers("/customer/showMyProducts/**").hasAnyAuthority(ADMIN, USER)
                     .antMatchers("/h2-console/**").hasAuthority(ADMIN)
 //                    .antMatchers("/product/insertOneProduct").hasRole(ADMIN)
 //                    .antMatchers("/customer/showMyProducts/**").hasAnyRole(ADMIN, USER)

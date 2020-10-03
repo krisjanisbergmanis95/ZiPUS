@@ -1,4 +1,4 @@
-package com.venta.zipus.storage;
+package com.venta.zipus.localstorage;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
