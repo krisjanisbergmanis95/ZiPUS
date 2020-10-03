@@ -1,11 +1,14 @@
 package com.venta.zipus.models.user;
 
+import com.venta.zipus.customvalidators.PasswordMatches;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -14,7 +17,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Getter
 @Setter
-
+//@PasswordMatches
 public class User {
 
     @Id
@@ -24,18 +27,30 @@ public class User {
     @Setter(value = AccessLevel.PRIVATE)
     private long u_ID;
 
+//    @NotNull
+//    @NotEmpty
     @Column(name = "U_Name")
     private String name;
 
+//    @NotNull
+//    @NotEmpty
     @Column(name = "U_Surname")
     private String surname;
 
+//    @NotNull
+//    @NotEmpty
     @Column(name = "U_Username")
     private String username;
 
+//    @NotNull
+//    @NotEmpty
     @Column(name = "U_Password") //TODO more secure
     private String password;
 
+    private String matchingPassword;
+
+//    @NotNull
+//    @NotEmpty
     @Column(name = "U_Email")
     private String email;
 
@@ -59,6 +74,15 @@ public class User {
         }
     }
 
+    public User(String name, String surname, String username, String email, String password, ArrayList<UserAuthority> roles) {
+        this.name = name;
+        this.surname = surname;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.authorities = roles;
+    }
+
     public User(String username, String password, ArrayList<UserAuthority> roles) {
         this.username = username;
         this.password = password;
@@ -67,16 +91,6 @@ public class User {
 
 
     public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    public User(String name, String surname, String username, String email, String password, String type) {
-        super();
-        this.name = name;
-        this.surname = surname;
-        this.username = username;
-        this.email = email;
         this.password = password;
     }
 

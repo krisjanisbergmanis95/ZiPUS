@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) {
         try {
             http.authorizeRequests()
-                    .antMatchers("/product/showAllProducts").anonymous()
+                    .antMatchers("/product/showAllProducts").permitAll()
                     .antMatchers("/product/insertOneProduct").hasAuthority(ADMIN)
                     .antMatchers("/customer/showMyProducts/**").hasAnyAuthority(ADMIN, USER)
                     .antMatchers("/h2-console/**").hasAuthority(ADMIN)
@@ -48,6 +48,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .anyRequest().authenticated() //need to authenticate on any request
                     .and()
                     .formLogin().permitAll() //login page is available for anyone
+                    .loginPage("/login")
+//                    .loginProcessingUrl("/perform-login")
+//                    .defaultSuccessUrl("/home-page.html", true)
                     .and()
                     .logout().permitAll();//logout url link is available for anyone
 

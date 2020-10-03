@@ -41,10 +41,10 @@ package com.bergmanis.SimpleApplication.controllers;
    import org.springframework.web.bind.annotation.GetMapping;
    @Controller
    public class SimpleController {
-       @GetMapping("/hello") // endpoint for localhost:8080
+       @GetMapping("/login") // endpoint for localhost:8080
        public String showHelloPage() {
-           System.out.println("showHelloPage");
-           return "hellopage";// this should show html "Hello my dude"
+           System.out.println("showLoginPage");
+           return "login-page";// this should show html "Hello my dude"
        }
    }
 ```

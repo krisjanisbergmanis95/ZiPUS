@@ -13,4 +13,5 @@ public interface IUserRepo extends CrudRepository<User, Long> {
     Collection<User> findByAuthoritiesIn(ArrayList<UserAuthority> authorityType);
     Collection<User> findAll();
     User findById(long id);
+    boolean existsByEmail(String email);
 }
