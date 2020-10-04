@@ -22,13 +22,6 @@
     </div>
 
     <div>
-        <label>Epasts</label>
-        <input type="email" th:field="*{email}"/>
-        <p th:each="error : ${#fields.errors('email')}"
-           th:text="${error}">Validation error</p>
-    </div>
-
-    <div>
         <label>Lietotājvārds</label>
         <input type="username" th:field="*{username}"/>
         <p th:each="error : ${#fields.errors('username')}"
@@ -36,17 +29,24 @@
     </div>
 
     <div>
+        <label>Epasts</label>
+        <input type="email" th:field="*{email}"/>
+        <p th:each="error : ${#fields.errors('email')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
         <label>Lietotāja tips</label>
         <div>
-            <input type="radio" th:field="*{authorities}" th:value="AUTHOR">
+            <input type="radio" th:field="*{registerWithAuth}" th:value="AUTHOR">
             <label>Publikāciju autors</label>
         </div>
         <div>
-            <input type="radio" th:field="*{authorities}" th:value="ZUADD">
+            <input type="radio" th:field="*{registerWithAuth}" th:value="ZUADD">
             <label>Zinātnes un Attīstības daļas darbinieks</label>
         </div>
         <div>
-            <input type="radio" th:field="*{authorities}" th:value="USER">
+            <input type="radio" th:field="*{registerWithAuth}" th:value="USER">
             <label>Cits</label>
         </div>
     </div>

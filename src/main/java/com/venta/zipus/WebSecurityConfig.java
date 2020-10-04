@@ -26,7 +26,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         try {
             http.authorizeRequests()
                     .antMatchers("/register").permitAll()
-                    .antMatchers("/h2-console/**").hasAuthority(ADMIN)
+                    .antMatchers("/h2-console/**").permitAll()
+//                    .antMatchers("/h2-console/**").hasAuthority(ADMIN)
                     .anyRequest().authenticated() //need to authenticate on any request
                     .and()
                     .formLogin().permitAll() //login page is available for anyone

@@ -10,4 +10,5 @@ import java.util.Collection;
 public interface IUserAuthorityRepo extends CrudRepository<UserAuthority, Integer> {
     Collection<UserAuthority> findByUsersIn(ArrayList<User> user);
     Collection<UserAuthority> findAll();
+    UserAuthority findByRoleTitle(String title);
 }

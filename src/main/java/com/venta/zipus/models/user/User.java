@@ -27,38 +27,42 @@ public class User {
     @Setter(value = AccessLevel.PRIVATE)
     private long u_ID;
 
-//    @NotNull
+    //    @NotNull
 //    @NotEmpty
     @Column(name = "U_Name")
     private String name;
 
-//    @NotNull
+    //    @NotNull
 //    @NotEmpty
     @Column(name = "U_Surname")
     private String surname;
 
-//    @NotNull
+    //    @NotNull
 //    @NotEmpty
     @Column(name = "U_Username")
     private String username;
 
-//    @NotNull
+    //    @NotNull
 //    @NotEmpty
     @Column(name = "U_Password") //TODO more secure
     private String password;
 
     private String matchingPassword;
+    private String registerWithAuth;
 
-//    @NotNull
+//    @Column
+//    private UserAuthority authority;
+
+    //    @NotNull
 //    @NotEmpty
     @Column(name = "U_Email")
     private String email;
 
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "User_Authority",
             joinColumns = @JoinColumn(name = "rId"),
             inverseJoinColumns = @JoinColumn(name = "uID"))
-    private Collection<UserAuthority> authorities;
+    private Collection<UserAuthority> authorities = new ArrayList<>();
 
     public User(String username, String password, UserAuthority... roles) {
         this.username = username;
@@ -68,7 +72,7 @@ public class User {
         UserAuthority[] tempArgsArray = roles;
         int tempArgsArrayLength = roles.length;
 
-        for(int i = 0; i < tempArgsArrayLength; ++i) {
+        for (int i = 0; i < tempArgsArrayLength; ++i) {
             UserAuthority authority = tempArgsArray[i];
             this.authorities.add(authority);
         }
@@ -94,8 +98,26 @@ public class User {
         this.password = password;
     }
 
+    public void addAuthority(UserAuthority authority) throws Exception {
+        if (authority != null) {
+            this.authorities.add(authority);
+        } else {
+            throw new Exception("authority title is null");
+        }
+    }
+
     @Override
     public String toString() {
-        return "User [name=" + name + ", surname=" + surname + ", username=" + username + ", email=" + email + "]";
+        return "User{" +
+                "u_ID=" + u_ID +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", username='" + username + '\'' +
+//                ", password='" + password + '\'' +
+//                ", matchingPassword='" + matchingPassword + '\'' +
+                ", registerWithAuth='" + registerWithAuth + '\'' +
+                ", email='" + email + '\'' +
+                ", authorities=" + authorities +
+                '}';
     }
 }

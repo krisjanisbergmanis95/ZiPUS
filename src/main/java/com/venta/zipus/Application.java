@@ -44,6 +44,9 @@ public class Application {
     @Autowired
     IPublishmentRepo publishmentRepo;
 
+    @Autowired
+    IUserAuthorityRepo userAuthorityRepo;
+
     public static void main(String[] args) {
 
         SpringApplication.run(Application.class, args);
@@ -79,6 +82,12 @@ public class Application {
             publishmentRepo.save(new PublishmentType(PublishmentTypeNames.INTERNATIONAL_REVIEW));
             publishmentRepo.save(new PublishmentType(PublishmentTypeNames.NATIONAL_REVIEW));
             publishmentRepo.save(new PublishmentType(PublishmentTypeNames.OTHER));
+
+
+            userAuthorityRepo.save(new UserAuthority("USER"));
+            userAuthorityRepo.save(new UserAuthority("ADMIN"));
+            userAuthorityRepo.save(new UserAuthority("AUTHOR"));
+            userAuthorityRepo.save(new UserAuthority("ZUADD"));
         };
     }
 

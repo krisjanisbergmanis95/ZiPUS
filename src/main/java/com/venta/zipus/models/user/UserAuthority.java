@@ -12,14 +12,14 @@ public class UserAuthority {
     @Column(name = "rId")
     private int rId;
 
-    @Column(name="RoleTitle")
+    @Column(name = "RoleTitle")
     private String roleTitle;
 
     @ManyToMany(mappedBy = "authorities")
     private Collection<User> users;
 
-
-    public UserAuthority() {}
+    public UserAuthority() {
+    }
 
     public UserAuthority(String roleTitle) {
         this.roleTitle = roleTitle;
@@ -39,5 +39,13 @@ public class UserAuthority {
 
     public void setUsers(Collection<User> users) {
         this.users = users;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAuthority{" +
+                "rId=" + rId +
+                ", roleTitle='" + roleTitle + '\'' +
+                '}';
     }
 }
