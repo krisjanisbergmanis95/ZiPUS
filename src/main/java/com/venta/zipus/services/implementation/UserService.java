@@ -30,6 +30,14 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User getUserByUsername(String username) {
+        if (userRepo.count() > 0) {
+            return userRepo.findByUsername(username);
+        }
+        return null;
+    }
+
+    @Override
     public boolean register(String name, String surname, String username, String email, String password, Collection<UserAuthority> authorities) {//name - as a username and unique
         if(userRepo.existsByUsername(username) || userRepo.existsByEmail(email))
         {

@@ -69,10 +69,12 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public String showProductById(@PathVariable(name = "id") int id, Model model) {
-        if (id >= 0 && id < users.size()) {
-            model.addAttribute("variableUser", users.get(id));
+        if (id > 0) {
+//            model.addAttribute("variableUser", users.get(id));
+            logger.info("Loading user page for user with id:" + id);
             return "user-profile";
         } else {
+            logger.info("error for id " + id);
             return "error";
         }
     }

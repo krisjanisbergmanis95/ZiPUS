@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>home</title>
 </head>
 <body>
 <b>HOME</b>
-<div class="header">
-    <a href="#default" class="logo">ZiPUS</a>
+<div class="header" th:object="${userID}">
     <div class="header-right">
         <a class="active" href="#home">Home</a>
-        <a href="#User">Mans profils</a>
-        <a href="#Publications">Publications</a>
-        <a href="#Logout">About</a>
+        <a th:href="@{/users/{id}(id=${userID})}">Mans profils</a>
+        <a href="#Publications">Publikācijas</a>
+        <a href="#Logout">Izlogoties</a>
     </div>
 </div>
 </body>

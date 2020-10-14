@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             http.authorizeRequests()
                     .antMatchers("/register").permitAll()
                     .antMatchers("/h2-console/**", "/users").hasAuthority(ADMIN)
-                    .antMatchers("/home").hasAnyAuthority(USER, ADMIN)
+                    .antMatchers("/home", "/users/**").hasAnyAuthority(USER, ADMIN)
                     .antMatchers("/h2-console/**").permitAll()
                     .anyRequest().authenticated() //need to authenticate on any request
                     .and()
