@@ -58,7 +58,7 @@ public class TestController {
 
 
     @GetMapping("/publications/types-to-groups") // endpoint for localhost:8080
-    public String showHelloPage() {
+    public String showLoginPage() {
         System.out.println("=========");
         PublicationType publicationType = publicationTypeRepo.findByPublicationTypeValue("Mācību grāmata");
         System.out.println(publicationType);
@@ -89,7 +89,7 @@ public class TestController {
         );
         System.out.println("=========");
 //        System.out.println(p1.toString());
-        return "hellopage";// this should show html "Hello my dude"
+        return "login-page";// this should show html "Hello my dude"
     }
 
     @GetMapping("/publications/add-pubs") // endpoint for localhost:8080
@@ -191,6 +191,6 @@ public class TestController {
         publicationRepo.save(p4);
 
 
-        return "hellopage";// this should show html "Hello my dude"
+        return "login-page";// this should show html "Hello my dude"
     }
 }

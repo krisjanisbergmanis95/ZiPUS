@@ -1,0 +1,71 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register user</title>
+</head>
+<body>
+<legend>ZiPUS Lietotāju reģistrācija</legend>
+
+<form action="/" th:action="@{/register}" th:object="${user}" method="post" enctype="utf8">
+    <div>
+        <label>Vārds</label>
+        <input th:field="*{name}"/>
+        <p th:each="error: ${#fields.errors('name')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Uzvārds</label>
+        <input th:field="*{surname}"/>
+        <p th:each="error : ${#fields.errors('surname')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Lietotājvārds</label>
+        <input type="text" th:field="*{username}"/>
+        <p th:each="error : ${#fields.errors('username')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Epasts</label>
+        <input type="email" th:field="*{email}"/>
+        <p th:each="error : ${#fields.errors('email')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Lietotāja tips</label>
+        <div>
+            <input type="radio" th:field="*{registerWithAuth}" th:value="AUTHOR">
+            <label>Publikāciju autors</label>
+        </div>
+        <div>
+            <input type="radio" th:field="*{registerWithAuth}" th:value="ZUADD">
+            <label>Zinātnes un Attīstības daļas darbinieks</label>
+        </div>
+        <div>
+            <input type="radio" th:field="*{registerWithAuth}" th:value="USER">
+            <label>Cits</label>
+        </div>
+    </div>
+
+    <div>
+        <label>Parole</label>
+        <input type="password" th:field="*{password}"/>
+        <p th:each="error : ${#fields.errors('password')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Paroles vēlreiz</label>
+        <input type="password" th:field="*{matchingPassword}"/>
+    </div>
+
+    <button type="submit">Iesniegt</button>
+</form>
+
+<a th:href="@{/login}">Ielogoties</a>
+</body>
+</html>

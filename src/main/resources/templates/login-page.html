@@ -1,0 +1,23 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+    <title tiles:fragment="title">Login user</title>
+</head>
+<body>
+<div tiles:fragment="content">
+    <form th:action="@{/login}" method="post" enctype="utf8">
+        <fieldset>
+            <legend>ZiPUS login</legend>
+            <p th:if="${loginError}" class="error">Wrong user or password</p>
+
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username"/>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password"/>
+
+            <button type="submit" class="btn">Log in</button>
+        </fieldset>
+    </form>
+    <a href="/register">Register</a>
+</div>
+</body>
+</html>

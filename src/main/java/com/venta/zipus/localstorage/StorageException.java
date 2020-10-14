@@ -1,4 +1,4 @@
-package com.venta.zipus.storage;
+package com.venta.zipus.localstorage;
 
 public class StorageException extends RuntimeException {
 

@@ -10,9 +10,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import com.venta.zipus.services.IStorageService;
-import com.venta.zipus.storage.StorageException;
-import com.venta.zipus.storage.StorageFileNotFoundException;
-import com.venta.zipus.storage.StorageProperties;
+import com.venta.zipus.localstorage.StorageException;
+import com.venta.zipus.localstorage.StorageFileNotFoundException;
+import com.venta.zipus.localstorage.StorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

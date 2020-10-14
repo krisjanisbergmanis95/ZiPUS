@@ -10,10 +10,14 @@ import com.venta.zipus.models.publications.pubtypes.constants.PublicationTypeTit
 import com.venta.zipus.models.publications.pubtypes.constants.PublicationTypeTitlesMagazine;
 import com.venta.zipus.models.publishments.PublishmentType;
 import com.venta.zipus.models.publishments.constants.PublishmentTypeNames;
+import com.venta.zipus.models.user.User;
+import com.venta.zipus.models.user.UserAuthority;
 import com.venta.zipus.repositories.dataBases.IDataBaseRepo;
 import com.venta.zipus.repositories.pubTypeGroups.IPublicationTypeGroupsRepo;
 import com.venta.zipus.repositories.pubTypes.IPublicationTypeRepo;
 import com.venta.zipus.repositories.publishments.IPublishmentRepo;
+import com.venta.zipus.repositories.user.IUserAuthorityRepo;
+import com.venta.zipus.repositories.user.IUserRepo;
 import com.venta.zipus.services.IStorageService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static com.venta.zipus.WebSecurityConfig.passwordEncoder;
 
 @SpringBootApplication
 public class Application {
@@ -35,6 +44,9 @@ public class Application {
 
     @Autowired
     IPublishmentRepo publishmentRepo;
+
+    @Autowired
+    IUserAuthorityRepo userAuthorityRepo;
 
     public static void main(String[] args) {
 
@@ -71,6 +83,29 @@ public class Application {
             publishmentRepo.save(new PublishmentType(PublishmentTypeNames.INTERNATIONAL_REVIEW));
             publishmentRepo.save(new PublishmentType(PublishmentTypeNames.NATIONAL_REVIEW));
             publishmentRepo.save(new PublishmentType(PublishmentTypeNames.OTHER));
+
+
+            userAuthorityRepo.save(new UserAuthority("USER"));
+            userAuthorityRepo.save(new UserAuthority("ADMIN"));
+            userAuthorityRepo.save(new UserAuthority("AUTHOR"));
+            userAuthorityRepo.save(new UserAuthority("ZUADD"));
+        };
+    }
+
+    @Bean
+    public CommandLineRunner setUpUsers(IUserAuthorityRepo userAuthorityRepo, IUserRepo userRepo) {
+        return (args) -> {
+            UserAuthority AuthTypeUser = new UserAuthority(WebSecurityConfig.USER);
+            userAuthorityRepo.save(AuthTypeUser);
+            User u1 = new User("user1", passwordEncoder().encode("user1"), AuthTypeUser);
+            userRepo.save(u1);
+
+            UserAuthority AuthTypeAdmin = new UserAuthority(WebSecurityConfig.ADMIN);
+            userAuthorityRepo.save(AuthTypeAdmin);
+            User u2 = new User("admin", passwordEncoder().encode("admin"), new ArrayList<>(Arrays.asList(AuthTypeAdmin)));
+            userRepo.save(u2);
+
+            System.out.println(userRepo.findAll());
         };
     }
 
