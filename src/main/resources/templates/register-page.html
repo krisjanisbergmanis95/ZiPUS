@@ -23,7 +23,7 @@
 
     <div>
         <label>Lietotājvārds</label>
-        <input type="username" th:field="*{username}"/>
+        <input type="text" th:field="*{username}"/>
         <p th:each="error : ${#fields.errors('username')}"
            th:text="${error}">Validation error</p>
     </div>

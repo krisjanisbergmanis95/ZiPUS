@@ -25,10 +25,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static com.venta.zipus.WebSecurityConfig.passwordEncoder;
 
 @SpringBootApplication
 public class Application {
@@ -106,11 +107,6 @@ public class Application {
 
             System.out.println(userRepo.findAll());
         };
-    }
-    //
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean

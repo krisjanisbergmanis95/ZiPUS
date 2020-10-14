@@ -1,14 +1,11 @@
 package com.venta.zipus.models.user;
 
-import com.venta.zipus.customvalidators.PasswordMatches;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -113,8 +110,8 @@ public class User {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", username='" + username + '\'' +
-//                ", password='" + password + '\'' +
-//                ", matchingPassword='" + matchingPassword + '\'' +
+                ", password='" + password + '\'' +
+                ", matchingPassword='" + matchingPassword + '\'' +
                 ", registerWithAuth='" + registerWithAuth + '\'' +
                 ", email='" + email + '\'' +
                 ", authorities=" + authorities +

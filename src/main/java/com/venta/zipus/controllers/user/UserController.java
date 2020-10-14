@@ -1,8 +1,6 @@
 package com.venta.zipus.controllers.user;
 
 import com.venta.zipus.models.user.User;
-import com.venta.zipus.models.user.UserAuthority;
-import com.venta.zipus.repositories.user.IUserRepo;
 import com.venta.zipus.services.IUserAuthorityService;
 import com.venta.zipus.services.IUserService;
 import org.slf4j.Logger;
@@ -30,16 +28,8 @@ public class UserController {
 
     @GetMapping("/users")
     public String userspage(Model model) {
-        System.out.println("Working?");
-
-//        User u1 = new User("liga", "ozola", "lozol", "lg@gmail.com", "parole123", "student");
-//        users.add(u1);
-//
-//        System.out.println(users.size());
-
-
+        logger.info("loading user list");
 //        model.addAttribute("user", users);
-
         return "userpage";
 
     }
@@ -67,6 +57,7 @@ public class UserController {
         logger.info(user.toString());
         if (!result.hasErrors()) {
             userService.register(user.getName(), user.getSurname(), user.getUsername(), user.getEmail(), user.getPassword(), user.getAuthorities());
+            logger.info("Registered successfully redirecting to login page");
             return "redirect:/login";
         } else {
             logger.info("Something wrong?");
