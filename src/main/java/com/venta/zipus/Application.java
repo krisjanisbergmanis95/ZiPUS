@@ -105,6 +105,14 @@ public class Application {
             User u2 = new User("admin", passwordEncoder().encode("admin"), new ArrayList<>(Arrays.asList(AuthTypeAdmin)));
             userRepo.save(u2);
 
+            User u3 = new User("john",
+                    "doe",
+                    "doo",
+                    "doe@dank.com",
+                    passwordEncoder().encode("doo"),
+                    new ArrayList<>(Arrays.asList(AuthTypeUser)));
+            userRepo.save(u3);
+
             System.out.println(userRepo.findAll());
         };
     }
