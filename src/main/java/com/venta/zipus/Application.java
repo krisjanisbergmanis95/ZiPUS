@@ -1,7 +1,10 @@
 package com.venta.zipus;
 
+import com.venta.zipus.models.authors.Author;
 import com.venta.zipus.models.databases.DataBase;
 import com.venta.zipus.models.databases.constants.DataBaseNames;
+import com.venta.zipus.models.publications.Publication;
+import com.venta.zipus.models.publications.PublicationBook;
 import com.venta.zipus.models.publications.pubtypegroups.PublicationTypeGroup;
 import com.venta.zipus.models.publications.pubtypegroups.constants.PublicationTypeGroupTitles;
 import com.venta.zipus.models.publications.pubtypes.PublicationType;
@@ -12,6 +15,8 @@ import com.venta.zipus.models.publishments.PublishmentType;
 import com.venta.zipus.models.publishments.constants.PublishmentTypeNames;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.models.user.UserAuthority;
+import com.venta.zipus.repositories.IPublicationBookRepo;
+import com.venta.zipus.repositories.authors.IAuthorRepo;
 import com.venta.zipus.repositories.dataBases.IDataBaseRepo;
 import com.venta.zipus.repositories.pubTypeGroups.IPublicationTypeGroupsRepo;
 import com.venta.zipus.repositories.pubTypes.IPublicationTypeRepo;
@@ -41,6 +46,12 @@ public class Application {
 
     @Autowired
     IDataBaseRepo dataBaseRepo;
+
+    @Autowired
+    IAuthorRepo authorRepo;
+
+    @Autowired
+    IPublicationBookRepo publicationBookRepo;
 
     @Autowired
     IPublishmentRepo publishmentRepo;
@@ -110,6 +121,51 @@ public class Application {
                     "doe@dank.com",
                     passwordEncoder().encode("doo"),
                     new ArrayList<>(Arrays.asList(AuthTypeAuthor)));
+//            userRepo.save(u3);
+            System.out.println(userRepo.findAll());
+
+//Adding a book
+            PublicationType publicationType1 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesBook.EDUCATIONAL_BOOK);
+            Author author1 = new Author("Juris", "Ābols", true, "VSRC");
+            authorRepo.save(author1);
+
+            ArrayList<Author> authors = new ArrayList<>(Arrays.asList(author1));
+
+
+            ArrayList<String> keyWords = new ArrayList<>(Arrays.asList("java", "spring"));
+            ArrayList<String> editors = new ArrayList<>(Arrays.asList("Jānis Stībelis", "Katrīna Pastarnaka"));
+            //test pub type field holders
+            PublicationBook pb1 = new PublicationBook("Izdota publikācija 1", editors, "Rīga");
+            publicationBookRepo.save(pb1);
+            PublishmentType publishType = publishmentRepo.findByPublishmentTypeName(PublishmentTypeNames.INTERNATIONAL_REVIEW);
+            ArrayList<DataBase> dataBases1 = new ArrayList<>(
+                    Arrays.asList(
+                            dataBaseRepo.findByDataBaseName(DataBaseNames.EBSCO),
+                            dataBaseRepo.findByDataBaseName(DataBaseNames.ENGINEERING_VILLAGE_2),
+                            dataBaseRepo.findByDataBaseName(DataBaseNames.GOOGLE_SCHOLAR)
+                    )
+            );
+            Publication p2 = new Publication(publicationType1,
+                    "Latviešu",
+                    "Pētījums par thymeleaf",
+                    "Research about thymeleaf",
+                    "Šeit ir anotācija",
+                    "This is anotation",
+                    "Astronomija",
+                    authors,
+                    keyWords,
+                    "Zvaigzne ABC",
+                    2004,
+                    460,
+                    "I231naKSDN",
+                    publishType,
+                    dataBases1,
+                    "https://www.google.com",
+                    "Just additional notes",
+                    pb1);
+            //end of creating a book
+
+            u3.addPublication(p2);
             userRepo.save(u3);
             System.out.println(userRepo.findAll());
         };

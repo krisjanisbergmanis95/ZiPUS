@@ -4,9 +4,19 @@
     THIS PAGE IS WORK IN PROGRESS
 </title>
 
-<body>
-<div th:href="@{/add}">Pievienot jaunu publikāciju</div>
-<div>Manas publikācijas</div>
+<body th:object="${user}">
+<div>
+    <a th:href="@{/publications/add}">Pievienot jaunu publikāciju</a>
+</div>
+<div>
+    <label Manas publikācijas/>
+    <ul th:each="publication: ${user.getPublications()}">
+        <li>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}" th:text="${publication.getPublicationTitleOrigin()}"/>
+        </li>
+    </ul>
+</div>
+
 
 </body>
 </html>

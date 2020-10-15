@@ -5,6 +5,7 @@ import com.venta.zipus.models.databases.DataBase;
 import com.venta.zipus.models.publications.pubtypegroups.PublicationTypeGroup;
 import com.venta.zipus.models.publications.pubtypes.*;
 import com.venta.zipus.models.publishments.PublishmentType;
+import com.venta.zipus.models.user.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -52,6 +53,9 @@ public class Publication {
 //            joinColumns = @JoinColumn(name = "PUBISHMENT_ID"),
 //            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
 //    private Collection<PublicationType> publishments;
+
+    @ManyToMany(mappedBy = "publications")
+    private Collection<User> users;
 
     @ManyToOne
     @JoinColumn(name = "PUBLISHMENT_ID")
