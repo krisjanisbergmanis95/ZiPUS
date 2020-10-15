@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String USER = "USER";
     public static final String ADMIN = "ADMIN";
+    public static final String AUTHOR = "AUTHOR";
+    public static final String ZUADD = "ZUADD";
 
     @Bean
     @Override

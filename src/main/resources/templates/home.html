@@ -6,11 +6,11 @@
 </head>
 <body>
 <b>HOME</b>
-<div class="header" th:object="${userID}">
+<div class="header" th:object="${user}">
     <div class="header-right">
         <a class="active" href="#home">Home</a>
-        <a th:href="@{/users/{id}(id=${userID})}">Mans profils</a>
-        <a href="#Publications">Publikācijas</a>
+        <a th:href="@{/users/{id}(id=${user.getU_ID()})}">Mans profils</a>
+        <a th:if="${isAuthorityAuthor}" th:href="@{/publications/my-publications}">Manas Publikācijas</a>
         <a href="#Logout">Izlogoties</a>
     </div>
 </div>

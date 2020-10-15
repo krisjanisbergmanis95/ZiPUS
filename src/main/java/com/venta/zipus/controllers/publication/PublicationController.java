@@ -1,6 +1,7 @@
 package com.venta.zipus.controllers.publication;
 
 import com.venta.zipus.models.publications.Publication;
+import com.venta.zipus.models.user.User;
 import com.venta.zipus.services.IPublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,5 +26,12 @@ public class PublicationController {
         Publication pub= publicationService.getPublicationById(id);
         model.addAttribute("publication", pub);
         return "publication-page";
+    }
+
+    @GetMapping(value = "/my-publications") // id for added publication
+    public String showMyPublications() {//@PathVariable(name = "user") User user, Model model
+//        Publication pub = publicationService.getPublicationById(id);
+//        model.addAttribute("publication", pub);
+        return "my-publications-page";
     }
 }

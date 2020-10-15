@@ -85,34 +85,32 @@ public class Application {
             publishmentRepo.save(new PublishmentType(PublishmentTypeNames.OTHER));
 
 
-            userAuthorityRepo.save(new UserAuthority("USER"));
-            userAuthorityRepo.save(new UserAuthority("ADMIN"));
-            userAuthorityRepo.save(new UserAuthority("AUTHOR"));
-            userAuthorityRepo.save(new UserAuthority("ZUADD"));
+            userAuthorityRepo.save(new UserAuthority(WebSecurityConfig.USER));
+            userAuthorityRepo.save(new UserAuthority(WebSecurityConfig.ADMIN));
+            userAuthorityRepo.save(new UserAuthority(WebSecurityConfig.AUTHOR));
+            userAuthorityRepo.save(new UserAuthority(WebSecurityConfig.ZUADD));
         };
     }
 
     @Bean
     public CommandLineRunner setUpUsers(IUserAuthorityRepo userAuthorityRepo, IUserRepo userRepo) {
         return (args) -> {
-            UserAuthority AuthTypeUser = new UserAuthority(WebSecurityConfig.USER);
-            userAuthorityRepo.save(AuthTypeUser);
+            UserAuthority AuthTypeUser = userAuthorityRepo.findByRoleTitle(WebSecurityConfig.USER);
             User u1 = new User("user1", passwordEncoder().encode("user1"), AuthTypeUser);
             userRepo.save(u1);
 
-            UserAuthority AuthTypeAdmin = new UserAuthority(WebSecurityConfig.ADMIN);
-            userAuthorityRepo.save(AuthTypeAdmin);
+            UserAuthority AuthTypeAdmin = userAuthorityRepo.findByRoleTitle(WebSecurityConfig.ADMIN);
             User u2 = new User("admin", passwordEncoder().encode("admin"), new ArrayList<>(Arrays.asList(AuthTypeAdmin)));
             userRepo.save(u2);
 
+            UserAuthority AuthTypeAuthor = userAuthorityRepo.findByRoleTitle(WebSecurityConfig.AUTHOR);
             User u3 = new User("john",
                     "doe",
                     "doo",
                     "doe@dank.com",
                     passwordEncoder().encode("doo"),
-                    new ArrayList<>(Arrays.asList(AuthTypeUser)));
+                    new ArrayList<>(Arrays.asList(AuthTypeAuthor)));
             userRepo.save(u3);
-
             System.out.println(userRepo.findAll());
         };
     }

@@ -103,6 +103,10 @@ public class User {
         }
     }
 
+    public boolean isAuthority(UserAuthority userAuthority) {
+        return this.authorities.contains(userAuthority);
+    }
+
     @Override
     public String toString() {
         return "User{" +
