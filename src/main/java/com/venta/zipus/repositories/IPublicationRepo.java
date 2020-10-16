@@ -7,4 +7,10 @@ public interface IPublicationRepo extends CrudRepository<Publication, Long> {
     @Override
     Iterable<Publication> findAll();
     Publication findById(long id);
+
+    boolean existsByPublicationTitleOrigin(String publicationTitleOrigin);
+
+    boolean existsByPublicationTitleEnglish(String publicationTitleEnglish);
+
+    Publication findByPublicationTitleOriginAndPublicationTitleEnglish(String titleOrigin, String titleEnglish);
 }

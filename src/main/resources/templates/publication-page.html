@@ -19,14 +19,14 @@
         <span th:text="${publication.getPublicationTitleOrigin()}"></span>
     </li>
     <li th:unless="${publication.getPublicationTitleEnglish() == null}">
-        <label>Nosaukums oriģinālvalodā</label>
+        <label>Publikācijas Nosaukums angļu valodā</label>
         <span th:text="${publication.getPublicationTitleEnglish()}"></span>
     </li>
     <li th:unless="${publication.getAnnotation() == null}">
         <label>Anotācija</label>
         <span th:text="${publication.getAnnotation()}"></span>
     </li>
-    <li th:unless="${publication.getAnnotation() == null}">
+    <li th:unless="${publication.getAnnotationEnglish() == null}">
         <label>Anotācija angļu valodā</label>
         <span th:text="${publication.getAnnotationEnglish()}"></span>
     </li>

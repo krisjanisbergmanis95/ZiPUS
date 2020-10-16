@@ -39,8 +39,7 @@ public class UserService implements IUserService {
 
     @Override
     public boolean register(String name, String surname, String username, String email, String password, Collection<UserAuthority> authorities) {//name - as a username and unique
-        if(userRepo.existsByUsername(username) || userRepo.existsByEmail(email))
-        {
+        if (userRepo.existsByUsername(username) || userRepo.existsByEmail(email)) {
             return false;
         }
         User user = new User(name, surname, username, email, passwordEncoder().encode(password), (ArrayList<UserAuthority>) authorities);
@@ -49,5 +48,14 @@ public class UserService implements IUserService {
         userRepo.save(user);
         logger.info(userRepo.findByUsername(username).toString());
         return true;
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        if (userRepo.existsById(user.getU_ID()) && userRepo.existsByUsername(user.getUsername()) && userRepo.existsByEmail(user.getEmail())) {
+            userRepo.save(user);
+            return true;
+        }
+        return false;
     }
 }

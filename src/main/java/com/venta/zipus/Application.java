@@ -158,8 +158,8 @@ public class Application {
                     2004,
                     460,
                     "I231naKSDN",
-                    publishType,
-                    dataBases1,
+//                    publishType,
+//                    dataBases1,
                     "https://www.google.com",
                     "Just additional notes",
                     pb1);
