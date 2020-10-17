@@ -35,6 +35,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
+import java.nio.file.Path;
 import java.util.stream.Collectors;
 
 import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
@@ -55,10 +56,10 @@ public class PublicationController {
         model.addAttribute("publication", new Publication());
         model.addAttribute("pubTypeBook", new PublicationBook());
         model.addAttribute("pubType", new PublicationType());
-        model.addAttribute("files", storageService.loadAll().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                        "serveFile", path.getFileName().toString()).build().toUri().toString())
-                .collect(Collectors.toList()));
+//        model.addAttribute("files", storageService.loadAll().map(
+//                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+//                        "serveFile", path.getFileName().toString()).build().toUri().toString())
+//                .collect(Collectors.toList()));
         return "add-publication-page-book";//add-publication-page
     }
 
@@ -67,19 +68,26 @@ public class PublicationController {
                                             PublicationBook publicationBook,
                                             BindingResult result,
                                             @RequestParam("file") MultipartFile file) {
-        logger.info(publication.toString());
+
         if (!result.hasErrors()) {
+            publication.setFilePath("upload-dir/" + file.getOriginalFilename());
+            publication.setFileName(file.getOriginalFilename());
             publicationService.addPublication(publication);
             Publication newPub = publicationService
                     .getPublicationByTitleOriginAndTitleEnglish(
                             publication.getPublicationTitleOrigin(),
                             publication.getPublicationTitleEnglish());
+            logger.info("=====================");
+            logger.info(publication.toString());
+            logger.info("=====================");
 
             User user = userService.getUserByUsername(getCurrentUsername());
             try {
                 user.addPublication(newPub);
                 storageService.store(file);
+                logger.info("file stored");
                 userService.updateUser(user);
+                logger.info("user updated");
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }
@@ -96,6 +104,20 @@ public class PublicationController {
     public String getPublicationById(@PathVariable(name = "id") long id, Model model) {
         Publication pub = publicationService.getPublicationById(id);
         model.addAttribute("publication", pub);
+//        model.addAttribute("files", storageService.loadAll().map(
+//                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+//                        "serveFile", path.getFileName().toString()).build().toUri().toString())
+//                .collect(Collectors.toList()));
+        logger.info("loading from path " + pub.getFilePath());
+
+        Path path = storageService.load(pub.getFilePath());
+        String pathFileName = path.getFileName().toString();
+        logger.info("pathFileName " + pathFileName);
+//
+        model.addAttribute("file", MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                "serveFile", pathFileName).build().toUri().toString());
+
+
         return "publication-page";
     }
 

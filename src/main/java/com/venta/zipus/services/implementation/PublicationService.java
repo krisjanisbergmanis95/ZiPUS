@@ -56,7 +56,9 @@ public class PublicationService implements IPublicationService {
 //                (ArrayList) pub.getDataBases(),
                 pub.getHyperLink(),
                 pub.getNotes(),
-                pub.getPublicationBook()
+                pub.getPublicationBook(),
+                pub.getFilePath(),
+                pub.getFileName()
         );
 
         publicationRepo.save(publication);

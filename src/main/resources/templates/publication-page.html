@@ -56,7 +56,16 @@
                 <td th:text="${keyWord}"/>
             </tr>
         </table>
-    </li>
+        <div th:unless="${publication.getFilePath() == null || publication.getFileName() == null }"
+<!--             th:object="${file}"-->
+        >
+            <label>Publikācijas fails</label>
+<!--            <ul>-->
+<!--                <li th:each="file : ${files}">-->
+                    <a th:href="${file}" th:text="${file}" />
+<!--                </li>-->
+<!--            </ul>-->
+        </div>
     <li th:unless="${publication.getPublisher() == null}">
         <label>Izdevējs</label>
         <span th:text="${publication.getPublisher()}"></span>

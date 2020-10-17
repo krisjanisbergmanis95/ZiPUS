@@ -43,6 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         try {
             http.authorizeRequests()
                     .antMatchers("/register").permitAll()
+                    .antMatchers("/files", "/files/**").permitAll()//test
                     .antMatchers("/h2-console/**", "/users").hasAuthority(ADMIN)
                     .antMatchers("/publications/my-publications", "/publications/my-publications/**").hasAuthority(AUTHOR)
                     .antMatchers("/home", "/users/**").hasAnyAuthority(USER, AUTHOR, ADMIN)
