@@ -3,7 +3,11 @@
 <title>
     Add Book
 </title>
-<form action="/" th:action="@{/publications/add/book}" th:object="${publication}" method="post" enctype="utf8">
+<form action="/"
+      th:action="@{/publications/add/book}"
+      th:object="${publication}"
+      method="post"
+      enctype="multipart/form-data">
     <div th:object="${pubType}">
         <label>Publikācijas tips</label>
         <input type="radio" th:field="*{publicationTypeValue}" th:value="BOOK">
@@ -89,19 +93,19 @@
            th:text="${error}">Validation error</p>
     </div>
 
-<!--    <div>-->
-<!--        <label>Izdevuma veids</label>-->
-<!--        <input th:field="*{publishment}"/>-->
-<!--        <p th:each="error : ${#fields.errors('publishment')}"-->
-<!--           th:text="${error}">Validation error</p>-->
-<!--    </div>-->
+    <!--    <div>-->
+    <!--        <label>Izdevuma veids</label>-->
+    <!--        <input th:field="*{publishment}"/>-->
+    <!--        <p th:each="error : ${#fields.errors('publishment')}"-->
+    <!--           th:text="${error}">Validation error</p>-->
+    <!--    </div>-->
 
-<!--    <div>-->
-<!--        <input type="radio" th:field="*{dataBases}" th:value="BOOK">-->
-<!--        <label>Datu bāzes</label>-->
-<!--        <p th:each="error : ${#fields.errors('dataBases')}"-->
-<!--           th:text="${error}">Validation error</p>-->
-<!--    </div>-->
+    <!--    <div>-->
+    <!--        <input type="radio" th:field="*{dataBases}" th:value="BOOK">-->
+    <!--        <label>Datu bāzes</label>-->
+    <!--        <p th:each="error : ${#fields.errors('dataBases')}"-->
+    <!--           th:text="${error}">Validation error</p>-->
+    <!--    </div>-->
 
     <div>
         <label>Saite uz publikāciju</label>
@@ -129,6 +133,21 @@
         <input th:field="*{editors}"/>
         <p th:each="error : ${#fields.errors('editors')}"
            th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <!--        <form enctype="multipart/form-data">-->
+        <table>
+            <tr>
+                <td>File to upload:</td>
+                <td><input type="file" name="file"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <!--                    <td><input type="submit" value="Upload"/></td>-->
+            </tr>
+        </table>
+        <!--        </form>-->
     </div>
 
     <div th:object="${pubTypeBook}">

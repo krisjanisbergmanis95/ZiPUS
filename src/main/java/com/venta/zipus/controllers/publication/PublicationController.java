@@ -1,5 +1,6 @@
 package com.venta.zipus.controllers.publication;
 
+import com.venta.zipus.controllers.fileupload.FileUploadController;
 import com.venta.zipus.controllers.user.UserController;
 import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.models.publications.PublicationBook;
@@ -18,8 +19,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import com.venta.zipus.services.IStorageService;
+import com.venta.zipus.localstorage.StorageFileNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+
+import java.util.stream.Collectors;
 
 import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
 
@@ -31,19 +47,26 @@ public class PublicationController {
     IPublicationService publicationService;
     @Autowired
     IUserService userService;
+    @Autowired
+    IStorageService storageService;
 
     @GetMapping(value = "/add") // id for added publication
     public String showNewPublicationPage(Model model) {
         model.addAttribute("publication", new Publication());
         model.addAttribute("pubTypeBook", new PublicationBook());
         model.addAttribute("pubType", new PublicationType());
+        model.addAttribute("files", storageService.loadAll().map(
+                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                        "serveFile", path.getFileName().toString()).build().toUri().toString())
+                .collect(Collectors.toList()));
         return "add-publication-page-book";//add-publication-page
     }
 
     @PostMapping(value = "/add/book") // id for added publication
     public String addNewBookTypePublication(@Valid Publication publication,
                                             PublicationBook publicationBook,
-                                            BindingResult result) {
+                                            BindingResult result,
+                                            @RequestParam("file") MultipartFile file) {
         logger.info(publication.toString());
         if (!result.hasErrors()) {
             publicationService.addPublication(publication);
@@ -55,6 +78,7 @@ public class PublicationController {
             User user = userService.getUserByUsername(getCurrentUsername());
             try {
                 user.addPublication(newPub);
+                storageService.store(file);
                 userService.updateUser(user);
             } catch (Exception e) {
                 logger.error(e.getMessage());
