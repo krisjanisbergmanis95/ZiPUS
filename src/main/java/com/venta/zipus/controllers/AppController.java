@@ -1,7 +1,9 @@
 package com.venta.zipus.controllers;
 
+import com.venta.zipus.WebSecurityConfig;
 import com.venta.zipus.controllers.user.UserController;
 import com.venta.zipus.models.user.User;
+import com.venta.zipus.services.IUserAuthorityService;
 import com.venta.zipus.services.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,8 @@ import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
 public class AppController {
     @Autowired
     IUserService userService;
+    @Autowired
+    IUserAuthorityService userAuthorityService;
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -58,8 +62,10 @@ public class AppController {
         logger.info("home page");
         logger.info(getCurrentUsername());
 //        logger.info(tempUser.getName());
-        long id = userService.getUserByUsername(getCurrentUsername()).getU_ID();
-        model.addAttribute("userID", id);
+        User user = userService.getUserByUsername(getCurrentUsername());
+        model.addAttribute("user", user);
+        model.addAttribute("isAuthorityAuthor",
+                user.isAuthority(userAuthorityService.getUserAuthorityByTitle(WebSecurityConfig.AUTHOR)));
 //        logger.info(id);
         return "home";
     }

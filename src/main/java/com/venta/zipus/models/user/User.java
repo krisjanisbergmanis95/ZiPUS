@@ -1,5 +1,6 @@
 package com.venta.zipus.models.user;
 
+import com.venta.zipus.models.publications.Publication;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,6 +62,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "uID"))
     private Collection<UserAuthority> authorities = new ArrayList<>();
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "User_Publication",
+            joinColumns = @JoinColumn(name = "pub_ID"),
+            inverseJoinColumns = @JoinColumn(name = "uID"))
+    private Collection<Publication> publications = new ArrayList<>();
+
     public User(String username, String password, UserAuthority... roles) {
         this.username = username;
         this.password = password;
@@ -101,6 +108,18 @@ public class User {
         } else {
             throw new Exception("authority title is null");
         }
+    }
+
+    public void addPublication(Publication publication) throws Exception {
+        if (publication != null) {
+            this.publications.add(publication);
+        } else {
+            throw new Exception("publication is null");
+        }
+    }
+
+    public boolean isAuthority(UserAuthority userAuthority) {
+        return this.authorities.contains(userAuthority);
     }
 
     @Override

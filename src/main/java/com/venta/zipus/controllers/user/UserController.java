@@ -72,9 +72,11 @@ public class UserController {
         if (id > 0) {
 //            model.addAttribute("variableUser", users.get(id));
             logger.info("Loading user page for user with id:" + id);
+            User user = userService.getUserById(id);
+            model.addAttribute("user", user);
             return "user-profile";
         } else {
-            logger.info("error for id " + id);
+            logger.error("error for id " + id);
             return "error";
         }
     }

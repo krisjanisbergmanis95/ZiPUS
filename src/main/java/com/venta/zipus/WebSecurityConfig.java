@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String USER = "USER";
     public static final String ADMIN = "ADMIN";
+    public static final String AUTHOR = "AUTHOR";
+    public static final String ZUADD = "ZUADD";
 
     @Bean
     @Override
@@ -41,8 +43,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         try {
             http.authorizeRequests()
                     .antMatchers("/register").permitAll()
+                    .antMatchers("/files", "/files/**").permitAll()//test
                     .antMatchers("/h2-console/**", "/users").hasAuthority(ADMIN)
-                    .antMatchers("/home", "/users/**").hasAnyAuthority(USER, ADMIN)
+                    .antMatchers("/publications/my-publications", "/publications/my-publications/**").hasAuthority(AUTHOR)
+                    .antMatchers("/home", "/users/**").hasAnyAuthority(USER, AUTHOR, ADMIN)
                     .antMatchers("/h2-console/**").permitAll()
                     .anyRequest().authenticated() //need to authenticate on any request
                     .and()

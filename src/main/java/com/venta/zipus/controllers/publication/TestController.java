@@ -141,13 +141,14 @@ public class TestController {
                 2004,
                 460,
                 "I231naKSDN",
-                publishType,
-                dataBases1,
+//                publishType,
+//                dataBases1,
                 "https://www.google.com",
                 "Just additional notes",
                 pb1);
 
-        Publication p3 = new Publication(publicationType2,
+        Publication p3 = new Publication(
+                publicationType2,
                 "Latviešu",
                 "Pētījums par thymeleaf žurnālam",
                 "Research about thymeleaf to journal",
@@ -160,8 +161,8 @@ public class TestController {
                 2015,
                 41,
                 "I2KadsSDN",
-                publishType,
-                dataBases1,
+//                publishType,
+//                dataBases1,
                 "https://www.google.com",
                 "Just additional notes",
                 pm1);
@@ -179,8 +180,8 @@ public class TestController {
                 2020,
                 420,
                 "I231na123N",
-                publishType,
-                dataBases1,
+//                publishType,
+//                dataBases1,
                 "https://www.google.com",
                 "Just additional notasddaslmdlasmldsadsaes",
                 pc1);

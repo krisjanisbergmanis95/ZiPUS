@@ -5,7 +5,9 @@ import com.venta.zipus.models.databases.DataBase;
 import com.venta.zipus.models.publications.pubtypegroups.PublicationTypeGroup;
 import com.venta.zipus.models.publications.pubtypes.*;
 import com.venta.zipus.models.publishments.PublishmentType;
+import com.venta.zipus.models.user.User;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -52,6 +54,9 @@ public class Publication {
 //            joinColumns = @JoinColumn(name = "PUBISHMENT_ID"),
 //            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
 //    private Collection<PublicationType> publishments;
+
+    @ManyToMany(mappedBy = "publications")
+    private Collection<User> users;
 
     @ManyToOne
     @JoinColumn(name = "PUBLISHMENT_ID")
@@ -105,6 +110,11 @@ public class Publication {
     private String notes;
 
     //TODO FILE TO IMPORT
+    @Column(name = "filePath")
+    private String filePath;
+
+    @Column(name = "fileName")
+    private String fileName;
 
     @OneToOne
     @JoinColumn(name = "PUB_BOOK_ID")
@@ -124,27 +134,28 @@ public class Publication {
         this.language = language;
     }
 
-    public Publication(PublicationType pubType,
-                       String language,
-                       String publicationTitleOrigin,
-                       String publicationTitleEnglish,
-                       String annotation,
-                       String annotationEnglish,
-                       String fieldOfResearch,
-                       ArrayList<Author> authors,
-                       ArrayList<String> keyWords,
-                       String publisher,
-                       int publishedYear,
-                       int pages,
-                       String isbnISSN,
-                       PublishmentType publishment,
-                       ArrayList<DataBase> dataBases,
-                       String hyperLink,
-                       String notes,
-                       PublicationBook publicationBook
+    public Publication(
+            PublicationType pubType,
+            String language,
+            String publicationTitleOrigin,
+            String publicationTitleEnglish,
+            String annotation,
+            String annotationEnglish,
+            String fieldOfResearch,
+            ArrayList<Author> authors,
+            ArrayList<String> keyWords,
+            String publisher,
+            int publishedYear,
+            int pages,
+            String isbnISSN,
+//            PublishmentType publishment,
+//            ArrayList<DataBase> dataBases,
+            String hyperLink,
+            String notes,
+            PublicationBook publicationBook
     ) {
         this.pubType = pubType;
-        this.publicationGroup = pubType.getPublicationGroup();
+//        this.publicationGroup = pubType.getPublicationGroup();
         this.language = language;
         this.publicationTitleOrigin = publicationTitleOrigin;
         this.publicationTitleEnglish = publicationTitleEnglish;
@@ -157,13 +168,60 @@ public class Publication {
         this.publishedYear = publishedYear;
         this.pages = pages;
         this.isbnISSN = isbnISSN;
-        this.publishment = publishment;
-        this.dataBases = dataBases;
+//        this.publishment = publishment;
+//        this.dataBases = dataBases;
         //TODO cita datu bāze
         this.hyperLink = hyperLink;
         this.notes = notes;
         this.publicationBook = publicationBook;
     }
+
+    public Publication(
+            PublicationType pubType,
+            String language,
+            String publicationTitleOrigin,
+            String publicationTitleEnglish,
+            String annotation,
+            String annotationEnglish,
+            String fieldOfResearch,
+            ArrayList<Author> authors,
+            ArrayList<String> keyWords,
+            String publisher,
+            int publishedYear,
+            int pages,
+            String isbnISSN,
+//            PublishmentType publishment,
+//            ArrayList<DataBase> dataBases,
+            String hyperLink,
+            String notes,
+            PublicationBook publicationBook,
+            String filePath,
+            String fileName
+    ) {
+        this.pubType = pubType;
+//        this.publicationGroup = pubType.getPublicationGroup();
+        this.language = language;
+        this.publicationTitleOrigin = publicationTitleOrigin;
+        this.publicationTitleEnglish = publicationTitleEnglish;
+        this.annotation = annotation;
+        this.annotationEnglish = annotationEnglish;
+        this.fieldOfResearch = fieldOfResearch;
+        this.authors = authors;
+        this.keyWords = keyWords;
+        this.publisher = publisher;
+        this.publishedYear = publishedYear;
+        this.pages = pages;
+        this.isbnISSN = isbnISSN;
+//        this.publishment = publishment;
+//        this.dataBases = dataBases;
+        //TODO cita datu bāze
+        this.hyperLink = hyperLink;
+        this.notes = notes;
+        this.publicationBook = publicationBook;
+        this.filePath = filePath;
+        this.fileName = fileName;
+    }
+
     public Publication(PublicationType pubType,
                        String language,
                        String publicationTitleOrigin,
@@ -177,14 +235,14 @@ public class Publication {
                        int publishedYear,
                        int pages,
                        String isbnISSN,
-                       PublishmentType publishment,
-                       ArrayList<DataBase> dataBases,
+//                       PublishmentType publishment,
+//                       ArrayList<DataBase> dataBases,
                        String hyperLink,
                        String notes,
                        PublicationMagazine publicationMagazine
     ) {
         this.pubType = pubType;
-        this.publicationGroup = pubType.getPublicationGroup();
+//        this.publicationGroup = pubType.getPublicationGroup();
         this.language = language;
         this.publicationTitleOrigin = publicationTitleOrigin;
         this.publicationTitleEnglish = publicationTitleEnglish;
@@ -197,13 +255,14 @@ public class Publication {
         this.publishedYear = publishedYear;
         this.pages = pages;
         this.isbnISSN = isbnISSN;
-        this.publishment = publishment;
-        this.dataBases = dataBases;
+//        this.publishment = publishment;
+//        this.dataBases = dataBases;
         //TODO cita datu bāze
         this.hyperLink = hyperLink;
         this.notes = notes;
         this.publicationMagazine = publicationMagazine;
     }
+
     public Publication(PublicationType pubType,
                        String language,
                        String publicationTitleOrigin,
@@ -217,14 +276,14 @@ public class Publication {
                        int publishedYear,
                        int pages,
                        String isbnISSN,
-                       PublishmentType publishment,
-                       ArrayList<DataBase> dataBases,
+//                       PublishmentType publishment,
+//                       ArrayList<DataBase> dataBases,
                        String hyperLink,
                        String notes,
                        PublicationConference publicationConference
     ) {
         this.pubType = pubType;
-        this.publicationGroup = pubType.getPublicationGroup();
+//        this.publicationGroup = pubType.getPublicationGroup();
         this.language = language;
         this.publicationTitleOrigin = publicationTitleOrigin;
         this.publicationTitleEnglish = publicationTitleEnglish;
@@ -237,8 +296,8 @@ public class Publication {
         this.publishedYear = publishedYear;
         this.pages = pages;
         this.isbnISSN = isbnISSN;
-        this.publishment = publishment;
-        this.dataBases = dataBases;
+//        this.publishment = publishment;
+//        this.dataBases = dataBases;
         //TODO cita datu bāze
         this.hyperLink = hyperLink;
         this.notes = notes;
@@ -251,6 +310,7 @@ public class Publication {
                 "pub_ID=" + pub_ID +
                 ", pubType='" + pubType + '\'' +
                 ", language='" + language + '\'' +
+                ", filepath = " + filePath + '\'' +
                 '}';
     }
 }
