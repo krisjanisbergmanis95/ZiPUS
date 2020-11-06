@@ -8,10 +8,17 @@ import com.venta.zipus.models.publications.pubtypes.PublicationType;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.services.IPublicationService;
 import com.venta.zipus.services.IUserService;
-import com.venta.zipus.services.implementation.PublicationService;
+import javassist.bytecode.ByteArray;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,24 +26,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import com.venta.zipus.services.IStorageService;
-import com.venta.zipus.localstorage.StorageFileNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
+import java.io.*;
 import java.nio.file.Path;
-import java.util.stream.Collectors;
 
 import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
 
@@ -56,10 +55,6 @@ public class PublicationController {
         model.addAttribute("publication", new Publication());
         model.addAttribute("pubTypeBook", new PublicationBook());
         model.addAttribute("pubType", new PublicationType());
-//        model.addAttribute("files", storageService.loadAll().map(
-//                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-//                        "serveFile", path.getFileName().toString()).build().toUri().toString())
-//                .collect(Collectors.toList()));
         return "add-publication-page-book";//add-publication-page
     }
 
@@ -67,11 +62,13 @@ public class PublicationController {
     public String addNewBookTypePublication(@Valid Publication publication,
                                             PublicationBook publicationBook,
                                             BindingResult result,
-                                            @RequestParam("file") MultipartFile file) {
+                                            @RequestParam("file") MultipartFile file) throws IOException {
 
         if (!result.hasErrors()) {
             publication.setFilePath("upload-dir/" + file.getOriginalFilename());
             publication.setFileName(file.getOriginalFilename());
+//            publication.setPubFile(file);
+            publication.setPubFile(file.getBytes());
             publicationService.addPublication(publication);
             Publication newPub = publicationService
                     .getPublicationByTitleOriginAndTitleEnglish(
@@ -84,7 +81,9 @@ public class PublicationController {
             User user = userService.getUserByUsername(getCurrentUsername());
             try {
                 user.addPublication(newPub);
-                storageService.store(file);
+//                storageService.store(file);
+                publicationService.storeFileAsByteArray(file);
+
                 logger.info("file stored");
                 userService.updateUser(user);
                 logger.info("user updated");
@@ -101,24 +100,61 @@ public class PublicationController {
     }
 
     @GetMapping(value = "/{id}") // id for added publication
-    public String getPublicationById(@PathVariable(name = "id") long id, Model model) {
+    public String getPublicationById(@PathVariable(name = "id") long id, Model model) throws IOException {
         Publication pub = publicationService.getPublicationById(id);
         model.addAttribute("publication", pub);
-//        model.addAttribute("files", storageService.loadAll().map(
-//                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-//                        "serveFile", path.getFileName().toString()).build().toUri().toString())
-//                .collect(Collectors.toList()));
-        logger.info("loading from path " + pub.getFilePath());
-
-        Path path = storageService.load(pub.getFilePath());
-        String pathFileName = path.getFileName().toString();
-        logger.info("pathFileName " + pathFileName);
+//        logger.info("loading from path " + pub.getFilePath());
 //
-        model.addAttribute("file", MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                "serveFile", pathFileName).build().toUri().toString());
+//        Path path = storageService.load(pub.getFilePath());
+//        String pathFileName = path.getFileName().toString();
+//        logger.info("pathFileName " + pathFileName);
+//
+
+//        InputStream inputStream = new ByteArrayInputStream(pub.getPubFile());
+
+        try (InputStream inputStream = new ByteArrayInputStream(pub.getPubFile());
+             ByteArrayOutputStream targetStream = new ByteArrayOutputStream())
+        {
+            IOUtils.copy(inputStream, targetStream);
+//            FileWriter multipartFile = new CommonsMultipartFile(targetStream);
+            model.addAttribute("file", targetStream);
+        }
 
 
+//        MultipartFile file = new MockMultipartFile(pub.getFileName(), pub.getFileName(), MediaType.APPLICATION_OCTET_STREAM.toString(), inputStream);
+//        file.transferTo(new File(pub.getFilePath()));
+//        Path path = storageService.load(pub.getFilePath());
+//        String pathFileName = path.getFileName().toString();
+
+//        ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM)
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attchment:filename=\"" + pub.getFileName() + "\"")
+//        .body(file);
+//        model.addAttribute("file", MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+//                "serveFile", pathFileName).build().toUri().toString());
+//        model.addAttribute("file", new ByteArrayResource(pub.getPubFile()));
+//        model.addAttribute("file", file.transferTo().getURI().toString());
+//        model.addAttribute("file", ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM)
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attchment:filename=\"" + pub.getFileName() + "\"")
+//                .body(new ByteArrayResource(pub.getPubFile())));
         return "publication-page";
+    }
+
+    @GetMapping("/downloadFile/{pubId}")
+//    public String downloadFile(@PathVariable long pubId) {
+    public HttpEntity<byte[]> downloadFile(@PathVariable long pubId) {
+        Publication pub = publicationService.getPublicationById(pubId);
+        logger.info(String.valueOf(pubId));
+        logger.info(pub.getFileName());
+        logger.info(pub.getPublicationTitleEnglish());
+        byte[] documentBody = pub.getPubFile();
+
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.APPLICATION_PDF);
+        header.set(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=" + pub.getFileName().replace(" ", "_"));
+        header.setContentLength(documentBody.length);
+
+        return new HttpEntity<byte[]>(documentBody, header);
     }
 
     @GetMapping(value = "/my-publications") // id for added publication
