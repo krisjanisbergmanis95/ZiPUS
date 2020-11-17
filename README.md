@@ -80,3 +80,13 @@ Many to Many
 
 ##Lombok
 
+##Dependency issues
+
+```<dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+```
+
+will fix `import org.apache.commons.io.IOUtils;` not being found
