@@ -62,7 +62,8 @@
             <label>Publikācijas fails</label>
 <!--            <ul>-->
 <!--                <li th:each="file : ${files}">-->
-                    <a th:href="${file}" th:text="${file}" />
+<!--                    <a th:href="${file}" th:text="${publication.getFileName()}" />-->
+        <a th:href="@{downloadFile/{id}(id=${publication.getPub_ID()})}" th:text="${publication.getFileName()}" />
 <!--                </li>-->
 <!--            </ul>-->
         </div>

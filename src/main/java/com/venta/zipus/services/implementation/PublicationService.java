@@ -1,22 +1,14 @@
 package com.venta.zipus.services.implementation;
 
-import com.venta.zipus.models.authors.Author;
-import com.venta.zipus.models.databases.DataBase;
+
 import com.venta.zipus.models.publications.Publication;
-import com.venta.zipus.models.publications.PublicationBook;
-import com.venta.zipus.models.publications.pubtypes.PublicationType;
-import com.venta.zipus.models.publishments.PublishmentType;
-import com.venta.zipus.models.user.User;
-import com.venta.zipus.models.user.UserAuthority;
 import com.venta.zipus.repositories.IPublicationRepo;
 import com.venta.zipus.services.IPublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Collection;
-
-import static com.venta.zipus.WebSecurityConfig.passwordEncoder;
 
 @Service
 public class PublicationService implements IPublicationService {
@@ -58,11 +50,18 @@ public class PublicationService implements IPublicationService {
                 pub.getNotes(),
                 pub.getPublicationBook(),
                 pub.getFilePath(),
-                pub.getFileName()
+                pub.getFileName(),
+                pub.getPubFile()
         );
 
         publicationRepo.save(publication);
         return true;
+    }
+
+    @Override
+    public boolean storeFileAsByteArray(MultipartFile file) {
+//        publicationRepo
+        return false;
     }
 
     public Publication getPublicationByTitleOriginAndTitleEnglish(String titleOrigin, String titleEnglish) {

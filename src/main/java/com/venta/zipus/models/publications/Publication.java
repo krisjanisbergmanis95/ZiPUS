@@ -116,6 +116,11 @@ public class Publication {
     @Column(name = "fileName")
     private String fileName;
 
+    @Lob
+    @Column(name="pubFile")
+    private byte[] pubFile;
+//    private MultipartFile pubFile;
+
     @OneToOne
     @JoinColumn(name = "PUB_BOOK_ID")
     private PublicationBook publicationBook;
@@ -196,7 +201,9 @@ public class Publication {
             String notes,
             PublicationBook publicationBook,
             String filePath,
-            String fileName
+            String fileName,
+            byte[] pubFile
+//            MultipartFile pubFile
     ) {
         this.pubType = pubType;
 //        this.publicationGroup = pubType.getPublicationGroup();
@@ -220,6 +227,7 @@ public class Publication {
         this.publicationBook = publicationBook;
         this.filePath = filePath;
         this.fileName = fileName;
+        this.pubFile = pubFile;
     }
 
     public Publication(PublicationType pubType,

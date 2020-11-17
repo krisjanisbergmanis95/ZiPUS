@@ -24,13 +24,18 @@ import com.venta.zipus.repositories.publishments.IPublishmentRepo;
 import com.venta.zipus.repositories.user.IUserAuthorityRepo;
 import com.venta.zipus.repositories.user.IUserRepo;
 import com.venta.zipus.services.IStorageService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -138,6 +143,8 @@ public class Application {
             PublicationBook pb1 = new PublicationBook("Izdota publikācija 1", editors, "Rīga");
             publicationBookRepo.save(pb1);
             PublishmentType publishType = publishmentRepo.findByPublishmentTypeName(PublishmentTypeNames.INTERNATIONAL_REVIEW);
+
+
             ArrayList<DataBase> dataBases1 = new ArrayList<>(
                     Arrays.asList(
                             dataBaseRepo.findByDataBaseName(DataBaseNames.EBSCO),
@@ -145,6 +152,15 @@ public class Application {
                             dataBaseRepo.findByDataBaseName(DataBaseNames.GOOGLE_SCHOLAR)
                     )
             );
+
+
+//            new File("./upload-dir/" + "doa_stack.json");
+//            MultipartFile mf = (MultipartFile) tf;
+            File file = new File("./upload-dir/Visitor pattern.pdf");
+            FileInputStream input = new FileInputStream(file);
+            MultipartFile multipartFile = new MockMultipartFile("file",
+                    file.getName(), "text/plain", IOUtils.toByteArray(input));
+
             Publication p2 = new Publication(publicationType1,
                     "Latviešu",
                     "Pētījums par thymeleaf",
@@ -162,8 +178,14 @@ public class Application {
 //                    dataBases1,
                     "https://www.google.com",
                     "Just additional notes",
-                    pb1);
+                    pb1,
+                    "upload-dir/" + "Visitor pattern.pdf",
+                    "Visitor pattern.pdf",
+                    multipartFile.getBytes()
+                    );
             //end of creating a book
+
+
 
             u3.addPublication(p2);
             userRepo.save(u3);
