@@ -8,12 +8,14 @@ import com.venta.zipus.services.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.venta.zipus.WebSecurityConfig.passwordEncoder;
+import static com.venta.zipus.config.WebSecurityConfig.passwordEncoder;
 
 @Service
 public class UserService implements IUserService {
@@ -22,7 +24,14 @@ public class UserService implements IUserService {
     IUserRepo userRepo;
 
     @Override
+    @Cacheable(value = "users")
     public User getUserById(long id) {
+//        try {
+//            long time = 3000L;
+//            Thread.sleep(time);
+//        } catch (InterruptedException e) {
+//            throw new IllegalStateException(e);
+//        }
         if (userRepo.count() > 0) {
             return userRepo.findById(id);
         }
@@ -30,6 +39,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Cacheable(value = "users")
     public User getUserByUsername(String username) {
         if (userRepo.count() > 0) {
             return userRepo.findByUsername(username);
@@ -51,6 +61,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @CachePut(value = "users")
     public boolean updateUser(User user) {
         if (userRepo.existsById(user.getU_ID()) && userRepo.existsByUsername(user.getUsername()) && userRepo.existsByEmail(user.getEmail())) {
             userRepo.save(user);

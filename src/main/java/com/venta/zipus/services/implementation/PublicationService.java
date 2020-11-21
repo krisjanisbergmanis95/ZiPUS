@@ -5,6 +5,7 @@ import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.repositories.IPublicationRepo;
 import com.venta.zipus.services.IPublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ public class PublicationService implements IPublicationService {
     IPublicationRepo publicationRepo;
 
     @Override
+    @Cacheable("publications")
     public Publication getPublicationById(long id) {
         if (publicationRepo.count() > 0) {
             return publicationRepo.findById(id);
@@ -64,6 +66,7 @@ public class PublicationService implements IPublicationService {
         return false;
     }
 
+    @Cacheable("publications")
     public Publication getPublicationByTitleOriginAndTitleEnglish(String titleOrigin, String titleEnglish) {
         return publicationRepo.findByPublicationTitleOriginAndPublicationTitleEnglish(titleOrigin, titleEnglish);
     }

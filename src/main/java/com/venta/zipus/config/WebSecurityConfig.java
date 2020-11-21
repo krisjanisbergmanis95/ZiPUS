@@ -1,4 +1,4 @@
-package com.venta.zipus;
+package com.venta.zipus.config;
 
 import com.venta.zipus.services.implementation.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Configurable;

@@ -1,6 +1,6 @@
 package com.venta.zipus.controllers;
 
-import com.venta.zipus.WebSecurityConfig;
+import com.venta.zipus.config.WebSecurityConfig;
 import com.venta.zipus.controllers.user.UserController;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.services.IUserAuthorityService;
@@ -8,7 +8,6 @@ import com.venta.zipus.services.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
 

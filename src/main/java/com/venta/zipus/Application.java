@@ -1,5 +1,6 @@
 package com.venta.zipus;
 
+import com.venta.zipus.config.WebSecurityConfig;
 import com.venta.zipus.models.authors.Author;
 import com.venta.zipus.models.databases.DataBase;
 import com.venta.zipus.models.databases.constants.DataBaseNames;
@@ -24,7 +25,10 @@ import com.venta.zipus.repositories.publishments.IPublishmentRepo;
 import com.venta.zipus.repositories.user.IUserAuthorityRepo;
 import com.venta.zipus.repositories.user.IUserRepo;
 import com.venta.zipus.services.IStorageService;
+import com.venta.zipus.services.IUserService;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -38,11 +42,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
-import static com.venta.zipus.WebSecurityConfig.passwordEncoder;
+import static com.venta.zipus.config.WebSecurityConfig.passwordEncoder;
 
 @SpringBootApplication
+//@EnableCaching
 public class Application {
+
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+
     @Autowired
     IPublicationTypeRepo publicationTypeRepo;
 
@@ -63,6 +72,9 @@ public class Application {
 
     @Autowired
     IUserAuthorityRepo userAuthorityRepo;
+
+    @Autowired
+    IUserService userService;
 
     public static void main(String[] args) {
 
@@ -127,7 +139,6 @@ public class Application {
                     passwordEncoder().encode("doo"),
                     new ArrayList<>(Arrays.asList(AuthTypeAuthor)));
 //            userRepo.save(u3);
-            System.out.println(userRepo.findAll());
 
 //Adding a book
             PublicationType publicationType1 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesBook.EDUCATIONAL_BOOK);
@@ -190,6 +201,24 @@ public class Application {
             u3.addPublication(p2);
             userRepo.save(u3);
             System.out.println(userRepo.findAll());
+
+            Collection<User> users = userRepo.findAll();
+            logger.info(".... Fetching users");
+            long start = System.currentTimeMillis();
+//            users.forEach(user -> logger.info(Long.toString(user.getU_ID())));
+            logger.info("user with id 26 -->" + userService.getUserById(26));
+            logger.info("user with id 27 -->" + userService.getUserById(27));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+
+            logger.info("time " + (System.currentTimeMillis() - start));
         };
     }
 
