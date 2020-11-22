@@ -19,7 +19,6 @@
             <div class="col-sm-2">Kopējais publikāciju skaits: [[${totalItems}]]</div>
             <div class="col-sm-1">
                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-<!--                    <a th:if="${currentPage != i}" th:href="@{publications/page/{i}/size/{size}(i=${id}, size=5)}">-->
                     <a th:if="${currentPage != i}" th:href="@{'/publications/page/' + ${i} + '/size/' + 5}">
                         [[${i}]]
                     </a>

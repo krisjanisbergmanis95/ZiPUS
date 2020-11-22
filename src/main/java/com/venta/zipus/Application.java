@@ -144,7 +144,7 @@ public class Application {
                     "doe@dank.com",
                     passwordEncoder().encode("doo"),
                     new ArrayList<>(Arrays.asList(AuthTypeAuthor)));
-//            userRepo.save(u3);
+            userRepo.save(u3);
 
 //Adding a book
             PublicationType publicationType1 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesBook.EDUCATIONAL_BOOK);
@@ -228,7 +228,8 @@ public class Application {
                     pb1,
                     "upload-dir/" + "Visitor_pattern.pdf",
                     "Visitor_pattern.pdf",
-                    multipartFile.getBytes()
+                    multipartFile.getBytes(),
+                    new ArrayList<User>(Arrays.asList(u3))
             );
 
             Publication p3 = new Publication(publicationType1,
@@ -251,7 +252,8 @@ public class Application {
                     pb2,
                     "upload-dir/" + "Visitor_pattern.pdf",
                     "Visitor_pattern.pdf",
-                    multipartFile.getBytes()
+                    multipartFile.getBytes(),
+                    new ArrayList<User>(Arrays.asList(u3))
                     );
 
             Publication p4 = new Publication(publicationType1,
@@ -475,7 +477,7 @@ public class Application {
 
 
 //            u3.addPublication(p2);
-            userRepo.save(u3);
+
             System.out.println(userRepo.findAll());
 
             Collection<User> users = userRepo.findAll();

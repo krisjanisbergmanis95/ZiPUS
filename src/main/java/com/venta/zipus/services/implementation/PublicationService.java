@@ -2,6 +2,8 @@ package com.venta.zipus.services.implementation;
 
 
 import com.venta.zipus.models.publications.Publication;
+import com.venta.zipus.models.user.User;
+import com.venta.zipus.models.user.UserAuthority;
 import com.venta.zipus.repositories.IPublicationRepo;
 import com.venta.zipus.services.IPublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class PublicationService implements IPublicationService {
@@ -56,7 +60,8 @@ public class PublicationService implements IPublicationService {
                 pub.getPublicationBook(),
                 pub.getFilePath(),
                 pub.getFileName(),
-                pub.getPubFile()
+                pub.getPubFile(),
+                (ArrayList)pub.getUsers()
         );
 
         publicationRepo.save(publication);
@@ -72,6 +77,14 @@ public class PublicationService implements IPublicationService {
     @Cacheable("publications")
     public Publication getPublicationByTitleOriginAndTitleEnglish(String titleOrigin, String titleEnglish) {
         return publicationRepo.findByPublicationTitleOriginAndPublicationTitleEnglish(titleOrigin, titleEnglish);
+    }
+
+    public List<Publication> getPublicationsByUser(User user) {
+        return getPublicationsByUser(new ArrayList<>(Arrays.asList(user)));
+    }
+
+    public List<Publication> getPublicationsByUser(ArrayList<User> users) {
+        return publicationRepo.findByUsersIn(users);
     }
 
 

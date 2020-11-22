@@ -5,6 +5,7 @@ import com.venta.zipus.controllers.user.UserController;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.services.IUserAuthorityService;
 import com.venta.zipus.services.IUserService;
+import lombok.extern.log4j.Log4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class AppController {
     @Autowired
     IUserAuthorityService userAuthorityService;
 
-    Logger logger = LoggerFactory.getLogger(UserController.class);
+    Logger logger = LoggerFactory.getLogger(AppController.class);
 
     private boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -66,7 +67,7 @@ public class AppController {
         model.addAttribute("user", user);
         model.addAttribute("isAuthorityAuthor",
                 user.isAuthority(userAuthorityService.getUserAuthorityByTitle(WebSecurityConfig.AUTHOR)));
-//        logger.info(id);
+        logger.info(userAuthorityService.getUserAuthorityByTitle(WebSecurityConfig.AUTHOR).toString());
         return "home";
     }
 }

@@ -62,10 +62,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "uID"))
     private Collection<UserAuthority> authorities = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "User_Publication",
-            joinColumns = @JoinColumn(name = "pub_ID"),
-            inverseJoinColumns = @JoinColumn(name = "uID"))
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JoinTable(name = "User_Publication",
+//            joinColumns = @JoinColumn(name = "pub_ID"),
+//            inverseJoinColumns = @JoinColumn(name = "uID"))
+//
+    @ManyToMany(mappedBy = "users")
     private Collection<Publication> publications = new ArrayList<>();
 
     public User(String username, String password, UserAuthority... roles) {
@@ -110,13 +112,13 @@ public class User {
         }
     }
 
-    public void addPublication(Publication publication) throws Exception {
-        if (publication != null) {
-            this.publications.add(publication);
-        } else {
-            throw new Exception("publication is null");
-        }
-    }
+//    public void addPublication(Publication publication) throws Exception {
+//        if (publication != null) {
+//            this.publications.add(publication);
+//        } else {
+//            throw new Exception("publication is null");
+//        }
+//    }
 
     public boolean isAuthority(UserAuthority userAuthority) {
         return this.authorities.contains(userAuthority);

@@ -7,11 +7,13 @@ import com.venta.zipus.models.publications.pubtypes.*;
 import com.venta.zipus.models.publishments.PublishmentType;
 import com.venta.zipus.models.user.User;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Pievienot jaunu one-to-one nulable ar katru grupas veidu, un būs klāt tikai tie lauki kas nav null.
@@ -49,14 +51,16 @@ public class Publication {
             inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
     private Collection<DataBase> dataBases;
 
-//    @ManyToMany
+    //    @ManyToMany
 //    @JoinTable(name = "Publishment_Publication",
 //            joinColumns = @JoinColumn(name = "PUBISHMENT_ID"),
 //            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
 //    private Collection<PublicationType> publishments;
-
-    @ManyToMany(mappedBy = "publications")
-    private Collection<User> users;
+    @ManyToMany//(cascade = CascadeType.ALL)
+    @JoinTable(name = "Publication_Users",
+            joinColumns = @JoinColumn(name = "uID"),
+            inverseJoinColumns = @JoinColumn(name = "pub_ID"))
+    private Collection<User> users = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "PUBLISHMENT_ID")
@@ -109,7 +113,6 @@ public class Publication {
     @Column(name = "Notes")
     private String notes;
 
-    //TODO FILE TO IMPORT
     @Column(name = "filePath")
     private String filePath;
 
@@ -117,9 +120,8 @@ public class Publication {
     private String fileName;
 
     @Lob
-    @Column(name="pubFile")
+    @Column(name = "pubFile")
     private byte[] pubFile;
-//    private MultipartFile pubFile;
 
     @OneToOne
     @JoinColumn(name = "PUB_BOOK_ID")
@@ -230,6 +232,56 @@ public class Publication {
         this.pubFile = pubFile;
     }
 
+    public Publication(
+            PublicationType pubType,
+            String language,
+            String publicationTitleOrigin,
+            String publicationTitleEnglish,
+            String annotation,
+            String annotationEnglish,
+            String fieldOfResearch,
+            ArrayList<Author> authors,
+            ArrayList<String> keyWords,
+            String publisher,
+            int publishedYear,
+            int pages,
+            String isbnISSN,
+//            PublishmentType publishment,
+//            ArrayList<DataBase> dataBases,
+            String hyperLink,
+            String notes,
+            PublicationBook publicationBook,
+            String filePath,
+            String fileName,
+            byte[] pubFile,
+            List<User> users
+    ) {
+        this.pubType = pubType;
+//        this.publicationGroup = pubType.getPublicationGroup();
+        this.language = language;
+        this.publicationTitleOrigin = publicationTitleOrigin;
+        this.publicationTitleEnglish = publicationTitleEnglish;
+        this.annotation = annotation;
+        this.annotationEnglish = annotationEnglish;
+        this.fieldOfResearch = fieldOfResearch;
+        this.authors = authors;
+        this.keyWords = keyWords;
+        this.publisher = publisher;
+        this.publishedYear = publishedYear;
+        this.pages = pages;
+        this.isbnISSN = isbnISSN;
+//        this.publishment = publishment;
+//        this.dataBases = dataBases;
+        //TODO cita datu bāze
+        this.hyperLink = hyperLink;
+        this.notes = notes;
+        this.publicationBook = publicationBook;
+        this.filePath = filePath;
+        this.fileName = fileName;
+        this.pubFile = pubFile;
+        this.users = users;
+    }
+
     public Publication(PublicationType pubType,
                        String language,
                        String publicationTitleOrigin,
@@ -312,11 +364,21 @@ public class Publication {
         this.publicationConference = publicationConference;
     }
 
+    public void addUser(User user) throws Exception {
+        System.out.println("Adding user to publication: " + user.toString());
+        if (user != null) {
+            this.users.add(user);
+        } else {
+            throw new Exception("No user to add!");
+        }
+    }
+
     @Override
     public String toString() {
         return "Publication{" +
                 "pub_ID=" + pub_ID +
                 ", pubType='" + pubType + '\'' +
+                ", title='" + publicationTitleOrigin + '\'' +
                 ", language='" + language + '\'' +
                 ", filepath = " + filePath + '\'' +
                 '}';

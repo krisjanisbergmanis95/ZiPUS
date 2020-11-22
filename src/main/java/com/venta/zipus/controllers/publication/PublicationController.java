@@ -68,26 +68,30 @@ public class PublicationController {
             publication.setFilePath("upload-dir/" + file.getOriginalFilename());
             publication.setFileName(file.getOriginalFilename());
             publication.setPubFile(file.getBytes());
+            User user = userService.getUserByUsername(getCurrentUsername());
+            logger.info("Adding book, current user to link: " + user.toString());
+            try {
+//                publicationService.storeFileAsByteArray(file);
+                publication.addUser(user);
+                logger.info("users " + publication.getUsers().toString() + " added");
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
+
+            logger.info("=====================");
+            logger.info(publication.toString());
+            logger.info("=====================");
+
             publicationService.addPublication(publication);
             Publication newPub = publicationService
                     .getPublicationByTitleOriginAndTitleEnglish(
                             publication.getPublicationTitleOrigin(),
                             publication.getPublicationTitleEnglish());
             logger.info("=====================");
-            logger.info(publication.toString());
+            logger.info(newPub.toString());
             logger.info("=====================");
 
-            User user = userService.getUserByUsername(getCurrentUsername());
-            try {
-                user.addPublication(newPub);
-                publicationService.storeFileAsByteArray(file);
 
-                logger.info("file stored");
-                userService.updateUser(user);
-                logger.info("user updated");
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-            }
 
             logger.info("Publication added successfully");
         } else {
@@ -132,8 +136,9 @@ public class PublicationController {
     @GetMapping(value = "/my-publications") // id for added publication
     public String showMyPublications(Model model) {//@PathVariable(name = "user") User user, Model model
         User user = userService.getUserByUsername(getCurrentUsername());
-        model.addAttribute("user", user);
-        logger.info(user.getPublications().toString());
+        List<Publication> publications = publicationService.getPublicationsByUser(user);
+        model.addAttribute("publications", publications);
+        logger.info(publications.toString());
 //        Publication pub = publicationService.getPublicationById(id);
 //        model.addAttribute("publication", pub);
         return "my-publications-page";
