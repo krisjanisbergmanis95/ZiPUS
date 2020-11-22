@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -32,10 +33,9 @@ import com.venta.zipus.services.IStorageService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
-import java.nio.file.Path;
+import java.util.List;
 
 import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
 
@@ -67,7 +67,6 @@ public class PublicationController {
         if (!result.hasErrors()) {
             publication.setFilePath("upload-dir/" + file.getOriginalFilename());
             publication.setFileName(file.getOriginalFilename());
-//            publication.setPubFile(file);
             publication.setPubFile(file.getBytes());
             publicationService.addPublication(publication);
             Publication newPub = publicationService
@@ -81,7 +80,6 @@ public class PublicationController {
             User user = userService.getUserByUsername(getCurrentUsername());
             try {
                 user.addPublication(newPub);
-//                storageService.store(file);
                 publicationService.storeFileAsByteArray(file);
 
                 logger.info("file stored");
@@ -93,7 +91,6 @@ public class PublicationController {
 
             logger.info("Publication added successfully");
         } else {
-            logger.error("Something wrong?");
             logger.error(result.toString());
         }
         return "redirect:/publications/my-publications/";//add-publication-page
@@ -103,44 +100,19 @@ public class PublicationController {
     public String getPublicationById(@PathVariable(name = "id") long id, Model model) throws IOException {
         Publication pub = publicationService.getPublicationById(id);
         model.addAttribute("publication", pub);
-//        logger.info("loading from path " + pub.getFilePath());
-//
-//        Path path = storageService.load(pub.getFilePath());
-//        String pathFileName = path.getFileName().toString();
-//        logger.info("pathFileName " + pathFileName);
-//
-
-//        InputStream inputStream = new ByteArrayInputStream(pub.getPubFile());
 
         try (InputStream inputStream = new ByteArrayInputStream(pub.getPubFile());
              ByteArrayOutputStream targetStream = new ByteArrayOutputStream())
         {
             IOUtils.copy(inputStream, targetStream);
-//            FileWriter multipartFile = new CommonsMultipartFile(targetStream);
             model.addAttribute("file", targetStream);
         }
 
 
-//        MultipartFile file = new MockMultipartFile(pub.getFileName(), pub.getFileName(), MediaType.APPLICATION_OCTET_STREAM.toString(), inputStream);
-//        file.transferTo(new File(pub.getFilePath()));
-//        Path path = storageService.load(pub.getFilePath());
-//        String pathFileName = path.getFileName().toString();
-
-//        ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM)
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attchment:filename=\"" + pub.getFileName() + "\"")
-//        .body(file);
-//        model.addAttribute("file", MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-//                "serveFile", pathFileName).build().toUri().toString());
-//        model.addAttribute("file", new ByteArrayResource(pub.getPubFile()));
-//        model.addAttribute("file", file.transferTo().getURI().toString());
-//        model.addAttribute("file", ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM)
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attchment:filename=\"" + pub.getFileName() + "\"")
-//                .body(new ByteArrayResource(pub.getPubFile())));
         return "publication-page";
     }
 
     @GetMapping("/downloadFile/{pubId}")
-//    public String downloadFile(@PathVariable long pubId) {
     public HttpEntity<byte[]> downloadFile(@PathVariable long pubId) {
         Publication pub = publicationService.getPublicationById(pubId);
         logger.info(String.valueOf(pubId));
@@ -165,5 +137,23 @@ public class PublicationController {
 //        Publication pub = publicationService.getPublicationById(id);
 //        model.addAttribute("publication", pub);
         return "my-publications-page";
+    }
+
+    @GetMapping(value = "/")
+    public String showPublicationsPage() {
+        return "redirect:/publications/page/1/size/5";
+    }
+
+    @GetMapping(value = "/page/{pageNum}/size/{pageSize}")
+    public String findPaginated(@PathVariable (value = "pageNum") int pageNum, @PathVariable (value = "pageSize") int pageSize, Model model) {
+        Page<Publication> page = publicationService.findPublicationPage(pageNum, pageSize);
+        List<Publication> publicationList = page.getContent();
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("publications", publicationList);
+        return "publication-list-page";
     }
 }

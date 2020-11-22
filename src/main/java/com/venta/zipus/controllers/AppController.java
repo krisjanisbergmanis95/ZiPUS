@@ -52,7 +52,10 @@ public class AppController {
         return "redirect:/home/";
     }
 
-
+    @GetMapping("/")
+    public String redirectHome() {
+        return "redirect:/home";
+    }
 
     @GetMapping("/home") // endpoint for localhost:8080
     public String showHomePage(Model model) {

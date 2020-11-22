@@ -1,6 +1,7 @@
 package com.venta.zipus.services;
 
 import com.venta.zipus.models.publications.Publication;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IPublicationService {
@@ -12,4 +13,6 @@ public interface IPublicationService {
 //    boolean storeFileAsByteArray(MultipartFile file);
 
     Publication getPublicationByTitleOriginAndTitleEnglish(String publicationTitleOrigin, String publicationTitleEnglish);
+
+    Page<Publication> findPublicationPage(int pageNum, int pageSize);
 }
