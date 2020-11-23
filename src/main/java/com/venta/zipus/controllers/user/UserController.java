@@ -29,7 +29,7 @@ public class UserController {
     @GetMapping("/users")
     public String userspage(Model model) {
         logger.info("loading user list");
-//        model.addAttribute("user", users);
+        model.addAttribute("user", users);
         return "userpage";
 
     }
@@ -70,7 +70,6 @@ public class UserController {
     @GetMapping("/users/{id}")
     public String showProductById(@PathVariable(name = "id") int id, Model model) {
         if (id > 0) {
-//            model.addAttribute("variableUser", users.get(id));
             logger.info("Loading user page for user with id:" + id);
             User user = userService.getUserById(id);
             model.addAttribute("user", user);

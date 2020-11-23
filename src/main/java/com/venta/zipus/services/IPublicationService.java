@@ -18,7 +18,7 @@ public interface IPublicationService {
 
     Publication getPublicationByTitleOriginAndTitleEnglish(String publicationTitleOrigin, String publicationTitleEnglish);
 
-    Page<Publication> findPublicationPage(int pageNum, int pageSize);
+    Page<Publication> findPublicationPage(int pageNum, int pageSize, String sortField, String sortDirection);
     List<Publication> getPublicationsByUser(User user);
     List<Publication> getPublicationsByUser(ArrayList<User> users);
 }

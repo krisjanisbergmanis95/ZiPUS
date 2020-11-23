@@ -3,7 +3,6 @@ package com.venta.zipus.services.implementation;
 
 import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.models.user.User;
-import com.venta.zipus.models.user.UserAuthority;
 import com.venta.zipus.repositories.IPublicationRepo;
 import com.venta.zipus.services.IPublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -61,7 +61,7 @@ public class PublicationService implements IPublicationService {
                 pub.getFilePath(),
                 pub.getFileName(),
                 pub.getPubFile(),
-                (ArrayList)pub.getUsers()
+                (ArrayList) pub.getUsers()
         );
 
         publicationRepo.save(publication);
@@ -88,8 +88,11 @@ public class PublicationService implements IPublicationService {
     }
 
 
-    public Page<Publication> findPublicationPage(int pageNum, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+    public Page<Publication> findPublicationPage(int pageNum, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortField).ascending()
+                : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
         return publicationRepo.findAll(pageable);
     }
 }
