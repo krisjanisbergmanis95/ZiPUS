@@ -62,12 +62,17 @@ public class AppController {
     public String showHomePage(Model model) {
         logger.info("home page");
         logger.info(getCurrentUsername());
-//        logger.info(tempUser.getName());
+        logger.info(userAuthorityService.getUserAuthorityByTitle(WebSecurityConfig.ADMIN).getRoleTitle());
         User user = userService.getUserByUsername(getCurrentUsername());
+        Boolean isAdmin = user.isAuthority(
+                userAuthorityService.getUserAuthorityByTitle(WebSecurityConfig.ADMIN));
+        logger.info("is admin = " + isAdmin);
         model.addAttribute("user", user);
+        model.addAttribute("isAuthorityAdmin", isAdmin);
         model.addAttribute("isAuthorityAuthor",
                 user.isAuthority(userAuthorityService.getUserAuthorityByTitle(WebSecurityConfig.AUTHOR)));
-        logger.info(userAuthorityService.getUserAuthorityByTitle(WebSecurityConfig.AUTHOR).toString());
+        logger.info(user.toString());
+        logger.info(user.getAuthorities().toString());
         return "home";
     }
 }

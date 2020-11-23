@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.venta.zipus.services.IStorageService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,8 +40,7 @@ public class PublicationController {
     IPublicationService publicationService;
     @Autowired
     IUserService userService;
-    @Autowired
-    IStorageService storageService;
+
 
     @GetMapping(value = "/add") // id for added publication
     public String showNewPublicationPage(Model model) {

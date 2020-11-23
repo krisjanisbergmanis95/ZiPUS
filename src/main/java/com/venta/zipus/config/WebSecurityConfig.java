@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             http.authorizeRequests()
                     .antMatchers("/register").permitAll()
                     .antMatchers("/files", "/files/**").permitAll()//test
-                    .antMatchers("/h2-console/**", "/users").hasAuthority(ADMIN)
+                    .antMatchers("/h2-console/**", "/users/").hasAuthority(ADMIN)
                     .antMatchers("/publications/my-publications", "/publications/my-publications/**").hasAuthority(AUTHOR)
                     .antMatchers("/home", "/users/**", "/publications/", "/publications/page/**").hasAnyAuthority(USER, AUTHOR, ADMIN)
                     .antMatchers("/h2-console/**").permitAll()

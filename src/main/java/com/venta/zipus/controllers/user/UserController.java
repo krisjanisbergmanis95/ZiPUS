@@ -1,5 +1,6 @@
 package com.venta.zipus.controllers.user;
 
+import com.venta.zipus.config.WebSecurityConfig;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.services.IUserAuthorityService;
 import com.venta.zipus.services.IUserService;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 import java.util.ArrayList;
 
+import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
+
 @Controller
 public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -27,11 +30,22 @@ public class UserController {
     IUserAuthorityService userAuthorityService;
 
     @GetMapping("/users")
-    public String userspage(Model model) {
-        logger.info("loading user list");
-        model.addAttribute("user", users);
-        return "userpage";
+    public String showAllUsersPage(Model model) {
+        User user = userService.getUserByUsername(getCurrentUsername());
+        logger.info(user.toString());
 
+        Boolean isAdmin = user.isAuthority(
+                userAuthorityService.getUserAuthorityByTitle(WebSecurityConfig.ADMIN));
+        logger.info("is admin = " + isAdmin);
+        logger.info(user.getAuthorities().toString());
+        logger.info(userAuthorityService.getUserAuthorityByTitle(WebSecurityConfig.ADMIN).getRoleTitle());
+        if (isAdmin) {
+            model.addAttribute("isAuthorityAdmin", true);
+            logger.info("loading user list");
+            model.addAttribute("users", userService.getAllUsers());
+            return "userpage";
+        }
+        return "error";
     }
 
     @GetMapping("/register")

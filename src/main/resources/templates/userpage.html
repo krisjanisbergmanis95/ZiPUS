@@ -19,12 +19,12 @@
         <th>Type</th>
 
     </tr>
-    <tr th:each="p: ${user}">
-        <td th:text="${p.getEmail()}"/>
-        <td th:text="${p.getName()}"/>
-        <td th:text="${p.getSurname()}"/>
-        <td th:text="${p.getUsername()}"/>
-        <td th:text="${p.getType()}"/>
+    <tr th:each="user: ${users}">
+        <td th:text="${user.getEmail()}"/>
+        <td th:text="${user.getName()}"/>
+        <td th:text="${user.getSurname()}"/>
+        <td th:text="${user.getUsername()}"/>
+        <td th:each="auth: ${user.getAuthorities()}" th:text="${auth.getRoleTitle()}"/>
 
     </tr>
 </table>

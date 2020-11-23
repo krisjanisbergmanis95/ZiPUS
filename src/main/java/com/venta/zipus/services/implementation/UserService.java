@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static com.venta.zipus.config.WebSecurityConfig.passwordEncoder;
 
@@ -24,7 +25,7 @@ public class UserService implements IUserService {
     IUserRepo userRepo;
 
     @Override
-    @Cacheable(value = "users")
+//    @Cacheable(value = "users")
     public User getUserById(long id) {
 //        try {
 //            long time = 3000L;
@@ -39,12 +40,17 @@ public class UserService implements IUserService {
     }
 
     @Override
-    @Cacheable(value = "users")
+//    @Cacheable(value = "users")
     public User getUserByUsername(String username) {
         if (userRepo.count() > 0) {
             return userRepo.findByUsername(username);
         }
         return null;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return (List)userRepo.findAll();
     }
 
     @Override
@@ -61,7 +67,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    @CachePut(value = "users")
+//    @CachePut(value = "users")
     public boolean updateUser(User user) {
         if (userRepo.existsById(user.getU_ID()) && userRepo.existsByUsername(user.getUsername()) && userRepo.existsByEmail(user.getEmail())) {
             userRepo.save(user);

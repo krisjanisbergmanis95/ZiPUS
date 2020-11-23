@@ -121,6 +121,10 @@ public class User {
 //    }
 
     public boolean isAuthority(UserAuthority userAuthority) {
+        System.out.println("DOES " + this.authorities.toString() + "\n contain " +
+                userAuthority.toString() + " " + this.authorities.contains(userAuthority));
+        System.out.println("DOES " + this.authorities + "\n contain " +
+                userAuthority + " " + this.authorities.contains(userAuthority));
         return this.authorities.contains(userAuthority);
     }
 

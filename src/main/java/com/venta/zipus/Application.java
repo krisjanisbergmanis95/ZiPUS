@@ -25,7 +25,6 @@ import com.venta.zipus.repositories.pubTypes.IPublicationTypeRepo;
 import com.venta.zipus.repositories.publishments.IPublishmentRepo;
 import com.venta.zipus.repositories.user.IUserAuthorityRepo;
 import com.venta.zipus.repositories.user.IUserRepo;
-import com.venta.zipus.services.IStorageService;
 import com.venta.zipus.services.IUserService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -36,7 +35,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -501,13 +499,5 @@ public class Application {
         };
 
 
-    }
-
-    @Bean
-    CommandLineRunner init(IStorageService storageService) {
-        return (args) -> {
-            storageService.deleteAll();
-            storageService.init();
-        };
     }
 }

@@ -11,6 +11,7 @@
         <a class="active" href="#home">Home</a>
         <a th:href="@{/users/{id}(id=${user.getU_ID()})}">Mans profils</a>
         <a th:if="${isAuthorityAuthor}" th:href="@{/publications/my-publications}">Manas Publikācijas</a>
+        <a th:if="${isAuthorityAdmin}" th:href="@{/users/}">Visi lietotāji</a>
         <a th:href="@{/publications/}">Visas Publikācijas</a>
         <a href="#Logout">Izlogoties</a>
     </div>
