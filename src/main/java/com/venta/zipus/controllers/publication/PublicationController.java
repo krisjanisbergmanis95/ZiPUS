@@ -122,12 +122,31 @@ public class PublicationController {
         return new HttpEntity<byte[]>(documentBody, header);
     }
 
-    @GetMapping(value = "/my-publications") // id for added publication
-    public String showMyPublications(Model model) {//@PathVariable(name = "user") User user, Model model
+    @GetMapping(value = "/my-publications")
+    public String showMyPublications(Model model) {
+        return showMyPublicationsPaginated(1, 5, "publicationTitleOrigin", String.valueOf(Sort.Direction.ASC), model);
+    }
+
+    @GetMapping(value = "/my-publications/page/{pageNum}/size/{pageSize}") // id for added publication
+    public String showMyPublicationsPaginated(@PathVariable(value = "pageNum") int pageNum,
+                                     @PathVariable(value = "pageSize") int pageSize,
+                                     @RequestParam(value = "sortField") String sortField,
+                                     @RequestParam(value = "sortDirection") String sortDirection,
+                                     Model model) {//@PathVariable(name = "user") User user, Model model
         User user = userService.getUserByUsername(getCurrentUsername());
-        List<Publication> publications = publicationService.getPublicationsByUser(user);
-        model.addAttribute("publications", publications);
-        logger.info(publications.toString());
+
+        Page<Publication> page = publicationService.findPublicationPageByUser(user, pageNum, pageSize, sortField, sortDirection);
+        List<Publication> publicationList = page.getContent();
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("reverseSortDirection", sortDirection.equals(String.valueOf(Sort.Direction.ASC)) ? String.valueOf(Sort.Direction.DESC) : String.valueOf(Sort.Direction.ASC));
+        model.addAttribute("publications", publicationList);
+
         return "my-publications-page";
     }
 

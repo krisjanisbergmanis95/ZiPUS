@@ -1,44 +1,83 @@
 <html xmlns:th="http://www.thymeleaf.org">
-
+<head>
+    <style>
+		table, th, td {
+			border: 1px solid black;
+		}
+    </style>
+</head>
 <title>
-    THIS PAGE IS WORK IN PROGRESS
+    Visas publikācijas
 </title>
 
 <body>
+
+<div class="card-2 topnav">
+    <div class="bar left green">
+        <a class="bar-item button" th:href="@{/home}">Home</a>
+        <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
+    </div>
+</div>
 <h1>Visas publikācijas</h1>
+
 <table border="1" class="table table-striped table-responsive-md">
     <thead>
-        <tr>
-            <th>
-                <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${reverseSortDirection}}">
+    <tr>
+        <th>
+            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${reverseSortDirection}}">
                 Publikācijas nosaukums</a>
-            </th>
-        </tr>
+        </th>
+        <th>
+            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + 5 + '?sortField=publicationTitleEnglish&sortDirection=' + ${reverseSortDirection}}">
+                Publikācijas nosaukums angļu valodā</a>
+        </th>
+        <th>
+            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + 5 + '?sortField=fieldOfResearch&sortDirection=' + ${reverseSortDirection}}">
+                Pētniecības nozare</a>
+        </th>
+        <th>
+            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + 5 + '?sortField=pubType&sortDirection=' + ${reverseSortDirection}}">
+                Publikācijas tips</a>
+        </th>
+    </tr>
     </thead>
     <tbody>
-        <tr th:each="publication: ${publications}">
-            <th>
-                <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
-                   th:text="${publication.getPublicationTitleOrigin()}"/>
-            </th>
-        </tr>
+    <tr th:each="publication: ${publications}">
+        <th>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getPublicationTitleOrigin()}"/>
+        </th>
+        <th>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getPublicationTitleEnglish()}"/>
+        </th>
+        <th>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getFieldOfResearch()}"/>
+        </th>
+        <th>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getPubType().getPublicationTypeValue()}"/>
+        </th>
+    </tr>
     </tbody>
 </table>
 
 <div>
-<!--    <ul th:each="publication: ${publications}">-->
-<!--        <li>-->
-<!--            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"-->
-<!--               th:text="${publication.getPublicationTitleOrigin()}"/>-->
-<!--        </li>-->
-<!--    </ul>-->
+    <!--    <ul th:each="publication: ${publications}">-->
+    <!--        <li>-->
+    <!--            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"-->
+    <!--               th:text="${publication.getPublicationTitleOrigin()}"/>-->
+    <!--        </li>-->
+    <!--    </ul>-->
 
     <div th:if="${totalPages > 1}">
         <div class="row col-sm-10">
             <div class="col-sm-2">Kopējais publikāciju skaits: [[${totalItems}]]</div>
             <div class="col-sm-1">
                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                    <a th:if="${currentPage != i}" th:href="@{'/publications/page/' + ${i} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                    <a th:if="${currentPage != i}"
+                       th:href="@{'/publications/page/' + ${i} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
                         [[${i}]]
                     </a>
                     <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;

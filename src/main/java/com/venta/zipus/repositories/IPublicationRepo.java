@@ -18,5 +18,6 @@ public interface IPublicationRepo extends PagingAndSortingRepository<Publication
 
     boolean existsByPublicationTitleEnglish(String publicationTitleEnglish);
     List<Publication> findByUsersIn(ArrayList<User> user);
+    Page<Publication> findByUsersIn(ArrayList<User> user, Pageable pageable);
     Publication findByPublicationTitleOriginAndPublicationTitleEnglish(String titleOrigin, String titleEnglish);
 }
