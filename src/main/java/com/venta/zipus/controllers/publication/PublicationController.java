@@ -168,6 +168,7 @@ public class PublicationController {
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("pageSize", pageSize);
+        model.addAttribute("selectedPageSize", pageSize);
         model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDirection", sortDirection);
@@ -177,3 +178,5 @@ public class PublicationController {
         return "publication-list-page";
     }
 }
+//http://localhost:8080/publications/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC
+//
