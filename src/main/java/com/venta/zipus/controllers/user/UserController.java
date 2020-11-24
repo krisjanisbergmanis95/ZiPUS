@@ -93,4 +93,9 @@ public class UserController {
             return "error";
         }
     }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/login";
+    }
 }

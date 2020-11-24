@@ -5,16 +5,26 @@
     <title>home</title>
 </head>
 <body>
-<b>HOME</b>
-<div class="header" th:object="${user}">
-    <div class="header-right">
-        <a class="active" href="#home">Home</a>
-        <a th:href="@{/users/{id}(id=${user.getU_ID()})}">Mans profils</a>
-        <a th:if="${isAuthorityAuthor}" th:href="@{/publications/my-publications}">Manas Publikācijas</a>
-        <a th:if="${isAuthorityAdmin}" th:href="@{/users/}">Visi lietotāji</a>
-        <a th:href="@{/publications/}">Visas Publikācijas</a>
-        <a href="#Logout">Izlogoties</a>
+
+<div class="card-2 topnav">
+    <div class="bar left green">
+        <a class="bar-item button" th:href="@{/home}">Home</a>
+        <a class="bar-item button" th:href="@{/users/{id}(id=${user.getU_ID()})}">Mans profils</a>
+        <a class="bar-item button" th:if="${isAuthorityAuthor}" th:href="@{/publications/my-publications}">Manas Publikācijas</a>
+        <a class="bar-item button" th:if="${isAuthorityAdmin}" th:href="@{/users/}">Visi lietotāji</a>
+        <a class="bar-item button" th:href="@{/publications/}">Visas Publikācijas</a>
+        <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
     </div>
 </div>
+
+<div class="main">
+    <div>
+    <span>
+        Zinātnisko Publikāciju Uzskaites Sistēma ZiPUS
+        2020
+    </span>
+    </div>
+</div>
+
 </body>
 </html>
