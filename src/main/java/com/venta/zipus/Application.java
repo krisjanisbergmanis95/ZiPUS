@@ -1,5 +1,6 @@
 package com.venta.zipus;
 
+import com.venta.zipus.config.WebSecurityConfig;
 import com.venta.zipus.models.authors.Author;
 import com.venta.zipus.models.databases.DataBase;
 import com.venta.zipus.models.databases.constants.DataBaseNames;
@@ -16,6 +17,7 @@ import com.venta.zipus.models.publishments.constants.PublishmentTypeNames;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.models.user.UserAuthority;
 import com.venta.zipus.repositories.IPublicationBookRepo;
+import com.venta.zipus.repositories.IPublicationRepo;
 import com.venta.zipus.repositories.authors.IAuthorRepo;
 import com.venta.zipus.repositories.dataBases.IDataBaseRepo;
 import com.venta.zipus.repositories.pubTypeGroups.IPublicationTypeGroupsRepo;
@@ -23,8 +25,10 @@ import com.venta.zipus.repositories.pubTypes.IPublicationTypeRepo;
 import com.venta.zipus.repositories.publishments.IPublishmentRepo;
 import com.venta.zipus.repositories.user.IUserAuthorityRepo;
 import com.venta.zipus.repositories.user.IUserRepo;
-import com.venta.zipus.services.IStorageService;
+import com.venta.zipus.services.IUserService;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -36,13 +40,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
-import static com.venta.zipus.WebSecurityConfig.passwordEncoder;
+import static com.venta.zipus.config.WebSecurityConfig.passwordEncoder;
 
 @SpringBootApplication
+//@EnableCaching
 public class Application {
+
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+
     @Autowired
     IPublicationTypeRepo publicationTypeRepo;
 
@@ -59,10 +70,16 @@ public class Application {
     IPublicationBookRepo publicationBookRepo;
 
     @Autowired
+    IPublicationRepo publicationRepo;
+
+    @Autowired
     IPublishmentRepo publishmentRepo;
 
     @Autowired
     IUserAuthorityRepo userAuthorityRepo;
+
+    @Autowired
+    IUserService userService;
 
     public static void main(String[] args) {
 
@@ -126,8 +143,7 @@ public class Application {
                     "doe@dank.com",
                     passwordEncoder().encode("doo"),
                     new ArrayList<>(Arrays.asList(AuthTypeAuthor)));
-//            userRepo.save(u3);
-            System.out.println(userRepo.findAll());
+            userRepo.save(u3);
 
 //Adding a book
             PublicationType publicationType1 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesBook.EDUCATIONAL_BOOK);
@@ -141,7 +157,29 @@ public class Application {
             ArrayList<String> editors = new ArrayList<>(Arrays.asList("Jānis Stībelis", "Katrīna Pastarnaka"));
             //test pub type field holders
             PublicationBook pb1 = new PublicationBook("Izdota publikācija 1", editors, "Rīga");
+            PublicationBook pb2 = new PublicationBook("Izdota publikācija 2", editors, "Liepāja");
+            PublicationBook pb3 = new PublicationBook("Izdota publikācija 3", editors, "Ventspils");
+            PublicationBook pb4 = new PublicationBook("Izdota publikācija 4", editors, "Daugavpils");
+            PublicationBook pb5 = new PublicationBook("Izdota publikācija 5", editors, "Jelgava");
+            PublicationBook pb6 = new PublicationBook("Izdota publikācija 6", editors, "Rīga");
+            PublicationBook pb7 = new PublicationBook("Izdota publikācija 7", editors, "Roja");
+            PublicationBook pb8 = new PublicationBook("Izdota publikācija 8", editors, "Kuldīga");
+            PublicationBook pb9 = new PublicationBook("Izdota publikācija 9", editors, "Valmiera");
+            PublicationBook pb10 = new PublicationBook("Izdota publikācija 10", editors, "Kandava");
+            PublicationBook pb11 = new PublicationBook("Izdota publikācija 11", editors, "Sabile");
+            PublicationBook pb12 = new PublicationBook("Izdota publikācija 12", editors, "Rīga");
             publicationBookRepo.save(pb1);
+            publicationBookRepo.save(pb2);
+            publicationBookRepo.save(pb3);
+            publicationBookRepo.save(pb4);
+            publicationBookRepo.save(pb5);
+            publicationBookRepo.save(pb6);
+            publicationBookRepo.save(pb7);
+            publicationBookRepo.save(pb8);
+            publicationBookRepo.save(pb9);
+            publicationBookRepo.save(pb10);
+            publicationBookRepo.save(pb11);
+            publicationBookRepo.save(pb12);
             PublishmentType publishType = publishmentRepo.findByPublishmentTypeName(PublishmentTypeNames.INTERNATIONAL_REVIEW);
 
 
@@ -153,10 +191,18 @@ public class Application {
                     )
             );
 
+            try {
+                logger.info("copying test file");
+                File file1 = new File("./src/main/resources/Visitor_pattern.pdf");
+                File file2 = new File("./upload-dir/Visitor_pattern.pdf");
+                Files.copy(file1.toPath(), file2.toPath());
+                logger.info("File copied");
+            } catch (IOException e) {
+                logger.error("Error while copying test file");
+                logger.error(e.getMessage());
+            }
 
-//            new File("./upload-dir/" + "doa_stack.json");
-//            MultipartFile mf = (MultipartFile) tf;
-            File file = new File("./upload-dir/Visitor pattern.pdf");
+            File file = new File("./upload-dir/Visitor_pattern.pdf");
             FileInputStream input = new FileInputStream(file);
             MultipartFile multipartFile = new MockMultipartFile("file",
                     file.getName(), "text/plain", IOUtils.toByteArray(input));
@@ -179,25 +225,279 @@ public class Application {
                     "https://www.google.com",
                     "Just additional notes",
                     pb1,
-                    "upload-dir/" + "Visitor pattern.pdf",
-                    "Visitor pattern.pdf",
-                    multipartFile.getBytes()
+                    "upload-dir/" + "Visitor_pattern.pdf",
+                    "Visitor_pattern.pdf",
+                    multipartFile.getBytes(),
+                    new ArrayList<User>(Arrays.asList(u3))
+            );
+
+            Publication p3 = new Publication(publicationType1,
+                    "Latviešu",
+                    "Aplikācijas tests A",
+                    "Research about thymeleaf",
+                    "Šeit ir anotācija",
+                    "This is anotation",
+                    "Astronomija",
+                    authors,
+                    keyWords,
+                    "Zvaigzne ABC",
+                    2004,
+                    460,
+                    "AA2da23SDNadsads",
+//                    publishType,
+//                    dataBases1,
+                    "https://www.google.com",
+                    "Just additional notes",
+                    pb2,
+                    "upload-dir/" + "Visitor_pattern.pdf",
+                    "Visitor_pattern.pdf",
+                    multipartFile.getBytes(),
+                    new ArrayList<User>(Arrays.asList(u3))
                     );
+
+            Publication p4 = new Publication(publicationType1,
+                    "Latviešu",
+                    "Aplikācijas tests B",
+                    "Research about thymeleaf",
+                    "Šeit ir anotācija",
+                    "This is anotation",
+                    "Astronomija",
+                    authors,
+                    keyWords,
+                    "Zvaigzne ABC",
+                    2004,
+                    460,
+                    "BA2123QQ",
+//                    publishType,
+//                    dataBases1,
+                    "https://www.google.com",
+                    "Just additional notes",
+                    pb3,
+                    "upload-dir/" + "Visitor_pattern.pdf",
+                    "Visitor_pattern.pdf",
+                    multipartFile.getBytes()
+            );
+
+            Publication p5 = new Publication(publicationType1,
+                    "Latviešu",
+                    "CAplikācijas tests 1",
+                    "Research about thymeleaf",
+                    "Šeit ir anotācija",
+                    "This is anotation",
+                    "Astronomija",
+                    authors,
+                    keyWords,
+                    "Zvaigzne ABC",
+                    2004,
+                    460,
+                    "33BA2123QQ",
+//                    publishType,
+//                    dataBases1,
+                    "https://www.google.com",
+                    "Just additional notes",
+                    pb4,
+                    "upload-dir/" + "Visitor_pattern.pdf",
+                    "Visitor_pattern.pdf",
+                    multipartFile.getBytes()
+            );
+
+
+            Publication p6 = new Publication(publicationType1,
+                    "Latviešu",
+                    "CAplikācijas tests 2",
+                    "Research about thymeleaf",
+                    "Šeit ir anotācija",
+                    "This is anotation",
+                    "Astronomija",
+                    authors,
+                    keyWords,
+                    "Zvaigzne ABC",
+                    2004,
+                    460,
+                    "33BA2123QQ4",
+//                    publishType,
+//                    dataBases1,
+                    "https://www.google.com",
+                    "Just additional notes",
+                    pb5,
+                    "upload-dir/" + "Visitor_pattern.pdf",
+                    "Visitor_pattern.pdf",
+                    multipartFile.getBytes()
+            );
+            Publication p7 = new Publication(publicationType1,
+                    "Latviešu",
+                    "DDDDD test",
+                    "Research about thymeleaf",
+                    "Šeit ir anotācija",
+                    "This is anotation",
+                    "Astronomija",
+                    authors,
+                    keyWords,
+                    "Zvaigzne ABC",
+                    2004,
+                    460,
+                    "DDDDDD123",
+//                    publishType,
+//                    dataBases1,
+                    "https://www.google.com",
+                    "Just additional notes",
+                    pb6,
+                    "upload-dir/" + "Visitor_pattern.pdf",
+                    "Visitor_pattern.pdf",
+                    multipartFile.getBytes()
+            );
+
+            Publication p8 = new Publication(publicationType1,
+                    "Latviešu",
+                    "DDDDD test 2",
+                    "Research about thymeleaf",
+                    "Šeit ir anotācija",
+                    "This is anotation",
+                    "Astronomija",
+                    authors,
+                    keyWords,
+                    "Zvaigzne ABC",
+                    2004,
+                    460,
+                    "DDDDDD123123",
+//                    publishType,
+//                    dataBases1,
+                    "https://www.google.com",
+                    "Just additional notes",
+                    pb7,
+                    "upload-dir/" + "Visitor_pattern.pdf",
+                    "Visitor_pattern.pdf",
+                    multipartFile.getBytes()
+            );
+
+            Publication p9 = new Publication(publicationType1,
+                    "Latviešu",
+                    "CCCCCCCCCCCCCCCCC",
+                    "Research about thymeleaf",
+                    "Šeit ir anotācija",
+                    "This is anotation",
+                    "Astronomija",
+                    authors,
+                    keyWords,
+                    "Zvaigzne ABC",
+                    2004,
+                    460,
+                    "CICICINN31",
+//                    publishType,
+//                    dataBases1,
+                    "https://www.google.com",
+                    "Just additional notes",
+                    pb8,
+                    "upload-dir/" + "Visitor_pattern.pdf",
+                    "Visitor_pattern.pdf",
+                    multipartFile.getBytes()
+            );
+
+            Publication p10 = new Publication(publicationType1,
+                    "Latviešu",
+                    "TEST pub 10",
+                    "Research about thymeleaf",
+                    "Šeit ir anotācija",
+                    "This is anotation",
+                    "Astronomija",
+                    authors,
+                    keyWords,
+                    "Zvaigzne ABC",
+                    2004,
+                    460,
+                    "TESTPUB10",
+//                    publishType,
+//                    dataBases1,
+                    "https://www.google.com",
+                    "Just additional notes",
+                    pb9,
+                    "upload-dir/" + "Visitor_pattern.pdf",
+                    "Visitor_pattern.pdf",
+                    multipartFile.getBytes()
+            );
+            Publication p11 = new Publication(publicationType1,
+                    "Latviešu",
+                    "TEST pub 11",
+                    "Research about thymeleaf",
+                    "Šeit ir anotācija",
+                    "This is anotation",
+                    "Astronomija",
+                    authors,
+                    keyWords,
+                    "Zvaigzne ABC",
+                    2004,
+                    460,
+                    "TESTPUB11",
+//                    publishType,
+//                    dataBases1,
+                    "https://www.google.com",
+                    "Just additional notes",
+                    pb10,
+                    "upload-dir/" + "Visitor_pattern.pdf",
+                    "Visitor_pattern.pdf",
+                    multipartFile.getBytes()
+            );
+
+            Publication p12 = new Publication(publicationType1,
+                    "Latviešu",
+                    "TEST pub 12",
+                    "Research about thymeleaf",
+                    "Šeit ir anotācija",
+                    "This is anotation",
+                    "Astronomija",
+                    authors,
+                    keyWords,
+                    "Zvaigzne ABC",
+                    2004,
+                    460,
+                    "TESTPUB12",
+//                    publishType,
+//                    dataBases1,
+                    "https://www.google.com",
+                    "Just additional notes",
+                    pb11,
+                    "upload-dir/" + "Visitor_pattern.pdf",
+                    "Visitor_pattern.pdf",
+                    multipartFile.getBytes()
+            );
+
+            publicationRepo.save(p2);
+            publicationRepo.save(p3);
+            publicationRepo.save(p4);
+            publicationRepo.save(p5);
+            publicationRepo.save(p6);
+            publicationRepo.save(p7);
+            publicationRepo.save(p8);
+            publicationRepo.save(p9);
+            publicationRepo.save(p10);
+            publicationRepo.save(p11);
+            publicationRepo.save(p12);
             //end of creating a book
 
 
+//            u3.addPublication(p2);
 
-            u3.addPublication(p2);
-            userRepo.save(u3);
             System.out.println(userRepo.findAll());
-        };
-    }
 
-    @Bean
-    CommandLineRunner init(IStorageService storageService) {
-        return (args) -> {
-            storageService.deleteAll();
-            storageService.init();
+            Collection<User> users = userRepo.findAll();
+            logger.info(".... Fetching users");
+            long start = System.currentTimeMillis();
+//            users.forEach(user -> logger.info(Long.toString(user.getU_ID())));
+            logger.info("user with id 26 -->" + userService.getUserById(26));
+            logger.info("user with id 27 -->" + userService.getUserById(27));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+            logger.info("user with id 30 -->" + userService.getUserById(30));
+
+            logger.info("time " + (System.currentTimeMillis() - start));
         };
+
+
     }
 }

@@ -1,6 +1,5 @@
 package com.venta.zipus.controllers.publication;
 
-import com.venta.zipus.controllers.fileupload.FileUploadController;
 import com.venta.zipus.controllers.user.UserController;
 import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.models.publications.PublicationBook;
@@ -8,17 +7,15 @@ import com.venta.zipus.models.publications.pubtypes.PublicationType;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.services.IPublicationService;
 import com.venta.zipus.services.IUserService;
-import javassist.bytecode.ByteArray;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,16 +23,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-import com.venta.zipus.services.IStorageService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
-import java.nio.file.Path;
+import java.util.List;
 
 import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
 
@@ -47,8 +40,7 @@ public class PublicationController {
     IPublicationService publicationService;
     @Autowired
     IUserService userService;
-    @Autowired
-    IStorageService storageService;
+
 
     @GetMapping(value = "/add") // id for added publication
     public String showNewPublicationPage(Model model) {
@@ -67,33 +59,32 @@ public class PublicationController {
         if (!result.hasErrors()) {
             publication.setFilePath("upload-dir/" + file.getOriginalFilename());
             publication.setFileName(file.getOriginalFilename());
-//            publication.setPubFile(file);
             publication.setPubFile(file.getBytes());
+            User user = userService.getUserByUsername(getCurrentUsername());
+            logger.info("Adding book, current user to link: " + user.toString());
+            try {
+                publication.addUser(user);
+                logger.info("users " + publication.getUsers().toString() + " added");
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
+
+            logger.info("=====================");
+            logger.info(publication.toString());
+            logger.info("=====================");
+
             publicationService.addPublication(publication);
             Publication newPub = publicationService
                     .getPublicationByTitleOriginAndTitleEnglish(
                             publication.getPublicationTitleOrigin(),
                             publication.getPublicationTitleEnglish());
             logger.info("=====================");
-            logger.info(publication.toString());
+            logger.info(newPub.toString());
             logger.info("=====================");
 
-            User user = userService.getUserByUsername(getCurrentUsername());
-            try {
-                user.addPublication(newPub);
-//                storageService.store(file);
-                publicationService.storeFileAsByteArray(file);
-
-                logger.info("file stored");
-                userService.updateUser(user);
-                logger.info("user updated");
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-            }
 
             logger.info("Publication added successfully");
         } else {
-            logger.error("Something wrong?");
             logger.error(result.toString());
         }
         return "redirect:/publications/my-publications/";//add-publication-page
@@ -103,44 +94,18 @@ public class PublicationController {
     public String getPublicationById(@PathVariable(name = "id") long id, Model model) throws IOException {
         Publication pub = publicationService.getPublicationById(id);
         model.addAttribute("publication", pub);
-//        logger.info("loading from path " + pub.getFilePath());
-//
-//        Path path = storageService.load(pub.getFilePath());
-//        String pathFileName = path.getFileName().toString();
-//        logger.info("pathFileName " + pathFileName);
-//
-
-//        InputStream inputStream = new ByteArrayInputStream(pub.getPubFile());
 
         try (InputStream inputStream = new ByteArrayInputStream(pub.getPubFile());
-             ByteArrayOutputStream targetStream = new ByteArrayOutputStream())
-        {
+             ByteArrayOutputStream targetStream = new ByteArrayOutputStream()) {
             IOUtils.copy(inputStream, targetStream);
-//            FileWriter multipartFile = new CommonsMultipartFile(targetStream);
             model.addAttribute("file", targetStream);
         }
 
 
-//        MultipartFile file = new MockMultipartFile(pub.getFileName(), pub.getFileName(), MediaType.APPLICATION_OCTET_STREAM.toString(), inputStream);
-//        file.transferTo(new File(pub.getFilePath()));
-//        Path path = storageService.load(pub.getFilePath());
-//        String pathFileName = path.getFileName().toString();
-
-//        ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM)
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attchment:filename=\"" + pub.getFileName() + "\"")
-//        .body(file);
-//        model.addAttribute("file", MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-//                "serveFile", pathFileName).build().toUri().toString());
-//        model.addAttribute("file", new ByteArrayResource(pub.getPubFile()));
-//        model.addAttribute("file", file.transferTo().getURI().toString());
-//        model.addAttribute("file", ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM)
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attchment:filename=\"" + pub.getFileName() + "\"")
-//                .body(new ByteArrayResource(pub.getPubFile())));
         return "publication-page";
     }
 
     @GetMapping("/downloadFile/{pubId}")
-//    public String downloadFile(@PathVariable long pubId) {
     public HttpEntity<byte[]> downloadFile(@PathVariable long pubId) {
         Publication pub = publicationService.getPublicationById(pubId);
         logger.info(String.valueOf(pubId));
@@ -160,10 +125,36 @@ public class PublicationController {
     @GetMapping(value = "/my-publications") // id for added publication
     public String showMyPublications(Model model) {//@PathVariable(name = "user") User user, Model model
         User user = userService.getUserByUsername(getCurrentUsername());
-        model.addAttribute("user", user);
-        logger.info(user.getPublications().toString());
-//        Publication pub = publicationService.getPublicationById(id);
-//        model.addAttribute("publication", pub);
+        List<Publication> publications = publicationService.getPublicationsByUser(user);
+        model.addAttribute("publications", publications);
+        logger.info(publications.toString());
         return "my-publications-page";
+    }
+
+    @GetMapping(value = "/")
+    public String showPublicationsPage(Model model) {
+        return findPaginated(1, 5, "publicationTitleOrigin", String.valueOf(Sort.Direction.ASC), model);
+    }
+
+    @GetMapping(value = "/page/{pageNum}/size/{pageSize}")
+    public String findPaginated(@PathVariable(value = "pageNum") int pageNum,
+                                @PathVariable(value = "pageSize") int pageSize,
+                                @RequestParam(value = "sortField") String sortField,
+                                @RequestParam(value = "sortDirection") String sortDirection,
+                                Model model) {
+
+        Page<Publication> page = publicationService.findPublicationPage(pageNum, pageSize, sortField, sortDirection);
+        List<Publication> publicationList = page.getContent();
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("reverseSortDirection", sortDirection.equals(String.valueOf(Sort.Direction.ASC)) ? String.valueOf(Sort.Direction.DESC) : String.valueOf(Sort.Direction.ASC));
+        model.addAttribute("publications", publicationList);
+
+        return "publication-list-page";
     }
 }

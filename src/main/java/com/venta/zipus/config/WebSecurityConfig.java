@@ -1,4 +1,4 @@
-package com.venta.zipus;
+package com.venta.zipus.config;
 
 import com.venta.zipus.services.implementation.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -44,9 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             http.authorizeRequests()
                     .antMatchers("/register").permitAll()
                     .antMatchers("/files", "/files/**").permitAll()//test
-                    .antMatchers("/h2-console/**", "/users").hasAuthority(ADMIN)
+                    .antMatchers("/h2-console/**", "/users/").hasAuthority(ADMIN)
                     .antMatchers("/publications/my-publications", "/publications/my-publications/**").hasAuthority(AUTHOR)
-                    .antMatchers("/home", "/users/**").hasAnyAuthority(USER, AUTHOR, ADMIN)
+                    .antMatchers("/home", "/users/**", "/publications/", "/publications/page/**").hasAnyAuthority(USER, AUTHOR, ADMIN)
                     .antMatchers("/h2-console/**").permitAll()
                     .anyRequest().authenticated() //need to authenticate on any request
                     .and()

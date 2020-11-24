@@ -5,10 +5,12 @@ import com.venta.zipus.models.user.User;
 import com.venta.zipus.models.user.UserAuthority;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface IUserService {
     boolean register(String name, String surname, String username, String email, String password, Collection<UserAuthority> authorities);
     User getUserById(long id);
     User getUserByUsername(String username);
+    List<User> getAllUsers();
     boolean updateUser(User user);
 }

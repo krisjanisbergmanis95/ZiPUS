@@ -1,0 +1,76 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<title>
+    THIS PAGE IS WORK IN PROGRESS
+</title>
+
+<body>
+<h1>Visas publikācijas</h1>
+<table border="1" class="table table-striped table-responsive-md">
+    <thead>
+        <tr>
+            <th>
+                <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${reverseSortDirection}}">
+                Publikācijas nosaukums</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="publication: ${publications}">
+            <th>
+                <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+                   th:text="${publication.getPublicationTitleOrigin()}"/>
+            </th>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+<!--    <ul th:each="publication: ${publications}">-->
+<!--        <li>-->
+<!--            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"-->
+<!--               th:text="${publication.getPublicationTitleOrigin()}"/>-->
+<!--        </li>-->
+<!--    </ul>-->
+
+    <div th:if="${totalPages > 1}">
+        <div class="row col-sm-10">
+            <div class="col-sm-2">Kopējais publikāciju skaits: [[${totalItems}]]</div>
+            <div class="col-sm-1">
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                    <a th:if="${currentPage != i}" th:href="@{'/publications/page/' + ${i} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                        [[${i}]]
+                    </a>
+                    <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                </span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage > 1}"
+                   th:href="@{'/publications/page/' + ${1} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                    << Pirmā lapa
+                </a>
+                <span th:unless="${currentPage > 1}"><< Pirmā lapa</span>
+                <a th:if="${currentPage > 1}"
+                   th:href="@{'/publications/page/' + ${1} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                    < Iepriekšējā lapa
+                </a>
+                <span th:unless="${currentPage > 1}"></span>
+                < Iepriekšējā lapa
+                <a th:if="${currentPage < totalPages}"
+                   th:href="@{'/publications/page/' + ${currentPage + 1} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                    Nākamā lapa >
+                </a>
+                <span th:unless="${currentPage < totalPages}">Nākamā lapa ></span>
+                <a th:if="${currentPage < totalPages}"
+                   th:href="@{'/publications/page/' + ${totalPages} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                    Pēdējā lapa >>
+                </a>
+                <span th:unless="${currentPage < totalPages}">Pēdējā lapa >></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
