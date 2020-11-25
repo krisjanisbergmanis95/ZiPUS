@@ -4,12 +4,20 @@
 		table, th, td {
 			border: 1px solid black;
 		}
-	</style>
+
+    </style>
 </head>
 <body>
 <h2>
     All users
 </h2>
+<div class="card-2 topnav">
+    <div class="bar left green">
+        <a class="bar-item button" th:href="@{/home}">Home</a>
+        <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
+    </div>
+</div>
+</body>
 <table>
     <tr>
         <th>E-mail</th>

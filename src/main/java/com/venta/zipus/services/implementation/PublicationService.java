@@ -95,4 +95,13 @@ public class PublicationService implements IPublicationService {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
         return publicationRepo.findAll(pageable);
     }
+
+    public Page<Publication> findPublicationPageByUser(User user, int pageNum, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortField).ascending()
+                : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+        ArrayList<User> users = new ArrayList<>(Arrays.asList(user));
+        return publicationRepo.findByUsersIn(users, pageable);
+    }
 }

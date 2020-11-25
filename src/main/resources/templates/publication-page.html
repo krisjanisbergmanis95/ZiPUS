@@ -5,6 +5,13 @@
 </title>
 
 <body>
+<div class="card-2 topnav">
+    <div class="bar left green">
+        <a class="bar-item button" th:href="@{/home}">Home</a>
+        <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
+    </div>
+</div>
+</body>
 <ul>
     <li th:unless="${publication.getPubType() == null}">
         <label>Publikācijas tips</label>
@@ -56,16 +63,16 @@
                 <td th:text="${keyWord}"/>
             </tr>
         </table>
-        <div th:unless="${publication.getFilePath() == null || publication.getFileName() == null }"
-<!--             th:object="${file}"-->
-        >
+        <div th:unless="${publication.getFilePath() == null || publication.getFileName() == null }">
+            <!--             th:object="${file}"-->
+
             <label>Publikācijas fails</label>
-<!--            <ul>-->
-<!--                <li th:each="file : ${files}">-->
-<!--                    <a th:href="${file}" th:text="${publication.getFileName()}" />-->
-        <a th:href="@{downloadFile/{id}(id=${publication.getPub_ID()})}" th:text="${publication.getFileName()}" />
-<!--                </li>-->
-<!--            </ul>-->
+            <!--            <ul>-->
+            <!--                <li th:each="file : ${files}">-->
+            <!--                    <a th:href="${file}" th:text="${publication.getFileName()}" />-->
+            <a th:href="@{downloadFile/{id}(id=${publication.getPub_ID()})}" th:text="${publication.getFileName()}"/>
+            <!--                </li>-->
+            <!--            </ul>-->
         </div>
     <li th:unless="${publication.getPublisher() == null}">
         <label>Izdevējs</label>
