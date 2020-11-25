@@ -133,7 +133,7 @@ public class Application {
             userRepo.save(u1);
 
             UserAuthority AuthTypeAdmin = userAuthorityRepo.findByRoleTitle(WebSecurityConfig.ADMIN);
-            User u2 = new User("admin", passwordEncoder().encode("admin"), new ArrayList<>(Arrays.asList(AuthTypeAdmin)));
+            User u2 = new User("Ešs", "Kečums", "admin", "labaikais@pokemon.com", passwordEncoder().encode("admin"), new ArrayList<>(Arrays.asList(AuthTypeAdmin)));
             userRepo.save(u2);
 
             UserAuthority AuthTypeAuthor = userAuthorityRepo.findByRoleTitle(WebSecurityConfig.AUTHOR);
@@ -253,7 +253,7 @@ public class Application {
                     "Visitor_pattern.pdf",
                     multipartFile.getBytes(),
                     new ArrayList<User>(Arrays.asList(u3))
-                    );
+            );
 
             Publication p4 = new Publication(publicationType1,
                     "Latviešu",
@@ -482,19 +482,16 @@ public class Application {
             Collection<User> users = userRepo.findAll();
             logger.info(".... Fetching users");
             long start = System.currentTimeMillis();
-//            users.forEach(user -> logger.info(Long.toString(user.getU_ID())));
+            users.forEach(user -> logger.info(Long.toString(user.getU_ID())));
             logger.info("user with id 26 -->" + userService.getUserById(26));
             logger.info("user with id 27 -->" + userService.getUserById(27));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-
+            logger.info("user with id 28 -->" + userService.getUserById(28));
+            logger.info("user with id 28 -->" + userService.getUserById(28));
+            logger.info("user with id 28 -->" + userService.getUserById(28));
+            logger.info("user with id 28 -->" + userService.getUserById(28));
+            logger.info("user with id 28 -->" + userService.getUserById(28));
+            logger.info("user with id 28 -->" + userService.getUserById(28));
+            logger.info("user with id 27 -->" + userService.getUserById(27));
             logger.info("time " + (System.currentTimeMillis() - start));
         };
 

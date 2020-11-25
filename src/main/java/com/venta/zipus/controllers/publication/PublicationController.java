@@ -3,9 +3,12 @@ package com.venta.zipus.controllers.publication;
 import com.venta.zipus.controllers.user.UserController;
 import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.models.publications.PublicationBook;
+import com.venta.zipus.models.publications.pubtypegroups.constants.PublicationTypeGroupTitles;
 import com.venta.zipus.models.publications.pubtypes.PublicationType;
+import com.venta.zipus.models.publications.pubtypes.constants.PublicationTypeTitlesBook;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.services.IPublicationService;
+import com.venta.zipus.services.IPublicationTypeService;
 import com.venta.zipus.services.IUserService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -38,8 +41,12 @@ public class PublicationController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     IPublicationService publicationService;
+
     @Autowired
     IUserService userService;
+
+    @Autowired
+    IPublicationTypeService publicationTypeService;
 
 
     @GetMapping(value = "/add") // id for added publication
@@ -53,6 +60,7 @@ public class PublicationController {
     @PostMapping(value = "/add/book") // id for added publication
     public String addNewBookTypePublication(@Valid Publication publication,
                                             PublicationBook publicationBook,
+                                            PublicationType pubType,
                                             BindingResult result,
                                             @RequestParam("file") MultipartFile file) throws IOException {
 
@@ -60,8 +68,11 @@ public class PublicationController {
             publication.setFilePath("upload-dir/" + file.getOriginalFilename());
             publication.setFileName(file.getOriginalFilename());
             publication.setPubFile(file.getBytes());
+            PublicationType tempPubType = publicationTypeService.getPubTypeByValue(PublicationTypeTitlesBook.EDUCATIONAL_BOOK);
+            publication.setPubType(tempPubType);
             User user = userService.getUserByUsername(getCurrentUsername());
             logger.info("Adding book, current user to link: " + user.toString());
+
             try {
                 publication.addUser(user);
                 logger.info("users " + publication.getUsers().toString() + " added");

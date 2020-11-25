@@ -21,14 +21,14 @@ public class CacheConfig {
 
         @Override
         public void customize(ConcurrentMapCacheManager cacheManager) {
-            cacheManager.setCacheNames(asList("users", "publications", "userDetails", "userAuthority"));
+            cacheManager.setCacheNames(asList("user", "users", "publications", "userDetails", "userAuthority"));
         }
     }
 
     /*Config*/
     @Bean
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("users", "publications", "userDetails", "userAuthority");
+        return new ConcurrentMapCacheManager("user", "users", "publications", "userDetails", "userAuthority");
     }
 
 }

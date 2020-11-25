@@ -11,6 +11,7 @@ public interface IUserService {
     boolean register(String name, String surname, String username, String email, String password, Collection<UserAuthority> authorities);
     User getUserById(long id);
     User getUserByUsername(String username);
+    User getUserByUsername(String username, Boolean lookUp);
     List<User> getAllUsers();
     boolean updateUser(User user);
 }
