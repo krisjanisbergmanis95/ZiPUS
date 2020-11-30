@@ -189,5 +189,3 @@ public class PublicationController {
         return "publication-list-page";
     }
 }
-//http://localhost:8080/publications/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC
-//

@@ -28,12 +28,6 @@ public class UserService implements IUserService {
     @Override
     @Cacheable(value = "user")
     public User getUserById(long id) {
-        try {
-            long time = 3000L;
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            throw new IllegalStateException(e);
-        }
         if (userRepo.count() > 0) {
             return userRepo.findById(id);
         }
@@ -62,7 +56,6 @@ public class UserService implements IUserService {
     }
 
     @Override
-    @CachePut(value = "users")
     public boolean register(String name, String surname, String username, String email, String password, Collection<UserAuthority> authorities) {//name - as a username and unique
         if (userRepo.existsByUsername(username) || userRepo.existsByEmail(email)) {
             return false;
@@ -76,7 +69,6 @@ public class UserService implements IUserService {
     }
 
     @Override
-    @CachePut(value = "user")
     public boolean updateUser(User user) {
         if (userRepo.existsById(user.getU_ID()) && userRepo.existsByUsername(user.getUsername()) && userRepo.existsByEmail(user.getEmail())) {
             userRepo.save(user);

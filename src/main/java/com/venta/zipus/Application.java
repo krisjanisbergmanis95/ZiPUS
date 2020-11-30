@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,7 +50,7 @@ import java.util.Collection;
 import static com.venta.zipus.config.WebSecurityConfig.passwordEncoder;
 
 @SpringBootApplication
-//@EnableCaching
+@EnableCaching
 public class Application {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
