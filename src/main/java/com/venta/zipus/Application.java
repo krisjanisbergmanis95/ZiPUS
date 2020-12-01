@@ -25,6 +25,7 @@ import com.venta.zipus.repositories.pubTypes.IPublicationTypeRepo;
 import com.venta.zipus.repositories.publishments.IPublishmentRepo;
 import com.venta.zipus.repositories.user.IUserAuthorityRepo;
 import com.venta.zipus.repositories.user.IUserRepo;
+import com.venta.zipus.services.IPublicationTypeService;
 import com.venta.zipus.services.IUserService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -81,6 +82,7 @@ public class Application {
 
     @Autowired
     IUserService userService;
+
 
     public static void main(String[] args) {
 
@@ -147,6 +149,7 @@ public class Application {
             userRepo.save(u3);
 
 //Adding a book
+
             PublicationType publicationType1 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesBook.EDUCATIONAL_BOOK);
             Author author1 = new Author("Juris", "Ābols", true, "VSRC");
             authorRepo.save(author1);
@@ -463,7 +466,7 @@ public class Application {
             );
 
             publicationRepo.save(p2);
-            publicationRepo.save(p3);
+            /*publicationRepo.save(p3);
             publicationRepo.save(p4);
             publicationRepo.save(p5);
             publicationRepo.save(p6);
@@ -473,6 +476,8 @@ public class Application {
             publicationRepo.save(p10);
             publicationRepo.save(p11);
             publicationRepo.save(p12);
+
+             */
             //end of creating a book
 
 
@@ -487,12 +492,6 @@ public class Application {
             logger.info("user with id 26 -->" + userService.getUserById(26));
             logger.info("user with id 27 -->" + userService.getUserById(27));
             logger.info("user with id 28 -->" + userService.getUserById(28));
-            logger.info("user with id 28 -->" + userService.getUserById(28));
-            logger.info("user with id 28 -->" + userService.getUserById(28));
-            logger.info("user with id 28 -->" + userService.getUserById(28));
-            logger.info("user with id 28 -->" + userService.getUserById(28));
-            logger.info("user with id 28 -->" + userService.getUserById(28));
-            logger.info("user with id 27 -->" + userService.getUserById(27));
             logger.info("time " + (System.currentTimeMillis() - start));
         };
 

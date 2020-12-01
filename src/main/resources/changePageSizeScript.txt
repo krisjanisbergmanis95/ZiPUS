@@ -1,0 +1,9 @@
+$(document).ready(function(selector, pathSubStr1, pathSubStr2) {
+    changePageAndSize(pathSubStr1, actualValue1, pathSubStr2);
+});
+
+function changePageAndSize(pathSubStr1, actualValue1, pathSubStr2) {
+    $(selector).change(function(evt) {
+        window.location.replace(pathSubStr1 + this.value + pathSubStr2);
+    });
+}

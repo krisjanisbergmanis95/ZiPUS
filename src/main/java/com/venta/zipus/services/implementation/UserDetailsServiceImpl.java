@@ -15,7 +15,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     IUserRepo userRepo;
 
     @Override
-    @Cacheable("userDetails")
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (userRepo.existsByUsername(username)) {
             return new MyUserDetails(userRepo.findByUsername(username));

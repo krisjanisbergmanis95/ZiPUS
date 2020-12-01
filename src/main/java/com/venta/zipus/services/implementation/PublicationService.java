@@ -25,7 +25,6 @@ public class PublicationService implements IPublicationService {
     IPublicationRepo publicationRepo;
 
     @Override
-    @Cacheable("publication")
     public Publication getPublicationById(long id) {
         if (publicationRepo.count() > 0) {
             return publicationRepo.findById(id);
@@ -74,22 +73,18 @@ public class PublicationService implements IPublicationService {
         return false;
     }
 
-    @Cacheable("publication")
     public Publication getPublicationByTitleOriginAndTitleEnglish(String titleOrigin, String titleEnglish) {
         return publicationRepo.findByPublicationTitleOriginAndPublicationTitleEnglish(titleOrigin, titleEnglish);
     }
 
-    @Cacheable("publicationList")
     public List<Publication> getPublicationsByUser(User user) {
         return getPublicationsByUser(new ArrayList<>(Arrays.asList(user)));
     }
 
-    @Cacheable("publicationList")
     public List<Publication> getPublicationsByUser(ArrayList<User> users) {
         return publicationRepo.findByUsersIn(users);
     }
 
-    @Cacheable("publicationPage")
     public Page<Publication> findPublicationPage(int pageNum, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortField).ascending()
@@ -98,7 +93,6 @@ public class PublicationService implements IPublicationService {
         return publicationRepo.findAll(pageable);
     }
 
-    @Cacheable("publicationPage")
     public Page<Publication> findPublicationPageByUser(User user, int pageNum, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortField).ascending()

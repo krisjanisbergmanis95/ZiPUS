@@ -42,6 +42,7 @@ public class Publication {
 //    private Collection<PublicationType> pubTypes;
 
     @ManyToOne
+            //(cascade = CascadeType.ALL)
     @JoinColumn(name = "Pub_Type")
     private PublicationType pubType;
 

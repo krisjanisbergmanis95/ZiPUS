@@ -84,25 +84,25 @@
             <div class="col-sm-1">
                 <a th:if="${currentPage > 1}"
                    th:href="@{'/publications/my-publications/page/' + ${1} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
-                    << Pirmā lapa
+                    Pirmā lapa
                 </a>
-                <span th:unless="${currentPage > 1}"><< Pirmā lapa</span>
+                <span th:unless="${currentPage > 1}">Pirmā lapa</span>
                 <a th:if="${currentPage > 1}"
                    th:href="@{'/publications/my-publications/page/' + ${1} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
-                    < Iepriekšējā lapa
+                    Iepriekšējā lapa
                 </a>
                 <span th:unless="${currentPage > 1}"></span>
-                < Iepriekšējā lapa
+                Iepriekšējā lapa
                 <a th:if="${currentPage < totalPages}"
                    th:href="@{'/publications/my-publications/page/' + ${currentPage + 1} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
-                    Nākamā lapa >
+                    Nākamā lapa
                 </a>
-                <span th:unless="${currentPage < totalPages}">Nākamā lapa ></span>
+                <span th:unless="${currentPage < totalPages}">Nākamā lapa</span>
                 <a th:if="${currentPage < totalPages}"
                    th:href="@{'/publications/my-publications/page/' + ${totalPages} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
-                    Pēdējā lapa >>
+                    Pēdējā lapa
                 </a>
-                <span th:unless="${currentPage < totalPages}">Pēdējā lapa >></span>
+                <span th:unless="${currentPage < totalPages}">Pēdējā lapa</span>
             </div>
         </div>
     </div>

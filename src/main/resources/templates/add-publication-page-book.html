@@ -1,8 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
-<title>
-    Add Book
-</title>
+<h1>
+    Pievienot publikāciju - Virsgrupa Grāmatas
+</h1>
 <div class="card-2 topnav">
     <div class="bar left green">
         <a class="bar-item button" th:href="@{/home}">Home</a>
@@ -16,10 +16,9 @@
       enctype="multipart/form-data">
     <div th:object="${pubType}">
         <label>Publikācijas tips</label>
-        <input type="radio" th:field="*{publicationTypeValue}" th:value="BOOK">
-        <label>Grāmata</label>
-        <p th:each="error: ${#fields.errors('publicationTypeValue')}"
-           th:text="${error}">Validation error</p>
+        <select th:field="*{publicationTypeValue}">
+            <option th:each="type: ${pubTypes}" th:value="${type.getPublicationTypeValue()}" th:text="${type.getPublicationTypeValue()}"></option>
+        </select>
     </div>
 
     <div>
@@ -141,8 +140,15 @@
            th:text="${error}">Validation error</p>
     </div>
 
+
+    <div th:object="${pubTypeBook}">
+        <label>Izdošanas vieta</label>
+        <input th:field="*{placePublished}"/>
+        <p th:each="error : ${#fields.errors('placePublished')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
     <div>
-        <!--        <form enctype="multipart/form-data">-->
         <table>
             <tr>
                 <td>File to upload:</td>
@@ -150,17 +156,8 @@
             </tr>
             <tr>
                 <td></td>
-                <!--                    <td><input type="submit" value="Upload"/></td>-->
             </tr>
         </table>
-        <!--        </form>-->
-    </div>
-
-    <div th:object="${pubTypeBook}">
-        <label>Izdošanas vieta</label>
-        <input th:field="*{placePublished}"/>
-        <p th:each="error : ${#fields.errors('placePublished')}"
-           th:text="${error}">Validation error</p>
     </div>
 
     <button type="submit">Iesniegt</button>

@@ -26,7 +26,6 @@ public class UserService implements IUserService {
     IUserRepo userRepo;
 
     @Override
-    @Cacheable(value = "user")
     public User getUserById(long id) {
         if (userRepo.count() > 0) {
             return userRepo.findById(id);
@@ -40,8 +39,6 @@ public class UserService implements IUserService {
     }
 
     @Override
-    @Cacheable(value = "user", condition="#lookUp == True")
-    @CacheEvict(value = "user", condition = "#lookUp == False")
     public User getUserByUsername(String username, Boolean lookUp) {
         if (userRepo.count() > 0) {
             return userRepo.findByUsername(username);
@@ -50,7 +47,6 @@ public class UserService implements IUserService {
     }
 
     @Override
-    @Cacheable(value = "users")
     public List<User> getAllUsers() {
         return (List)userRepo.findAll();
     }

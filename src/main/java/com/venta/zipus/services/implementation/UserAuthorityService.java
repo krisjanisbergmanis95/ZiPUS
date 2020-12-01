@@ -15,7 +15,6 @@ public class UserAuthorityService implements IUserAuthorityService {
     IUserAuthorityRepo userAuthorityRepo;
 
     @Override
-    @Cacheable("userAuthority")
     public UserAuthority getUserAuthorityByTitle(String title) {
         System.out.println("Looking for role by title: " + title);
         System.out.println("Found: " + userAuthorityRepo.findByRoleTitle(title));
@@ -23,7 +22,6 @@ public class UserAuthorityService implements IUserAuthorityService {
     }
 
     @Override
-    @Cacheable("userAuthorities")
     public List<UserAuthority> getUserAuthorities() {
         return (List) userAuthorityRepo.findAll();
     }
