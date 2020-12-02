@@ -67,12 +67,6 @@ public class PublicationService implements IPublicationService {
         return true;
     }
 
-    @Override
-    public boolean storeFileAsByteArray(MultipartFile file) {
-//        publicationRepo
-        return false;
-    }
-
     public Publication getPublicationByTitleOriginAndTitleEnglish(String titleOrigin, String titleEnglish) {
         return publicationRepo.findByPublicationTitleOriginAndPublicationTitleEnglish(titleOrigin, titleEnglish);
     }

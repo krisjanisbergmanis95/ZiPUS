@@ -9,5 +9,5 @@ import java.util.ArrayList;
 public interface IPublicationTypeGroupsRepo extends PagingAndSortingRepository<PublicationTypeGroup, Long> {
     ArrayList<PublicationTypeGroup> findAll();
     PublicationTypeGroup findByPublicationTypesIn(ArrayList<PublicationType> publicationTypes);
-    PublicationTypeGroup findByPugTypeGroupName(String pubTypeGroupName);
+    PublicationTypeGroup findByPubTypeGroupName(String pubTypeGroupName);
 }

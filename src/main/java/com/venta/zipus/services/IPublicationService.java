@@ -13,8 +13,6 @@ public interface IPublicationService {
     Publication getPublicationById(long id);
 
     boolean addPublication(Publication publication);
-    boolean storeFileAsByteArray(MultipartFile file);
-//    boolean storeFileAsByteArray(MultipartFile file);
 
     Publication getPublicationByTitleOriginAndTitleEnglish(String publicationTitleOrigin, String publicationTitleEnglish);
 

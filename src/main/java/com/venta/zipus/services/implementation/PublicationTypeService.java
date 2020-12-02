@@ -38,7 +38,7 @@ public class PublicationTypeService implements IPublicationTypeService {
     }
 
     public List<PublicationType> getPubTypeByPublicationTypeTitle(String pubTypeGroupName) {
-        return publicationTypeRepo.findByPublicationGroup(publicationTypeGroupsRepo.findByPugTypeGroupName(pubTypeGroupName));
+        return publicationTypeRepo.findByPublicationGroup(publicationTypeGroupsRepo.findByPubTypeGroupName(pubTypeGroupName));
     }
 
     public void createPublicationBook(PublicationBook publicationBook) {

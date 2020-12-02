@@ -25,20 +25,28 @@
     <thead>
     <tr>
         <th>
-            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${reverseSortDirection}}">
+            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${reverseSortDirection}}">
                 Publikācijas nosaukums</a>
         </th>
         <th>
-            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + 5 + '?sortField=publicationTitleEnglish&sortDirection=' + ${reverseSortDirection}}">
+            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleEnglish&sortDirection=' + ${reverseSortDirection}}">
                 Publikācijas nosaukums angļu valodā</a>
         </th>
         <th>
-            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + 5 + '?sortField=fieldOfResearch&sortDirection=' + ${reverseSortDirection}}">
+            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=IsbnISSN&sortDirection=' + ${reverseSortDirection}}">
+                ISBN\ISSN</a>
+        </th>
+        <th>
+            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=fieldOfResearch&sortDirection=' + ${reverseSortDirection}}">
                 Pētniecības nozare</a>
         </th>
         <th>
-            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + 5 + '?sortField=pubType&sortDirection=' + ${reverseSortDirection}}">
+            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=pubType&sortDirection=' + ${reverseSortDirection}}">
                 Publikācijas tips</a>
+        </th>
+        <th>
+            <a th:href="@{'/publications/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=publicationGroup&sortDirection=' + ${reverseSortDirection}}">
+                Publikācijas tipa virsgrupa</a>
         </th>
     </tr>
     </thead>
@@ -54,31 +62,32 @@
         </th>
         <th>
             <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getIsbnISSN()}"/>
+        </th>
+        <th>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
                th:text="${publication.getFieldOfResearch()}"/>
         </th>
         <th>
             <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
                th:text="${publication.getPubType().getPublicationTypeValue()}"/>
         </th>
+        <th>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getPubType().getPublicationGroup().getPubTypeGroupName()}"/>
+        </th>
     </tr>
     </tbody>
 </table>
 
 <div>
-    <!--    <ul th:each="publication: ${publications}">-->
-    <!--        <li>-->
-    <!--            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"-->
-    <!--               th:text="${publication.getPublicationTitleOrigin()}"/>-->
-    <!--        </li>-->
-    <!--    </ul>-->
-
     <div th:if="${totalPages > 1}">
         <div class="row col-sm-10">
             <div class="col-sm-2">Kopējais publikāciju skaits: [[${totalItems}]]</div>
             <div class="col-sm-1">
                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
                     <a th:if="${currentPage != i}"
-                       th:href="@{'/publications/page/' + ${i} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                       th:href="@{'/publications/page/' + ${i} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
                         [[${i}]]
                     </a>
                     <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
@@ -86,24 +95,24 @@
             </div>
             <div class="col-sm-1">
                 <a th:if="${currentPage > 1}"
-                   th:href="@{'/publications/page/' + ${1} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                   th:href="@{'/publications/page/' + ${1} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
                     Pirmā lapa
                 </a>
                 <span th:unless="${currentPage > 1}">Pirmā lapa</span>
 
                 <a th:if="${currentPage > 1}"
-                   th:href="@{'/publications/page/' + ${1} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                   th:href="@{'/publications/page/' + ${1} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
                     Iepriekšējā lapa
                 </a>
                 <span th:unless="${currentPage > 1}"></span>
                 Iepriekšējā lapa
                 <a th:if="${currentPage < totalPages}"
-                   th:href="@{'/publications/page/' + ${currentPage + 1} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                   th:href="@{'/publications/page/' + ${currentPage + 1} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
                     Nākamā lapa
                 </a>
                 <span th:unless="${currentPage < totalPages}">Nākamā lapa</span>
                 <a th:if="${currentPage < totalPages}"
-                   th:href="@{'/publications/page/' + ${totalPages} + '/size/' + 5 + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                   th:href="@{'/publications/page/' + ${totalPages} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
                     Pēdējā lapa
                 </a>
                 <span th:unless="${currentPage < totalPages}">Pēdējā lapa</span>
