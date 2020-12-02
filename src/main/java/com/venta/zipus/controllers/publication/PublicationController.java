@@ -8,7 +8,6 @@ import com.venta.zipus.models.publications.PublicationConference;
 import com.venta.zipus.models.publications.PublicationMagazine;
 import com.venta.zipus.models.publications.pubtypegroups.constants.PublicationTypeGroupTitles;
 import com.venta.zipus.models.publications.pubtypes.PublicationType;
-import com.venta.zipus.models.publications.pubtypes.constants.PublicationTypeTitlesBook;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.services.IPublicationService;
 import com.venta.zipus.services.IPublicationTypeService;

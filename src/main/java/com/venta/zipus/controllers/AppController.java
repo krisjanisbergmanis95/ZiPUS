@@ -1,11 +1,9 @@
 package com.venta.zipus.controllers;
 
 import com.venta.zipus.config.WebSecurityConfig;
-import com.venta.zipus.controllers.user.UserController;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.services.IUserAuthorityService;
 import com.venta.zipus.services.IUserService;
-import lombok.extern.log4j.Log4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

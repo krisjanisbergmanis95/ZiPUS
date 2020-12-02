@@ -8,7 +8,6 @@ import com.venta.zipus.services.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,7 @@ public class UserService implements IUserService {
     IUserRepo userRepo;
 
     @Override
+    @Cacheable("userCache")
     public User getUserById(long id) {
         if (userRepo.count() > 0) {
             return userRepo.findById(id);
@@ -34,6 +34,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Cacheable("userCache")
     public User getUserByUsername(String username) {
         return getUserByUsername(username, true);
     }
@@ -65,6 +66,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @CachePut("userCache")
     public boolean updateUser(User user) {
         if (userRepo.existsById(user.getU_ID()) && userRepo.existsByUsername(user.getUsername()) && userRepo.existsByEmail(user.getEmail())) {
             userRepo.save(user);

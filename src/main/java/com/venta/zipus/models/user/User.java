@@ -62,7 +62,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "uID"))
     private Collection<UserAuthority> authorities = new ArrayList<>();
 
-//    @ManyToMany(cascade = CascadeType.ALL)
+    //    @ManyToMany(cascade = CascadeType.ALL)
 //    @JoinTable(name = "User_Publication",
 //            joinColumns = @JoinColumn(name = "pub_ID"),
 //            inverseJoinColumns = @JoinColumn(name = "uID"))
@@ -112,20 +112,15 @@ public class User {
         }
     }
 
-//    public void addPublication(Publication publication) throws Exception {
-//        if (publication != null) {
-//            this.publications.add(publication);
-//        } else {
-//            throw new Exception("publication is null");
-//        }
-//    }
-
     public boolean isAuthority(UserAuthority userAuthority) {
-        System.out.println("DOES " + this.authorities.toString() + "\n contain " +
-                userAuthority.toString() + " " + this.authorities.contains(userAuthority));
-        System.out.println("DOES " + this.authorities + "\n contain " +
-                userAuthority + " " + this.authorities.contains(userAuthority));
-        return this.authorities.contains(userAuthority);
+        boolean isAuthorithy = false;
+        for (UserAuthority authority : this.authorities) {
+            if (authority.getRoleTitle().equals(userAuthority.getRoleTitle())) {
+                isAuthorithy = true;
+                return isAuthorithy;
+            }
+        }
+        return isAuthorithy;
     }
 
     @Override
