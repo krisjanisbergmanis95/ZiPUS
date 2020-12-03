@@ -3,7 +3,6 @@ package com.venta.zipus.services.implementation;
 import com.venta.zipus.models.publications.PublicationBook;
 import com.venta.zipus.models.publications.PublicationConference;
 import com.venta.zipus.models.publications.PublicationMagazine;
-import com.venta.zipus.models.publications.pubtypegroups.PublicationTypeGroup;
 import com.venta.zipus.models.publications.pubtypes.PublicationType;
 import com.venta.zipus.repositories.IPublicationBookRepo;
 import com.venta.zipus.repositories.IPublicationConferenceRepo;
@@ -33,6 +32,7 @@ public class PublicationTypeService implements IPublicationTypeService {
     IPublicationTypeGroupsRepo publicationTypeGroupsRepo;
 
     @Override
+    @Cacheable("pubTypeRepo")
     public PublicationType getPubTypeByValue(String publicationTypeValue) {
         return publicationTypeRepo.findByPublicationTypeValue(publicationTypeValue);
     }
