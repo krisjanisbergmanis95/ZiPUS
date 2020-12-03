@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("/users")
     public String showAllUsersPage(Model model) {
-        User user = userService.getUserByUsername(getCurrentUsername());
+        User user = userService.getUserByUsername(getCurrentUsername(), false);
         logger.info(user.toString());
 
         Boolean isAdmin = user.isAuthority(

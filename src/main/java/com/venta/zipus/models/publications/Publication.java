@@ -42,6 +42,7 @@ public class Publication {
 //    private Collection<PublicationType> pubTypes;
 
     @ManyToOne
+            //(cascade = CascadeType.ALL)
     @JoinColumn(name = "Pub_Type")
     private PublicationType pubType;
 
@@ -135,10 +136,102 @@ public class Publication {
     @JoinColumn(name = "PUB_SC_ID")
     private PublicationConference publicationConference;
 
-    public Publication(PublicationType pubType, String language) {//TODO REMOVE THIS CONSTRUCTOR
+    public Publication(
+            PublicationType pubType,
+            String language,
+            String publicationTitleOrigin,
+            String publicationTitleEnglish,
+            String annotation,
+            String annotationEnglish,
+            String fieldOfResearch,
+            ArrayList<Author> authors,
+            ArrayList<String> keyWords,
+            String publisher,
+            int publishedYear,
+            int pages,
+            String isbnISSN,
+//            PublishmentType publishment,
+//            ArrayList<DataBase> dataBases,
+            String hyperLink,
+            String notes,
+            PublicationConference publicationConference,
+            String filePath,
+            String fileName,
+            byte[] pubFile
+//            MultipartFile pubFile
+    ) {
         this.pubType = pubType;
-        this.publicationGroup = pubType.getPublicationGroup();
+//        this.publicationGroup = pubType.getPublicationGroup();
         this.language = language;
+        this.publicationTitleOrigin = publicationTitleOrigin;
+        this.publicationTitleEnglish = publicationTitleEnglish;
+        this.annotation = annotation;
+        this.annotationEnglish = annotationEnglish;
+        this.fieldOfResearch = fieldOfResearch;
+        this.authors = authors;
+        this.keyWords = keyWords;
+        this.publisher = publisher;
+        this.publishedYear = publishedYear;
+        this.pages = pages;
+        this.isbnISSN = isbnISSN;
+//        this.publishment = publishment;
+//        this.dataBases = dataBases;
+        //TODO cita datu bāze
+        this.hyperLink = hyperLink;
+        this.notes = notes;
+        this.publicationConference = publicationConference;
+        this.filePath = filePath;
+        this.fileName = fileName;
+        this.pubFile = pubFile;
+    }
+
+    public Publication(
+            PublicationType pubType,
+            String language,
+            String publicationTitleOrigin,
+            String publicationTitleEnglish,
+            String annotation,
+            String annotationEnglish,
+            String fieldOfResearch,
+            ArrayList<Author> authors,
+            ArrayList<String> keyWords,
+            String publisher,
+            int publishedYear,
+            int pages,
+            String isbnISSN,
+//            PublishmentType publishment,
+//            ArrayList<DataBase> dataBases,
+            String hyperLink,
+            String notes,
+            PublicationMagazine publicationMagazine,
+            String filePath,
+            String fileName,
+            byte[] pubFile
+//            MultipartFile pubFile
+    ) {
+        this.pubType = pubType;
+//        this.publicationGroup = pubType.getPublicationGroup();
+        this.language = language;
+        this.publicationTitleOrigin = publicationTitleOrigin;
+        this.publicationTitleEnglish = publicationTitleEnglish;
+        this.annotation = annotation;
+        this.annotationEnglish = annotationEnglish;
+        this.fieldOfResearch = fieldOfResearch;
+        this.authors = authors;
+        this.keyWords = keyWords;
+        this.publisher = publisher;
+        this.publishedYear = publishedYear;
+        this.pages = pages;
+        this.isbnISSN = isbnISSN;
+//        this.publishment = publishment;
+//        this.dataBases = dataBases;
+        //TODO cita datu bāze
+        this.hyperLink = hyperLink;
+        this.notes = notes;
+        this.publicationMagazine = publicationMagazine;
+        this.filePath = filePath;
+        this.fileName = fileName;
+        this.pubFile = pubFile;
     }
 
     public Publication(

@@ -1,13 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
-<title>
-    Add NEWPublication page.
-    Strategy. as soon as publication type is chosen save the field and load in page with extra fields.
-    if change pub type the save every field except extra fields and reload page with new extra page fields.
-</title>
 <header>
     <h1/>
-    Hi
+    Pievienot publikāciju - Virsgrupa konforences
 
     </h1>
 </header>
@@ -18,5 +13,187 @@
         <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
     </div>
 </div>
+
+<form action="/"
+      th:action="@{/publications/add/conference}"
+      th:object="${publication}"
+      method="post"
+      enctype="multipart/form-data">
+    <div th:object="${pubType}">
+        <label>Publikācijas tips</label>
+        <select th:field="*{publicationTypeValue}">
+            <option th:each="type: ${pubTypes}" th:value="${type.getPublicationTypeValue()}" th:text="${type.getPublicationTypeValue()}"></option>
+        </select>
+    </div>
+
+    <div>
+        <label>Valoda</label>
+        <input th:field="*{language}"/>
+        <p th:each="error : ${#fields.errors('language')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Publikācijas nosaukums oriģinālvalodā</label>
+        <input th:field="*{publicationTitleOrigin}"/>
+        <p th:each="error : ${#fields.errors('publicationTitleOrigin')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Publikācijas Nosaukums angļu valodā</label>
+        <input th:field="*{publicationTitleEnglish}"/>
+        <p th:each="error : ${#fields.errors('publicationTitleEnglish')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Anotācija</label>
+        <input th:field="*{annotation}"/>
+        <p th:each="error : ${#fields.errors('annotation')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Anotācija angļu valodā</label>
+        <input th:field="*{annotationEnglish}"/>
+        <p th:each="error : ${#fields.errors('annotationEnglish')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Pētniecības nozare</label>
+        <input th:field="*{fieldOfResearch}"/>
+        <p th:each="error : ${#fields.errors('fieldOfResearch')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Atslēgas vārdi</label>
+        <input th:field="*{keyWords}"/>
+        <p th:each="error : ${#fields.errors('keyWords')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Izdevējs</label>
+        <input th:field="*{publisher}"/>
+        <p th:each="error : ${#fields.errors('publisher')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Publikācijas gads</label>
+        <input th:field="*{publishedYear}"/>
+        <p th:each="error : ${#fields.errors('publishedYear')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Lapaspušu skaits</label>
+        <input th:field="*{pages}"/>
+        <p th:each="error : ${#fields.errors('pages')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>ISBN/ISSN</label>
+        <input th:field="*{isbnISSN}"/>
+        <p th:each="error : ${#fields.errors('isbnISSN')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <!--    <div>-->
+    <!--        <label>Izdevuma veids</label>-->
+    <!--        <input th:field="*{publishment}"/>-->
+    <!--        <p th:each="error : ${#fields.errors('publishment')}"-->
+    <!--           th:text="${error}">Validation error</p>-->
+    <!--    </div>-->
+
+    <!--    <div>-->
+    <!--        <input type="radio" th:field="*{dataBases}" th:value="BOOK">-->
+    <!--        <label>Datu bāzes</label>-->
+    <!--        <p th:each="error : ${#fields.errors('dataBases')}"-->
+    <!--           th:text="${error}">Validation error</p>-->
+    <!--    </div>-->
+
+    <div>
+        <label>Saite uz publikāciju</label>
+        <input th:field="*{hyperLink}"/>
+        <p th:each="error : ${#fields.errors('hyperLink')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <label>Piezīmes</label>
+        <input th:field="*{notes}"/>
+        <p th:each="error : ${#fields.errors('notes')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div th:object="${pubTypeConference}">
+        <label>Konferences nosaukums</label>
+        <input th:field="*{conferenceName}"/>
+        <p th:each="error : ${#fields.errors('conferenceName')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div th:object="${pubTypeConference}">
+        <label>Konferences datums</label>
+        <input th:field="*{date}"/>
+        <p th:each="error : ${#fields.errors('date')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div th:object="${pubTypeConference}">
+        <label>Konferences Valsts</label>
+        <input th:field="*{country}"/>
+        <p th:each="error : ${#fields.errors('country')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div th:object="${pubTypeConference}">
+        <label>Konferences Pilsēta</label>
+        <input th:field="*{city}"/>
+        <p th:each="error : ${#fields.errors('city')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div th:object="${pubTypeConference}">
+        <label>Zinātnisko rakstu krājuma nosaukums</label>
+        <input th:field="*{nameOfCollection}"/>
+        <p th:each="error : ${#fields.errors('nameOfCollection')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div th:object="${pubTypeConference}">
+        <label>Sējums</label>
+        <input th:field="*{volume}"/>
+        <p th:each="error : ${#fields.errors('volume')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div th:object="${pubTypeConference}">
+        <label>Izdošamas vieta</label>
+        <input th:field="*{placePublished}"/>
+        <p th:each="error : ${#fields.errors('placePublished')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
+        <table>
+            <tr>
+                <td>File to upload:</td>
+                <td><input type="file" name="file" enctype="multipart/form-data"/></td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+
+    <button type="submit">Iesniegt</button>
+</form>
+
 </body>
 </html>

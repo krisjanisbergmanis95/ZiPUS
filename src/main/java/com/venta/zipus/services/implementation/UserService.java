@@ -25,14 +25,8 @@ public class UserService implements IUserService {
     IUserRepo userRepo;
 
     @Override
-//    @Cacheable(value = "users")
+    @Cacheable("userCache")
     public User getUserById(long id) {
-//        try {
-//            long time = 3000L;
-//            Thread.sleep(time);
-//        } catch (InterruptedException e) {
-//            throw new IllegalStateException(e);
-//        }
         if (userRepo.count() > 0) {
             return userRepo.findById(id);
         }
@@ -40,8 +34,13 @@ public class UserService implements IUserService {
     }
 
     @Override
-//    @Cacheable(value = "users")
+    @Cacheable("userCache")
     public User getUserByUsername(String username) {
+        return getUserByUsername(username, true);
+    }
+
+    @Override
+    public User getUserByUsername(String username, Boolean lookUp) {
         if (userRepo.count() > 0) {
             return userRepo.findByUsername(username);
         }
@@ -67,7 +66,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-//    @CachePut(value = "users")
+    @CachePut("userCache")
     public boolean updateUser(User user) {
         if (userRepo.existsById(user.getU_ID()) && userRepo.existsByUsername(user.getUsername()) && userRepo.existsByEmail(user.getEmail())) {
             userRepo.save(user);

@@ -21,7 +21,7 @@ public class PublicationTypeGroup {
     private long groupTypeId;
 
     @Column(name = "Pup_Type_Group_Name")
-    private String pugTypeGroupName;
+    private String pubTypeGroupName;
 
     @OneToMany(mappedBy = "publicationGroup")
     private Collection<Publication> publications;
@@ -29,15 +29,15 @@ public class PublicationTypeGroup {
     @OneToMany(mappedBy = "publicationGroup")
     private Collection<PublicationType> publicationTypes;
 
-    public PublicationTypeGroup(String pugTypeGroupName) {
-        this.pugTypeGroupName = pugTypeGroupName;
+    public PublicationTypeGroup(String pubTypeGroupName) {
+        this.pubTypeGroupName = pubTypeGroupName;
     }
 
     @Override
     public String toString() {
         return "PublicationTypeGroup{" +
                 "groupTypeId=" + groupTypeId +
-                ", pugTypeGroupName='" + pugTypeGroupName + '\'' +
+                ", pubTypeGroupName='" + pubTypeGroupName + '\'' +
                 '}';
     }
 }

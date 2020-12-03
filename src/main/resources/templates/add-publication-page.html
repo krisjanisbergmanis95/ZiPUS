@@ -1,14 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
-<title>
-    Add NEWPublication page.
-    Strategy. as soon as publication type is chosen save the field and load in page with extra fields.
-    if change pub type the save every field except extra fields and reload page with new extra page fields.
-</title>
 <header>
     <h1/>
-    Hi
-
+    Pievienot jaunu publikāciju
     </h1>
 </header>
 <body>
@@ -18,5 +12,37 @@
         <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
     </div>
 </div>
+
+<select id="pubTypeSelect">
+    <option th:value="empty" th:selected="True">Izvēlieties publikācijas virsgrupu</option>
+    <option th:each="type: ${publicationTypeSelect}" th:value="${type}" th:text="${type}"></option>
+</select>
+
+
 </body>
+<script
+        src="https://code.jquery.com/jquery-1.11.1.min.js"
+        integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE="
+        crossorigin="anonymous"></script>
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+
+</body>
+<script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function() {
+            changePageAndSize();
+        });
+
+        function changePageAndSize() {
+            $('#pubTypeSelect').change(function(evt) {
+                window.location.replace("/publications/add/" + this.value);
+            });
+        }
+        /*]]>*/
+
+</script>
 </html>

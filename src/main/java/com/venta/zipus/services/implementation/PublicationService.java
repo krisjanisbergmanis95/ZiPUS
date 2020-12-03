@@ -12,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +24,6 @@ public class PublicationService implements IPublicationService {
     IPublicationRepo publicationRepo;
 
     @Override
-    @Cacheable("publications")
     public Publication getPublicationById(long id) {
         if (publicationRepo.count() > 0) {
             return publicationRepo.findById(id);
@@ -68,13 +66,7 @@ public class PublicationService implements IPublicationService {
         return true;
     }
 
-    @Override
-    public boolean storeFileAsByteArray(MultipartFile file) {
-//        publicationRepo
-        return false;
-    }
-
-    @Cacheable("publications")
+    @Cacheable("pubRepo")
     public Publication getPublicationByTitleOriginAndTitleEnglish(String titleOrigin, String titleEnglish) {
         return publicationRepo.findByPublicationTitleOriginAndPublicationTitleEnglish(titleOrigin, titleEnglish);
     }
@@ -86,7 +78,6 @@ public class PublicationService implements IPublicationService {
     public List<Publication> getPublicationsByUser(ArrayList<User> users) {
         return publicationRepo.findByUsersIn(users);
     }
-
 
     public Page<Publication> findPublicationPage(int pageNum, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())

@@ -6,6 +6,8 @@ import com.venta.zipus.models.databases.DataBase;
 import com.venta.zipus.models.databases.constants.DataBaseNames;
 import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.models.publications.PublicationBook;
+import com.venta.zipus.models.publications.PublicationConference;
+import com.venta.zipus.models.publications.PublicationMagazine;
 import com.venta.zipus.models.publications.pubtypegroups.PublicationTypeGroup;
 import com.venta.zipus.models.publications.pubtypegroups.constants.PublicationTypeGroupTitles;
 import com.venta.zipus.models.publications.pubtypes.PublicationType;
@@ -17,6 +19,8 @@ import com.venta.zipus.models.publishments.constants.PublishmentTypeNames;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.models.user.UserAuthority;
 import com.venta.zipus.repositories.IPublicationBookRepo;
+import com.venta.zipus.repositories.IPublicationConferenceRepo;
+import com.venta.zipus.repositories.IPublicationMagazineRepo;
 import com.venta.zipus.repositories.IPublicationRepo;
 import com.venta.zipus.repositories.authors.IAuthorRepo;
 import com.venta.zipus.repositories.dataBases.IDataBaseRepo;
@@ -25,6 +29,7 @@ import com.venta.zipus.repositories.pubTypes.IPublicationTypeRepo;
 import com.venta.zipus.repositories.publishments.IPublishmentRepo;
 import com.venta.zipus.repositories.user.IUserAuthorityRepo;
 import com.venta.zipus.repositories.user.IUserRepo;
+import com.venta.zipus.services.IPublicationTypeService;
 import com.venta.zipus.services.IUserService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -34,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,11 +51,12 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 
 import static com.venta.zipus.config.WebSecurityConfig.passwordEncoder;
 
 @SpringBootApplication
-//@EnableCaching
+@EnableCaching
 public class Application {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
@@ -68,6 +75,10 @@ public class Application {
 
     @Autowired
     IPublicationBookRepo publicationBookRepo;
+    @Autowired
+    IPublicationMagazineRepo publicationMagazineRepoRepo;
+    @Autowired
+    IPublicationConferenceRepo publicationConferenceRepo;
 
     @Autowired
     IPublicationRepo publicationRepo;
@@ -80,6 +91,7 @@ public class Application {
 
     @Autowired
     IUserService userService;
+
 
     public static void main(String[] args) {
 
@@ -133,7 +145,7 @@ public class Application {
             userRepo.save(u1);
 
             UserAuthority AuthTypeAdmin = userAuthorityRepo.findByRoleTitle(WebSecurityConfig.ADMIN);
-            User u2 = new User("admin", passwordEncoder().encode("admin"), new ArrayList<>(Arrays.asList(AuthTypeAdmin)));
+            User u2 = new User("Ešs", "Kečums", "admin", "labaikais@pokemon.com", passwordEncoder().encode("admin"), new ArrayList<>(Arrays.asList(AuthTypeAdmin)));
             userRepo.save(u2);
 
             UserAuthority AuthTypeAuthor = userAuthorityRepo.findByRoleTitle(WebSecurityConfig.AUTHOR);
@@ -146,7 +158,13 @@ public class Application {
             userRepo.save(u3);
 
 //Adding a book
+
             PublicationType publicationType1 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesBook.EDUCATIONAL_BOOK);
+            PublicationType publicationType2 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesBook.PUB_IN_SC_PAPER_COLLECTION);
+            PublicationType publicationType3 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesBook.SC_MONOGRAPH);
+            PublicationType publicationType4 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesMagazine.PUB_IN_SC_MAGAZINE);
+            PublicationType publicationType5= publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesConferences.ARTICLE_IN_CONFERENCE_COLLECTION);
+            PublicationType publicationType6= publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesConferences.ARTICLE_IN_THESIS_COLLECTION);
             Author author1 = new Author("Juris", "Ābols", true, "VSRC");
             authorRepo.save(author1);
 
@@ -165,9 +183,9 @@ public class Application {
             PublicationBook pb7 = new PublicationBook("Izdota publikācija 7", editors, "Roja");
             PublicationBook pb8 = new PublicationBook("Izdota publikācija 8", editors, "Kuldīga");
             PublicationBook pb9 = new PublicationBook("Izdota publikācija 9", editors, "Valmiera");
-            PublicationBook pb10 = new PublicationBook("Izdota publikācija 10", editors, "Kandava");
-            PublicationBook pb11 = new PublicationBook("Izdota publikācija 11", editors, "Sabile");
-            PublicationBook pb12 = new PublicationBook("Izdota publikācija 12", editors, "Rīga");
+            PublicationConference pc10 = new PublicationConference("Izdota publikācija 10", new Date(), "Latvija", "Rīga", "Publickāciju kolekcija1", "Kabile", "33");
+            PublicationConference pc11 = new PublicationConference("Izdota publikācija 11", new Date(), "Latvija", "Liepāja", "Publickāciju kolekcija2", "Sabile", "1");
+            PublicationMagazine pm12 = new PublicationMagazine("Izdota publikācija 12", editors, "123321K");
             publicationBookRepo.save(pb1);
             publicationBookRepo.save(pb2);
             publicationBookRepo.save(pb3);
@@ -177,11 +195,9 @@ public class Application {
             publicationBookRepo.save(pb7);
             publicationBookRepo.save(pb8);
             publicationBookRepo.save(pb9);
-            publicationBookRepo.save(pb10);
-            publicationBookRepo.save(pb11);
-            publicationBookRepo.save(pb12);
-            PublishmentType publishType = publishmentRepo.findByPublishmentTypeName(PublishmentTypeNames.INTERNATIONAL_REVIEW);
-
+            publicationConferenceRepo.save(pc10);
+            publicationConferenceRepo.save(pc11);
+            publicationMagazineRepoRepo.save(pm12);
 
             ArrayList<DataBase> dataBases1 = new ArrayList<>(
                     Arrays.asList(
@@ -253,9 +269,9 @@ public class Application {
                     "Visitor_pattern.pdf",
                     multipartFile.getBytes(),
                     new ArrayList<User>(Arrays.asList(u3))
-                    );
+            );
 
-            Publication p4 = new Publication(publicationType1,
+            Publication p4 = new Publication(publicationType2,
                     "Latviešu",
                     "Aplikācijas tests B",
                     "app test B",
@@ -278,7 +294,7 @@ public class Application {
                     multipartFile.getBytes()
             );
 
-            Publication p5 = new Publication(publicationType1,
+            Publication p5 = new Publication(publicationType3,
                     "Latviešu",
                     "CAplikācijas tests 1",
                     "Capp test 1",
@@ -302,7 +318,7 @@ public class Application {
             );
 
 
-            Publication p6 = new Publication(publicationType1,
+            Publication p6 = new Publication(publicationType3,
                     "Latviešu",
                     "CAplikācijas tests 2",
                     "Capp test 2",
@@ -370,7 +386,7 @@ public class Application {
                     multipartFile.getBytes()
             );
 
-            Publication p9 = new Publication(publicationType1,
+            Publication p9 = new Publication(publicationType3,
                     "Latviešu",
                     "CCCCCCCCCCCCCCCCC",
                     "App ccccc",
@@ -393,7 +409,7 @@ public class Application {
                     multipartFile.getBytes()
             );
 
-            Publication p10 = new Publication(publicationType1,
+            Publication p10 = new Publication(publicationType6,
                     "Latviešu",
                     "TEST pub 10",
                     "Test pub 10",
@@ -410,13 +426,13 @@ public class Application {
 //                    dataBases1,
                     "https://www.google.com",
                     "Just additional notes",
-                    pb9,
+                    pc10,
                     "upload-dir/" + "Visitor_pattern.pdf",
                     "Visitor_pattern.pdf",
                     multipartFile.getBytes()
             );
-            Publication p11 = new Publication(publicationType1,
-                    "Latviešu",
+            Publication p11 = new Publication(publicationType5,
+                    "Grieķu",
                     "TEST pub 11",
                     "Test pub 11",
                     "Šeit ir anotācija",
@@ -432,13 +448,13 @@ public class Application {
 //                    dataBases1,
                     "https://www.google.com",
                     "Just additional notes",
-                    pb10,
+                    pc11,
                     "upload-dir/" + "Visitor_pattern.pdf",
                     "Visitor_pattern.pdf",
                     multipartFile.getBytes()
             );
 
-            Publication p12 = new Publication(publicationType1,
+            Publication p12 = new Publication(publicationType4,
                     "Latviešu",
                     "TEST pub 12",
                     "Test publication 12",
@@ -455,7 +471,7 @@ public class Application {
 //                    dataBases1,
                     "https://www.google.com",
                     "Just additional notes",
-                    pb11,
+                    pm12,
                     "upload-dir/" + "Visitor_pattern.pdf",
                     "Visitor_pattern.pdf",
                     multipartFile.getBytes()
@@ -472,6 +488,8 @@ public class Application {
             publicationRepo.save(p10);
             publicationRepo.save(p11);
             publicationRepo.save(p12);
+
+
             //end of creating a book
 
 
@@ -482,19 +500,10 @@ public class Application {
             Collection<User> users = userRepo.findAll();
             logger.info(".... Fetching users");
             long start = System.currentTimeMillis();
-//            users.forEach(user -> logger.info(Long.toString(user.getU_ID())));
+            users.forEach(user -> logger.info(Long.toString(user.getU_ID())));
             logger.info("user with id 26 -->" + userService.getUserById(26));
             logger.info("user with id 27 -->" + userService.getUserById(27));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-            logger.info("user with id 30 -->" + userService.getUserById(30));
-
+            logger.info("user with id 28 -->" + userService.getUserById(28));
             logger.info("time " + (System.currentTimeMillis() - start));
         };
 
