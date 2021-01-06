@@ -4,7 +4,9 @@ import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.models.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,4 +22,8 @@ public interface IPublicationRepo extends PagingAndSortingRepository<Publication
     List<Publication> findByUsersIn(ArrayList<User> user);
     Page<Publication> findByUsersIn(ArrayList<User> user, Pageable pageable);
     Publication findByPublicationTitleOriginAndPublicationTitleEnglish(String titleOrigin, String titleEnglish);
+
+    @Query(value = "SELECT * FROM Publication_table WHERE PUBLICATIONTITLEORIGIN LIKE CONCAT('%', :searchText, '%')",
+            nativeQuery = true)
+    Page<Publication> findByQueryISBNOrTitle(Pageable pageable, @Param("searchText") String searchText);
 }

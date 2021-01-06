@@ -70,7 +70,7 @@ public class Publication {
     @Column(name = "Language")
     private String language;
 
-    @Column(name = "Publication_Title_Origin")
+    @Column(name = "PUBLICATIONTITLEORIGIN")
     private String publicationTitleOrigin;
 
     @Column(name = "Publication_Title_English")

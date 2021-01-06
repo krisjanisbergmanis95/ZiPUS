@@ -315,4 +315,46 @@ public class PublicationController {
 
         return "publication-list-page";
     }
+
+//    @PostMapping(value = "publications/page/{pageNum}/size/{pageSize}/search")
+//    public String searchPublications(@PathVariable(value = "pageNum") int pageNum,
+//                                                        @PathVariable(value = "pageSize") int pageSize,
+//                                                        @RequestParam(value = "searchValue") String searchValue,
+//                                                        @RequestParam(value = "sortField") String sortField,
+//                                                        @RequestParam(value = "sortDirection") String sortDirection,
+//                                                        Model model) {
+//        System.out.println("POST SEARCH");
+//        return getPublicationsSearchResults(pageNum, pageSize, searchValue, sortField, sortDirection, model);
+//    }
+                       //publications/page/1        /size/5         /search?searchValue=CC&sortField=publicationTitleOrigin&sortDirection=ASC
+    @GetMapping(value = "/page/{pageNum}/size/{pageSize}/search")
+    public String getPublicationsSearchResults(@PathVariable(value = "pageNum") int pageNum,
+                                     @PathVariable(value = "pageSize") int pageSize,
+                                     @RequestParam(value = "searchValue") String searchValue,
+                                     @RequestParam(value = "sortField") String sortField,
+                                     @RequestParam(value = "sortDirection") String sortDirection,
+                                     Model model) {
+
+        //http://localhost:8080/publications/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC
+        //http://localhost:8080/publications/page/1/5?sortField=publicationTitleOrigin&sortDirection=ASC
+        //http://localhost:8080/publications/page/1/size/5/search?searchValue=CC&sortField=publicationTitleOrigin&sortDirection=ASC
+//        String sortField = "publicationTitleOrigin";
+//        String sortDirection = "ASC";
+        System.out.println("searchValue= " + searchValue);
+        logger.info("searchValue= " + searchValue);
+        Page<Publication> page = publicationService.findPublicationPageByISSNisbnOrTitle(pageNum, pageSize, sortField, sortDirection, searchValue);
+        List<Publication> publicationList = page.getContent();
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("selectedPageSize", pageSize);
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("reverseSortDirection", sortDirection.equals(String.valueOf(Sort.Direction.ASC)) ? String.valueOf(Sort.Direction.DESC) : String.valueOf(Sort.Direction.ASC));
+        model.addAttribute("publications", publicationList);
+        model.addAttribute("allowedPageSizes", PAGE_SIZES);
+        return "publication-list-page";
+    }
 }
