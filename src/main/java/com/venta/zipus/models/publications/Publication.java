@@ -73,7 +73,7 @@ public class Publication {
     @Column(name = "PUBLICATIONTITLEORIGIN")
     private String publicationTitleOrigin;
 
-    @Column(name = "Publication_Title_English")
+    @Column(name = "PUBLICATIONTITLEENGLISH")
     private String publicationTitleEnglish;
 
     @Column(name = "Annotation")
@@ -103,7 +103,7 @@ public class Publication {
     @Column(name = "Pages")
     private int pages;
 
-    @Column(name = "ISBN_ISSN")
+    @Column(name = "ISBNISSN")
     private String isbnISSN;
 
     //TODO OtherDB

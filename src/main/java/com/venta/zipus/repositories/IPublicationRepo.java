@@ -22,8 +22,14 @@ public interface IPublicationRepo extends PagingAndSortingRepository<Publication
     List<Publication> findByUsersIn(ArrayList<User> user);
     Page<Publication> findByUsersIn(ArrayList<User> user, Pageable pageable);
     Publication findByPublicationTitleOriginAndPublicationTitleEnglish(String titleOrigin, String titleEnglish);
-
-    @Query(value = "SELECT * FROM Publication_table WHERE PUBLICATIONTITLEORIGIN LIKE CONCAT('%', :searchText, '%')",
+//SELECT * FROM Publication_table pt WHERE pt.PUBLICATIONTITLEORIGIN LIKE '%CC%' OR pt.PUBLICATIONTITLEENGLISH LIKE '%test%';
+    @Query(value = "SELECT * FROM Publication_table pt " +
+            "WHERE pt.PUBLICATIONTITLEORIGIN " +
+            "LIKE CONCAT('%', :searchText, '%')" +
+            " OR pt.PUBLICATIONTITLEENGLISH" +
+            " LIKE CONCAT('%', :searchText, '%')" +
+            " OR pt.ISBNISSN" +
+            " LIKE CONCAT('%', :searchText, '%')",
             nativeQuery = true)
     Page<Publication> findByQueryISBNOrTitle(Pageable pageable, @Param("searchText") String searchText);
 }
