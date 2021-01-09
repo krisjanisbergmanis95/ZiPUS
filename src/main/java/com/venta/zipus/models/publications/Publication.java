@@ -58,9 +58,9 @@ public class Publication {
 //            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
 //    private Collection<PublicationType> publishments;
     @ManyToMany//(cascade = CascadeType.ALL)
-    @JoinTable(name = "Publication_Users",
-            joinColumns = @JoinColumn(name = "uID"),
-            inverseJoinColumns = @JoinColumn(name = "pub_ID"))
+    @JoinTable(name = "PUBLICATIONUSERS",
+            joinColumns = @JoinColumn(name = "pub_ID"),
+            inverseJoinColumns = @JoinColumn(name = "UID"))
     private Collection<User> users = new ArrayList<>();
 
     @ManyToOne

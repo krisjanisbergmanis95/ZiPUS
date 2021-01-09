@@ -96,6 +96,15 @@ public class PublicationService implements IPublicationService {
         return publicationRepo.findByQueryISBNOrTitle(pageable, searchText);
     }
 
+
+    public Page<Publication> findPublicationPageByUserISSNisbnOrTitle(User user, int pageNum, int pageSize, String sortField, String sortDirection, String searchText) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortField).ascending()
+                : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+        return publicationRepo.findByQueryUserAndISBNOrTitle(pageable, user.getU_ID(), searchText);
+    }
+
     public Page<Publication> findPublicationPageByUser(User user, int pageNum, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortField).ascending()

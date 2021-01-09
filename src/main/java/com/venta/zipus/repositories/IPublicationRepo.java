@@ -32,4 +32,17 @@ public interface IPublicationRepo extends PagingAndSortingRepository<Publication
             " LIKE CONCAT('%', :searchText, '%')",
             nativeQuery = true)
     Page<Publication> findByQueryISBNOrTitle(Pageable pageable, @Param("searchText") String searchText);
+
+//    SELECT * FROM PUBLICATIONUSERS PU JOIN PUBLICATION_TABLE PT ON PU.PUB_ID = PT.PUB_ID WHERE PU.UID = 28
+//    AND (PT.PUBLICATIONTITLEORIGIN LIKE '%app%' OR PT.PUBLICATIONTITLEENGLISH LIKE '%app%' OR ISBNISSN LIKE '%app%');
+    @Query(value = "SELECT * FROM PUBLICATION_TABLE pt" +
+            " JOIN PUBLICATIONUSERS pu ON pu.PUB_ID = pt.PUB_ID" +
+            " WHERE pu.UID = :userId" +
+            " AND (pt.PUBLICATIONTITLEORIGIN LIKE CONCAT('%', :searchText, '%')" +
+            " OR pt.PUBLICATIONTITLEENGLISH LIKE CONCAT('%', :searchText, '%')" +
+            " OR pt.ISBNISSN LIKE CONCAT('%', :searchText, '%'))" +
+            " ORDER BY pt.PUBLICATIONTITLEORIGIN",
+            nativeQuery = true)
+
+    Page<Publication> findByQueryUserAndISBNOrTitle(Pageable pageable, @Param("userId") long userId, @Param("searchText") String searchText);
 }

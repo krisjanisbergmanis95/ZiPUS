@@ -68,10 +68,10 @@ public class PublicationController {
 
     @PostMapping(value = "/add/magazine") // id for added publication
     public String addNewBookTypeMagazine(@Valid Publication publication,
-                                           PublicationMagazine publicationMagazine,
-                                           PublicationType pubType,
-                                           BindingResult result,
-                                           @RequestParam("file") MultipartFile file) throws IOException {
+                                         PublicationMagazine publicationMagazine,
+                                         PublicationType pubType,
+                                         BindingResult result,
+                                         @RequestParam("file") MultipartFile file) throws IOException {
 
         if (!result.hasErrors()) {
             publication.setFilePath("upload-dir/" + file.getOriginalFilename());
@@ -124,10 +124,10 @@ public class PublicationController {
 
     @PostMapping(value = "/add/conference") // id for added publication
     public String addNewBookTypeConference(@Valid Publication publication,
-                                            PublicationConference publicationConference,
-                                            PublicationType pubType,
-                                            BindingResult result,
-                                            @RequestParam("file") MultipartFile file) throws IOException {
+                                           PublicationConference publicationConference,
+                                           PublicationType pubType,
+                                           BindingResult result,
+                                           @RequestParam("file") MultipartFile file) throws IOException {
 
         if (!result.hasErrors()) {
             publication.setFilePath("upload-dir/" + file.getOriginalFilename());
@@ -266,23 +266,29 @@ public class PublicationController {
 
     @GetMapping(value = "/my-publications/page/{pageNum}/size/{pageSize}") // id for added publication
     public String showMyPublicationsPaginated(@PathVariable(value = "pageNum") int pageNum,
-                                     @PathVariable(value = "pageSize") int pageSize,
-                                     @RequestParam(value = "sortField") String sortField,
-                                     @RequestParam(value = "sortDirection") String sortDirection,
-                                     Model model) {//@PathVariable(name = "user") User user, Model model
+                                              @PathVariable(value = "pageSize") int pageSize,
+                                              @RequestParam(value = "sortField") String sortField,
+                                              @RequestParam(value = "sortDirection") String sortDirection,
+                                              Model model) {//@PathVariable(name = "user") User user, Model model
         User user = userService.getUserByUsername(getCurrentUsername());
 
         Page<Publication> page = publicationService.findPublicationPageByUser(user, pageNum, pageSize, sortField, sortDirection);
-        List<Publication> publicationList = page.getContent();
+        model = addModelAttributes(model, pageNum, page, pageSize, sortField, sortDirection);
 
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDirection", sortDirection);
-        model.addAttribute("reverseSortDirection", sortDirection.equals(String.valueOf(Sort.Direction.ASC)) ? String.valueOf(Sort.Direction.DESC) : String.valueOf(Sort.Direction.ASC));
-        model.addAttribute("publications", publicationList);
+        return "my-publications-page";
+    }
+
+    @GetMapping(value = "/my-publications/page/{pageNum}/size/{pageSize}/search")
+    public String showMyPublicationsPaginatedSearchResults(@PathVariable(value = "pageNum") int pageNum,
+                                                           @PathVariable(value = "pageSize") int pageSize,
+                                                           @RequestParam(value = "searchValue") String searchValue,
+                                                           @RequestParam(value = "sortField") String sortField,
+                                                           @RequestParam(value = "sortDirection") String sortDirection,
+                                                           Model model) {
+        User user = userService.getUserByUsername(getCurrentUsername());
+
+        Page<Publication> page = publicationService.findPublicationPageByUserISSNisbnOrTitle(user, pageNum, pageSize, sortField, sortDirection, searchValue);
+        model = addModelAttributes(model, pageNum, page, pageSize, sortField, sortDirection);
 
         return "my-publications-page";
     }
@@ -300,51 +306,26 @@ public class PublicationController {
                                 Model model) {
 
         Page<Publication> page = publicationService.findPublicationPage(pageNum, pageSize, sortField, sortDirection);
-        List<Publication> publicationList = page.getContent();
+        model = addModelAttributes(model, pageNum, page, pageSize, sortField, sortDirection);
+        return "publication-list-page";
+    }
 
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("selectedPageSize", pageSize);
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDirection", sortDirection);
-        model.addAttribute("reverseSortDirection", sortDirection.equals(String.valueOf(Sort.Direction.ASC)) ? String.valueOf(Sort.Direction.DESC) : String.valueOf(Sort.Direction.ASC));
-        model.addAttribute("publications", publicationList);
-        model.addAttribute("allowedPageSizes", PAGE_SIZES);
+
+    @GetMapping(value = "/page/{pageNum}/size/{pageSize}/search")
+    public String getPublicationsSearchResults(@PathVariable(value = "pageNum") int pageNum,
+                                               @PathVariable(value = "pageSize") int pageSize,
+                                               @RequestParam(value = "searchValue") String searchValue,
+                                               @RequestParam(value = "sortField") String sortField,
+                                               @RequestParam(value = "sortDirection") String sortDirection,
+                                               Model model) {
+
+        Page<Publication> page = publicationService.findPublicationPageByISSNisbnOrTitle(pageNum, pageSize, sortField, sortDirection, searchValue);
+        model = addModelAttributes(model, pageNum, page, pageSize, sortField, sortDirection);
 
         return "publication-list-page";
     }
 
-//    @PostMapping(value = "publications/page/{pageNum}/size/{pageSize}/search")
-//    public String searchPublications(@PathVariable(value = "pageNum") int pageNum,
-//                                                        @PathVariable(value = "pageSize") int pageSize,
-//                                                        @RequestParam(value = "searchValue") String searchValue,
-//                                                        @RequestParam(value = "sortField") String sortField,
-//                                                        @RequestParam(value = "sortDirection") String sortDirection,
-//                                                        Model model) {
-//        System.out.println("POST SEARCH");
-//        return getPublicationsSearchResults(pageNum, pageSize, searchValue, sortField, sortDirection, model);
-//    }
-                       //publications/page/1        /size/5         /search?searchValue=CC&sortField=publicationTitleOrigin&sortDirection=ASC
-    @GetMapping(value = "/page/{pageNum}/size/{pageSize}/search")
-    public String getPublicationsSearchResults(@PathVariable(value = "pageNum") int pageNum,
-                                     @PathVariable(value = "pageSize") int pageSize,
-                                     @RequestParam(value = "searchValue") String searchValue,
-                                     @RequestParam(value = "sortField") String sortField,
-                                     @RequestParam(value = "sortDirection") String sortDirection,
-                                     Model model) {
-
-        //http://localhost:8080/publications/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC
-        //http://localhost:8080/publications/page/1/5?sortField=publicationTitleOrigin&sortDirection=ASC
-        //http://localhost:8080/publications/page/1/size/5/search?searchValue=CC&sortField=publicationTitleOrigin&sortDirection=ASC
-//        String sortField = "publicationTitleOrigin";
-//        String sortDirection = "ASC";
-        System.out.println("searchValue= " + searchValue);
-        logger.info("searchValue= " + searchValue);
-        Page<Publication> page = publicationService.findPublicationPageByISSNisbnOrTitle(pageNum, pageSize, sortField, sortDirection, searchValue);
-        List<Publication> publicationList = page.getContent();
-
+    public Model addModelAttributes(Model model, int pageNum, Page page, int pageSize, String sortField, String sortDirection) {
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("pageSize", pageSize);
@@ -353,8 +334,8 @@ public class PublicationController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDirection", sortDirection);
         model.addAttribute("reverseSortDirection", sortDirection.equals(String.valueOf(Sort.Direction.ASC)) ? String.valueOf(Sort.Direction.DESC) : String.valueOf(Sort.Direction.ASC));
-        model.addAttribute("publications", publicationList);
+        model.addAttribute("publications", page.getContent());
         model.addAttribute("allowedPageSizes", PAGE_SIZES);
-        return "publication-list-page";
+        return model;
     }
 }
