@@ -2,6 +2,7 @@ package com.venta.zipus.controllers.publication;
 
 import com.venta.zipus.controllers.user.UserController;
 import com.venta.zipus.helpers.SelectValues;
+import com.venta.zipus.models.authors.Author;
 import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.models.publications.PublicationBook;
 import com.venta.zipus.models.publications.PublicationConference;
@@ -9,6 +10,7 @@ import com.venta.zipus.models.publications.PublicationMagazine;
 import com.venta.zipus.models.publications.pubtypegroups.constants.PublicationTypeGroupTitles;
 import com.venta.zipus.models.publications.pubtypes.PublicationType;
 import com.venta.zipus.models.user.User;
+import com.venta.zipus.services.IAuthorService;
 import com.venta.zipus.services.IPublicationService;
 import com.venta.zipus.services.IPublicationTypeService;
 import com.venta.zipus.services.IUserService;
@@ -33,7 +35,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.*;
-import java.util.List;
 
 import static com.venta.zipus.helpers.SelectValues.PAGE_SIZES;
 import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
@@ -50,6 +51,9 @@ public class PublicationController {
 
     @Autowired
     IPublicationTypeService publicationTypeService;
+
+    @Autowired
+    IAuthorService authorService;
 
     @GetMapping(value = "/add") // id for added publication
     public String showNewPublicationPage(Model model) {
@@ -337,5 +341,28 @@ public class PublicationController {
         model.addAttribute("publications", page.getContent());
         model.addAttribute("allowedPageSizes", PAGE_SIZES);
         return model;
+    }
+    //http://localhost:8080/publications           /page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC
+    //http://localhost:8080/publications/authors/43/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC
+    @GetMapping(value = "authors/{id}/page/{pageNum}/size/{pageSize}")
+    public String showAuthorPageById(@PathVariable(name = "id") long id,
+                                     @PathVariable(value = "pageNum") int pageNum,
+                                     @PathVariable(value = "pageSize") int pageSize,
+                                     @RequestParam(value = "sortField") String sortField,
+                                     @RequestParam(value = "sortDirection") String sortDirection,
+                                     Model model) {
+        Author author = authorService.getAuthorById(id);
+        System.out.println(author);
+        //int pageSize = 5;
+//        int pageNum = 1;
+//        String sortField = "ASC";
+//        String sortDirection = "ASC";
+
+        Page<Publication> page = publicationService.findPublicationPageByAuthor(author, pageNum, pageSize, sortField, sortDirection);
+        model = addModelAttributes(model, pageNum, page, pageSize, sortField, sortDirection);
+        model.addAttribute("author", author);
+        model.addAttribute("id", id);
+
+        return "author-page";
     }
 }

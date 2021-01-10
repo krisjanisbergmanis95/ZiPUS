@@ -1,0 +1,164 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+		table, th, td {
+			border: 1px solid black;
+		}
+    </style>
+</head>
+<title>
+    Autors
+</title>
+<h1>Autors</h1>
+<h2 th:object = "${author}" th:text = "${author.getName()} + ' ' + ${author.getSurname()}"></h2>
+<span th:object = "${author}"  th:text="'Autors' + ${author.isWorkingInVea() ? ' ir ' : ' NAV '}  + 'Ventspils Augstskolas darbinieks'"></span>
+
+<h3>Autora publikācijas</h3>
+<span th:text="${publications == null ? 'Autoram nav publikāciju' : ''}"></span>
+<body>
+<div class="card-2 topnav">
+    <div class="bar left green">
+        <a class="bar-item button" th:href="@{/home}">Home</a>
+        <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
+    </div>
+</div>
+</body>
+
+
+<table th:object = "${publications}" th:unless="${publications == null}">
+    <thead>
+    <tr>
+        <th>
+            <a th:href="@{'/publications/authors/' + ${id} + '/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${reverseSortDirection}}">
+                Publikācijas nosaukums</a>
+        </th>
+        <th>
+            <a th:href="@{'/publications/authors/' + ${id} + '/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleEnglish&sortDirection=' + ${reverseSortDirection}}">
+                Publikācijas nosaukums angļu valodā</a>
+        </th>
+        <th>
+            <a th:href="@{'/publications/authors/' + ${id} + '/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=IsbnISSN&sortDirection=' + ${reverseSortDirection}}">
+                ISBN\ISSN</a>
+        </th>
+        <th>
+            <a th:href="@{'/publications/authors/' + ${id} + '/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=fieldOfResearch&sortDirection=' + ${reverseSortDirection}}">
+                Pētniecības nozare</a>
+        </th>
+        <th>
+            <a th:href="@{'/publications/authors/' + ${id} + '/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=pubType&sortDirection=' + ${reverseSortDirection}}">
+                Publikācijas tips</a>
+        </th>
+        <th>
+            <a th:href="@{'/publications/authors/' + ${id} + '/page/' + ${currentPage} + '/size/' + ${selectedPageSize} + '?sortField=publicationGroup&sortDirection=' + ${reverseSortDirection}}">
+                Publikācijas tipa virsgrupa</a>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="publication: ${publications}">
+        <td>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getPublicationTitleOrigin()}"/>
+        </td>
+        <td>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getPublicationTitleEnglish()}"/>
+        </td>
+        <td>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getIsbnISSN()}"/>
+        </td>
+        <td>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getFieldOfResearch()}"/>
+        </td>
+        <td>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getPubType().getPublicationTypeValue()}"/>
+        </td>
+        <td>
+            <a th:href="@{/publications/{id}(id=${publication.getPub_ID()})}"
+               th:text="${publication.getPubType().getPublicationGroup().getPubTypeGroupName()}"/>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div>
+
+    <div th:if="${totalPages > 1}">
+        <div class="row col-sm-10">
+            <div class="col-sm-2">Kopējais publikāciju skaits: [[${totalItems}]]</div>
+            <div class="col-sm-1">
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                    <a th:if="${currentPage != i}"
+                       th:href="@{'/publications/authors/' + ${id} + '/page/' + ${i} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                        [[${i}]]
+                    </a>
+                    <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                </span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage > 1}"
+                   th:href="@{'/publications/authors/' + ${id} + '/page/' + ${1} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                    Pirmā lapa
+                </a>
+                <span th:unless="${currentPage > 1}">Pirmā lapa</span>
+                <a th:if="${currentPage > 1}"
+                   th:href="@{'/publications/authors/' + ${id} + '/page/' + ${1} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                    Iepriekšējā lapa
+                </a>
+                <span th:unless="${currentPage > 1}"></span>
+                Iepriekšējā lapa
+                <a th:if="${currentPage < totalPages}"
+                   th:href="@{'/publications/authors/' + ${id} + '/page/' + ${currentPage + 1} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                    Nākamā lapa
+                </a>
+                <span th:unless="${currentPage < totalPages}">Nākamā lapa</span>
+                <a th:if="${currentPage < totalPages}"
+                   th:href="@{'/publications/authors/' + ${id} + '/page/' + ${totalPages} + '/size/' + ${selectedPageSize} + '?sortField=publicationTitleOrigin&sortDirection=' + ${sortDirection}}">
+                    Pēdējā lapa
+                </a>
+                <span th:unless="${currentPage < totalPages}">Pēdējā lapa</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<select id="pageSizeSelect">
+    <option th:value="5" th:text="5" th:selected="5 == ${selectedPageSize}"></option>
+    <option th:value="10" th:text="10" th:selected="10 == ${selectedPageSize}"></option>
+    <option th:value="50" th:text="50" th:selected="50 == ${selectedPageSize}"></option>
+    <option th:value="100" th:text="100" th:selected="100 == ${selectedPageSize}"></option>
+    <option th:value="500" th:text="500" th:selected="500 == ${selectedPageSize}"></option>
+</select>
+
+
+</body>
+<script
+        src="https://code.jquery.com/jquery-1.11.1.min.js"
+        integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE="
+        crossorigin="anonymous"></script>
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function() {
+            changePageAndSize();
+        });
+
+        function changePageAndSize() {
+            $('#pageSizeSelect').change(function(evt) {
+                this.href = window.location.href;
+                this.matchingText = this.href.match("/authors/.*?/page");
+                this.firstReplace = this.matchingText[0].replace("/authors/", "");
+                this.id = this.firstReplace.replace("/page", "");
+                window.location.replace("/publications/authors/" + this.id + "/page/1/size/" + this.value + "?sortField=publicationTitleOrigin&sortDirection=ASC");
+            });
+        }
+        /*]]>*/
+
+</script>
+</html>

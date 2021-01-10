@@ -50,9 +50,18 @@
                 <th>Strādā Vea</th>
             </tr>
             <tr>
-                <td th:text="${author.getName()}"/>
-                <td th:text="${author.getSurname()}"/>
-                <td th:text="${author.isWorkingInVea() ? 'Jā' : 'Nē'}"/>
+                <td>
+                    <a th:href="@{'authors/' + ${author.getAuthorId()} + '/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC'}"
+                       th:text="${author.getName()}"/>
+                </td>
+                <td>
+                    <a th:href="@{'authors/' + ${author.getAuthorId()} + '/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC'}"
+                       th:text="${author.getSurname()}"/>
+                </td>
+                <td>
+                    <a th:href="@{'authors/' + ${author.getAuthorId()} + '/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC'}"
+                       th:text="${author.isWorkingInVea() ? 'Jā' : 'Nē'}"/>
+                </td>
             </tr>
         </table>
     </li>
@@ -67,12 +76,7 @@
             <!--             th:object="${file}"-->
 
             <label>Publikācijas fails</label>
-            <!--            <ul>-->
-            <!--                <li th:each="file : ${files}">-->
-            <!--                    <a th:href="${file}" th:text="${publication.getFileName()}" />-->
             <a th:href="@{downloadFile/{id}(id=${publication.getPub_ID()})}" th:text="${publication.getFileName()}"/>
-            <!--                </li>-->
-            <!--            </ul>-->
         </div>
     <li th:unless="${publication.getPublisher() == null}">
         <label>Izdevējs</label>

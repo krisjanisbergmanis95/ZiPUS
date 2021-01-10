@@ -1,5 +1,6 @@
 package com.venta.zipus.repositories;
 
+import com.venta.zipus.models.authors.Author;
 import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.models.user.User;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ public interface IPublicationRepo extends PagingAndSortingRepository<Publication
     boolean existsByPublicationTitleEnglish(String publicationTitleEnglish);
     List<Publication> findByUsersIn(ArrayList<User> user);
     Page<Publication> findByUsersIn(ArrayList<User> user, Pageable pageable);
+    Page<Publication> findByAuthorsIn(ArrayList<Author> authors, Pageable pageable);
     Publication findByPublicationTitleOriginAndPublicationTitleEnglish(String titleOrigin, String titleEnglish);
 //SELECT * FROM Publication_table pt WHERE pt.PUBLICATIONTITLEORIGIN LIKE '%CC%' OR pt.PUBLICATIONTITLEENGLISH LIKE '%test%';
     @Query(value = "SELECT * FROM Publication_table pt " +

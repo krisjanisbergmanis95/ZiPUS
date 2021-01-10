@@ -1,6 +1,7 @@
 package com.venta.zipus.services.implementation;
 
 
+import com.venta.zipus.models.authors.Author;
 import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.repositories.IPublicationRepo;
@@ -112,5 +113,13 @@ public class PublicationService implements IPublicationService {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
         ArrayList<User> users = new ArrayList<>(Arrays.asList(user));
         return publicationRepo.findByUsersIn(users, pageable);
+    }
+    public Page<Publication> findPublicationPageByAuthor(Author author, int pageNum, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortField).ascending()
+                : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+        ArrayList<Author> authors = new ArrayList<>(Arrays.asList(author));
+        return publicationRepo.findByAuthorsIn(authors, pageable);
     }
 }
