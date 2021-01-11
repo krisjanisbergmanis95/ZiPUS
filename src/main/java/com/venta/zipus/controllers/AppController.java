@@ -69,6 +69,8 @@ public class AppController {
         model.addAttribute("isAuthorityAdmin", isAdmin);
         model.addAttribute("isAuthorityAuthor",
                 user.isAuthority(userAuthorityService.getUserAuthorityByTitle(WebSecurityConfig.AUTHOR)));
+        model.addAttribute("isAuthorityZUADD",
+                user.isAuthority(userAuthorityService.getUserAuthorityByTitle(WebSecurityConfig.ZUADD)));
         logger.info(user.toString());
         logger.info(user.getAuthorities().toString());
         return "home";

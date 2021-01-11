@@ -157,6 +157,17 @@ public class Application {
                     new ArrayList<>(Arrays.asList(AuthTypeAuthor)));
             userRepo.save(u3);
 
+            UserAuthority AuthTypeZUADD = userAuthorityRepo.findByRoleTitle(WebSecurityConfig.ZUADD);
+            User u4 = new User(
+                    "zane",
+                    "zane",
+                    "zane",
+                    "zane@zane.com",
+                    passwordEncoder().encode("zane"),
+                    new ArrayList<>(Arrays.asList(AuthTypeZUADD))
+            );
+            userRepo.save(u4);
+
 //Adding a book
 
             PublicationType publicationType1 = publicationTypeRepo.findByPublicationTypeValue(PublicationTypeTitlesBook.EDUCATIONAL_BOOK);

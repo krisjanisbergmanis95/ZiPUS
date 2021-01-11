@@ -26,6 +26,13 @@
     </div>
 
     <div>
+        <label>Autori</label>
+        <input th:field="*{authorsInput}"/>
+        <p th:each="error : ${#fields.errors('authorsInput')}"
+           th:text="${error}">Validation error</p>
+    </div>
+
+    <div>
         <label>Valoda</label>
         <input th:field="*{language}"/>
         <p th:each="error : ${#fields.errors('language')}"

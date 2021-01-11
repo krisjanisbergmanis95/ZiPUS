@@ -6,6 +6,14 @@
 		}
     </style>
 </head>
+<body>
+<div class="card-2 topnav">
+    <div class="bar left green">
+        <a class="bar-item button" th:href="@{/home}">Home</a>
+        <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
+    </div>
+</div>
+</body>
 <title>
     Autors
 </title>
@@ -15,14 +23,7 @@
 
 <h3>Autora publikācijas</h3>
 <span th:text="${publications == null ? 'Autoram nav publikāciju' : ''}"></span>
-<body>
-<div class="card-2 topnav">
-    <div class="bar left green">
-        <a class="bar-item button" th:href="@{/home}">Home</a>
-        <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
-    </div>
-</div>
-</body>
+
 
 
 <table th:object = "${publications}" th:unless="${publications == null}">

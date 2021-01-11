@@ -35,14 +35,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.*;
+import java.util.List;
 
 import static com.venta.zipus.helpers.SelectValues.PAGE_SIZES;
 import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
+import static java.util.Arrays.asList;
 
 @Controller
 @RequestMapping("/publications")
 public class PublicationController {
-    Logger logger = LoggerFactory.getLogger(UserController.class);
+    Logger logger = LoggerFactory.getLogger(PublicationController.class);
     @Autowired
     IPublicationService publicationService;
 
@@ -95,6 +97,26 @@ public class PublicationController {
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }
+            String spliter = publication.getAuthorsInput().contains(", ") ? ", " : ",";
+            System.out.println("input : " + publication.getAuthorsInput());
+            List<String> authorList = asList(publication.getAuthorsInput().split(spliter));
+            System.out.println("list" + authorList);
+            for (String listEntry : authorList) {
+                String name = listEntry.split(" ")[0];
+                String surname = listEntry.split(" ")[1];
+                Author tempAuthor = new Author(name, surname, false, "");
+                authorService.addNewAuthor(tempAuthor);
+                Author theNewAuthor = authorService.findAuthorByNameAndSurname(name, surname);
+
+                System.out.println("Author in db : " + theNewAuthor);
+                try {
+                    publication.addAuthor(theNewAuthor);
+                } catch (Exception e) {
+                    logger.error("Error while adding author to publication");
+                    logger.error(e.getMessage());
+                }
+            }
+
 
             logger.info("=====================");
             logger.info(publication.toString());
@@ -150,6 +172,26 @@ public class PublicationController {
                 logger.info("users " + publication.getUsers().toString() + " added");
             } catch (Exception e) {
                 logger.error(e.getMessage());
+            }
+
+            String spliter = publication.getAuthorsInput().contains(", ") ? ", " : ",";
+            System.out.println("input : " + publication.getAuthorsInput());
+            List<String> authorList = asList(publication.getAuthorsInput().split(spliter));
+            System.out.println("list" + authorList);
+            for (String listEntry : authorList) {
+                String name = listEntry.split(" ")[0];
+                String surname = listEntry.split(" ")[1];
+                Author tempAuthor = new Author(name, surname, false, "");
+                authorService.addNewAuthor(tempAuthor);
+                Author theNewAuthor = authorService.findAuthorByNameAndSurname(name, surname);
+
+                System.out.println("Author in db : " + theNewAuthor);
+                try {
+                    publication.addAuthor(theNewAuthor);
+                } catch (Exception e) {
+                    logger.error("Error while adding author to publication");
+                    logger.error(e.getMessage());
+                }
             }
 
             logger.info("=====================");
@@ -210,6 +252,26 @@ public class PublicationController {
                 logger.error(e.getMessage());
             }
 
+            String spliter = publication.getAuthorsInput().contains(", ") ? ", " : ",";
+            System.out.println("input : " + publication.getAuthorsInput());
+            List<String> authorList = asList(publication.getAuthorsInput().split(spliter));
+            System.out.println("list" + authorList);
+            for (String listEntry : authorList) {
+                String name = listEntry.split(" ")[0];
+                String surname = listEntry.split(" ")[1];
+                Author tempAuthor = new Author(name, surname, false, "");
+                authorService.addNewAuthor(tempAuthor);
+                Author theNewAuthor = authorService.findAuthorByNameAndSurname(name, surname);
+
+                System.out.println("Author in db : " + theNewAuthor);
+                try {
+                    publication.addAuthor(theNewAuthor);
+                } catch (Exception e) {
+                    logger.error("Error while adding author to publication");
+                    logger.error(e.getMessage());
+                }
+            }
+
             logger.info("=====================");
             logger.info(publication.toString());
             logger.info("=====================");
@@ -223,6 +285,9 @@ public class PublicationController {
             logger.info(newPub.toString());
             logger.info("=====================");
 
+            logger.info("authors");
+            logger.info(newPub.getAuthors().toString());
+            logger.info("=====================");
 
             logger.info("Publication added successfully");
         } else {
@@ -342,6 +407,7 @@ public class PublicationController {
         model.addAttribute("allowedPageSizes", PAGE_SIZES);
         return model;
     }
+
     //http://localhost:8080/publications           /page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC
     //http://localhost:8080/publications/authors/43/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC
     @GetMapping(value = "authors/{id}/page/{pageNum}/size/{pageSize}")

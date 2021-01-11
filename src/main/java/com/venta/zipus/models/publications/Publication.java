@@ -89,7 +89,10 @@ public class Publication {
     @JoinTable(name = "Author_Publication",
             joinColumns = @JoinColumn(name = "AUTHOR_ID"),
             inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
-    private Collection<Author> authors;
+    private Collection<Author> authors = new ArrayList<>();
+
+    @Column(name="Authors_input")
+    private String authorsInput;
 
     @Column(name = "Key_Words")
     private ArrayList<String> keyWords;
@@ -463,6 +466,14 @@ public class Publication {
             this.users.add(user);
         } else {
             throw new Exception("No user to add!");
+        }
+    }
+    public void addAuthor(Author author) throws Exception {
+        System.out.println("Adding author to publication: " + author.toString());
+        if (author != null) {
+            this.authors.add(author);
+        } else {
+            throw new Exception("No authors to add!");
         }
     }
 

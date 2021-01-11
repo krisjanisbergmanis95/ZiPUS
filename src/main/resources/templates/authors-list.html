@@ -1,0 +1,37 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+		table, th, td {
+			border: 1px solid black;
+		}
+
+    </style>
+</head>
+<body>
+<h2>
+    All users
+</h2>
+<div class="card-2 topnav">
+    <div class="bar left green">
+        <a class="bar-item button" th:href="@{/home}">Home</a>
+        <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
+    </div>
+</div>
+</body>
+<table>
+    <tr>
+        <th>Vārds</th>
+        <th>Uzvārds</th>
+    </tr>
+    <tr th:each="author: ${authors}">
+        <td >
+            <a th:text="${author.getName()}" th:href="@{'/publications/authors/' + ${author.getAuthorId()} + '/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC'}"></a>
+        </td>
+        <td >
+            <a th:text="${author.getSurname()}" th:href="@{'/publications/authors/' + ${author.getAuthorId()} + '/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC'}"></a>
+        </td>
+
+    </tr>
+</table>
+</body>
+</html>
