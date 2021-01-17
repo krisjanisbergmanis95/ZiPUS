@@ -20,8 +20,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "U_ID")
-
+    @Column(name = "UID")
     @Setter(value = AccessLevel.PRIVATE)
     private long u_ID;
 
@@ -59,13 +58,13 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "User_Authority",
             joinColumns = @JoinColumn(name = "rId"),
-            inverseJoinColumns = @JoinColumn(name = "uID"))
+            inverseJoinColumns = @JoinColumn(name = "UID"))
     private Collection<UserAuthority> authorities = new ArrayList<>();
 
     //    @ManyToMany(cascade = CascadeType.ALL)
 //    @JoinTable(name = "User_Publication",
 //            joinColumns = @JoinColumn(name = "pub_ID"),
-//            inverseJoinColumns = @JoinColumn(name = "uID"))
+//            inverseJoinColumns = @JoinColumn(name = "UID"))
 //
     @ManyToMany(mappedBy = "users")
     private Collection<Publication> publications = new ArrayList<>();

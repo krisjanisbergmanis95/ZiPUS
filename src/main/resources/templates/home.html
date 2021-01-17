@@ -12,6 +12,7 @@
         <a class="bar-item button" th:href="@{/users/{id}(id=${user.getU_ID()})}">Mans profils</a>
         <a class="bar-item button" th:if="${isAuthorityAuthor}" th:href="@{/publications/my-publications}">Manas Publikācijas</a>
         <a class="bar-item button" th:if="${isAuthorityAdmin}" th:href="@{/users/}">Visi lietotāji</a>
+        <a class="bar-item button" th:if="${isAuthorityZUADD}" th:href="@{/authors/}">Visi Autori</a>
         <a class="bar-item button" th:href="@{/publications/}">Visas Publikācijas</a>
         <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
     </div>

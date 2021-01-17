@@ -58,9 +58,9 @@ public class Publication {
 //            inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
 //    private Collection<PublicationType> publishments;
     @ManyToMany//(cascade = CascadeType.ALL)
-    @JoinTable(name = "Publication_Users",
-            joinColumns = @JoinColumn(name = "uID"),
-            inverseJoinColumns = @JoinColumn(name = "pub_ID"))
+    @JoinTable(name = "PUBLICATIONUSERS",
+            joinColumns = @JoinColumn(name = "pub_ID"),
+            inverseJoinColumns = @JoinColumn(name = "UID"))
     private Collection<User> users = new ArrayList<>();
 
     @ManyToOne
@@ -70,10 +70,10 @@ public class Publication {
     @Column(name = "Language")
     private String language;
 
-    @Column(name = "Publication_Title_Origin")
+    @Column(name = "PUBLICATIONTITLEORIGIN")
     private String publicationTitleOrigin;
 
-    @Column(name = "Publication_Title_English")
+    @Column(name = "PUBLICATIONTITLEENGLISH")
     private String publicationTitleEnglish;
 
     @Column(name = "Annotation")
@@ -89,7 +89,10 @@ public class Publication {
     @JoinTable(name = "Author_Publication",
             joinColumns = @JoinColumn(name = "AUTHOR_ID"),
             inverseJoinColumns = @JoinColumn(name = "PUB_ID"))
-    private Collection<Author> authors;
+    private Collection<Author> authors = new ArrayList<>();
+
+    @Column(name="Authors_input")
+    private String authorsInput;
 
     @Column(name = "Key_Words")
     private ArrayList<String> keyWords;
@@ -103,7 +106,7 @@ public class Publication {
     @Column(name = "Pages")
     private int pages;
 
-    @Column(name = "ISBN_ISSN")
+    @Column(name = "ISBNISSN")
     private String isbnISSN;
 
     //TODO OtherDB
@@ -463,6 +466,14 @@ public class Publication {
             this.users.add(user);
         } else {
             throw new Exception("No user to add!");
+        }
+    }
+    public void addAuthor(Author author) throws Exception {
+        System.out.println("Adding author to publication: " + author.toString());
+        if (author != null) {
+            this.authors.add(author);
+        } else {
+            throw new Exception("No authors to add!");
         }
     }
 

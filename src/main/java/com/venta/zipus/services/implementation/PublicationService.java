@@ -1,6 +1,7 @@
 package com.venta.zipus.services.implementation;
 
 
+import com.venta.zipus.models.authors.Author;
 import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.models.user.User;
 import com.venta.zipus.repositories.IPublicationRepo;
@@ -87,6 +88,24 @@ public class PublicationService implements IPublicationService {
         return publicationRepo.findAll(pageable);
     }
 
+    public Page<Publication> findPublicationPageByISSNisbnOrTitle(int pageNum, int pageSize, String sortField, String sortDirection, String searchText) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortField).ascending()
+                : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+        System.out.println(publicationRepo.findByQueryISBNOrTitle(pageable, searchText));
+        return publicationRepo.findByQueryISBNOrTitle(pageable, searchText);
+    }
+
+
+    public Page<Publication> findPublicationPageByUserISSNisbnOrTitle(User user, int pageNum, int pageSize, String sortField, String sortDirection, String searchText) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortField).ascending()
+                : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+        return publicationRepo.findByQueryUserAndISBNOrTitle(pageable, user.getU_ID(), searchText);
+    }
+
     public Page<Publication> findPublicationPageByUser(User user, int pageNum, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortField).ascending()
@@ -94,5 +113,13 @@ public class PublicationService implements IPublicationService {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
         ArrayList<User> users = new ArrayList<>(Arrays.asList(user));
         return publicationRepo.findByUsersIn(users, pageable);
+    }
+    public Page<Publication> findPublicationPageByAuthor(Author author, int pageNum, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortField).ascending()
+                : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+        ArrayList<Author> authors = new ArrayList<>(Arrays.asList(author));
+        return publicationRepo.findByAuthorsIn(authors, pageable);
     }
 }

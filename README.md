@@ -90,3 +90,8 @@ Many to Many
 ```
 
 will fix `import org.apache.commons.io.IOUtils;` not being found
+
+# building urls withs thymeleaf
+
+th:form action doesn't use `'` when using url an url with params
+th:href uses `'` when adding url and url with parameters

@@ -2,6 +2,7 @@ package com.venta.zipus.controllers.publication;
 
 import com.venta.zipus.controllers.user.UserController;
 import com.venta.zipus.helpers.SelectValues;
+import com.venta.zipus.models.authors.Author;
 import com.venta.zipus.models.publications.Publication;
 import com.venta.zipus.models.publications.PublicationBook;
 import com.venta.zipus.models.publications.PublicationConference;
@@ -9,6 +10,7 @@ import com.venta.zipus.models.publications.PublicationMagazine;
 import com.venta.zipus.models.publications.pubtypegroups.constants.PublicationTypeGroupTitles;
 import com.venta.zipus.models.publications.pubtypes.PublicationType;
 import com.venta.zipus.models.user.User;
+import com.venta.zipus.services.IAuthorService;
 import com.venta.zipus.services.IPublicationService;
 import com.venta.zipus.services.IPublicationTypeService;
 import com.venta.zipus.services.IUserService;
@@ -37,11 +39,12 @@ import java.util.List;
 
 import static com.venta.zipus.helpers.SelectValues.PAGE_SIZES;
 import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
+import static java.util.Arrays.asList;
 
 @Controller
 @RequestMapping("/publications")
 public class PublicationController {
-    Logger logger = LoggerFactory.getLogger(UserController.class);
+    Logger logger = LoggerFactory.getLogger(PublicationController.class);
     @Autowired
     IPublicationService publicationService;
 
@@ -50,6 +53,9 @@ public class PublicationController {
 
     @Autowired
     IPublicationTypeService publicationTypeService;
+
+    @Autowired
+    IAuthorService authorService;
 
     @GetMapping(value = "/add") // id for added publication
     public String showNewPublicationPage(Model model) {
@@ -68,10 +74,10 @@ public class PublicationController {
 
     @PostMapping(value = "/add/magazine") // id for added publication
     public String addNewBookTypeMagazine(@Valid Publication publication,
-                                           PublicationMagazine publicationMagazine,
-                                           PublicationType pubType,
-                                           BindingResult result,
-                                           @RequestParam("file") MultipartFile file) throws IOException {
+                                         PublicationMagazine publicationMagazine,
+                                         PublicationType pubType,
+                                         BindingResult result,
+                                         @RequestParam("file") MultipartFile file) throws IOException {
 
         if (!result.hasErrors()) {
             publication.setFilePath("upload-dir/" + file.getOriginalFilename());
@@ -91,6 +97,26 @@ public class PublicationController {
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }
+            String spliter = publication.getAuthorsInput().contains(", ") ? ", " : ",";
+            System.out.println("input : " + publication.getAuthorsInput());
+            List<String> authorList = asList(publication.getAuthorsInput().split(spliter));
+            System.out.println("list" + authorList);
+            for (String listEntry : authorList) {
+                String name = listEntry.split(" ")[0];
+                String surname = listEntry.split(" ")[1];
+                Author tempAuthor = new Author(name, surname, false, "");
+                authorService.addNewAuthor(tempAuthor);
+                Author theNewAuthor = authorService.findAuthorByNameAndSurname(name, surname);
+
+                System.out.println("Author in db : " + theNewAuthor);
+                try {
+                    publication.addAuthor(theNewAuthor);
+                } catch (Exception e) {
+                    logger.error("Error while adding author to publication");
+                    logger.error(e.getMessage());
+                }
+            }
+
 
             logger.info("=====================");
             logger.info(publication.toString());
@@ -124,10 +150,10 @@ public class PublicationController {
 
     @PostMapping(value = "/add/conference") // id for added publication
     public String addNewBookTypeConference(@Valid Publication publication,
-                                            PublicationConference publicationConference,
-                                            PublicationType pubType,
-                                            BindingResult result,
-                                            @RequestParam("file") MultipartFile file) throws IOException {
+                                           PublicationConference publicationConference,
+                                           PublicationType pubType,
+                                           BindingResult result,
+                                           @RequestParam("file") MultipartFile file) throws IOException {
 
         if (!result.hasErrors()) {
             publication.setFilePath("upload-dir/" + file.getOriginalFilename());
@@ -146,6 +172,26 @@ public class PublicationController {
                 logger.info("users " + publication.getUsers().toString() + " added");
             } catch (Exception e) {
                 logger.error(e.getMessage());
+            }
+
+            String spliter = publication.getAuthorsInput().contains(", ") ? ", " : ",";
+            System.out.println("input : " + publication.getAuthorsInput());
+            List<String> authorList = asList(publication.getAuthorsInput().split(spliter));
+            System.out.println("list" + authorList);
+            for (String listEntry : authorList) {
+                String name = listEntry.split(" ")[0];
+                String surname = listEntry.split(" ")[1];
+                Author tempAuthor = new Author(name, surname, false, "");
+                authorService.addNewAuthor(tempAuthor);
+                Author theNewAuthor = authorService.findAuthorByNameAndSurname(name, surname);
+
+                System.out.println("Author in db : " + theNewAuthor);
+                try {
+                    publication.addAuthor(theNewAuthor);
+                } catch (Exception e) {
+                    logger.error("Error while adding author to publication");
+                    logger.error(e.getMessage());
+                }
             }
 
             logger.info("=====================");
@@ -206,6 +252,26 @@ public class PublicationController {
                 logger.error(e.getMessage());
             }
 
+            String spliter = publication.getAuthorsInput().contains(", ") ? ", " : ",";
+            System.out.println("input : " + publication.getAuthorsInput());
+            List<String> authorList = asList(publication.getAuthorsInput().split(spliter));
+            System.out.println("list" + authorList);
+            for (String listEntry : authorList) {
+                String name = listEntry.split(" ")[0];
+                String surname = listEntry.split(" ")[1];
+                Author tempAuthor = new Author(name, surname, false, "");
+                authorService.addNewAuthor(tempAuthor);
+                Author theNewAuthor = authorService.findAuthorByNameAndSurname(name, surname);
+
+                System.out.println("Author in db : " + theNewAuthor);
+                try {
+                    publication.addAuthor(theNewAuthor);
+                } catch (Exception e) {
+                    logger.error("Error while adding author to publication");
+                    logger.error(e.getMessage());
+                }
+            }
+
             logger.info("=====================");
             logger.info(publication.toString());
             logger.info("=====================");
@@ -219,6 +285,9 @@ public class PublicationController {
             logger.info(newPub.toString());
             logger.info("=====================");
 
+            logger.info("authors");
+            logger.info(newPub.getAuthors().toString());
+            logger.info("=====================");
 
             logger.info("Publication added successfully");
         } else {
@@ -266,23 +335,29 @@ public class PublicationController {
 
     @GetMapping(value = "/my-publications/page/{pageNum}/size/{pageSize}") // id for added publication
     public String showMyPublicationsPaginated(@PathVariable(value = "pageNum") int pageNum,
-                                     @PathVariable(value = "pageSize") int pageSize,
-                                     @RequestParam(value = "sortField") String sortField,
-                                     @RequestParam(value = "sortDirection") String sortDirection,
-                                     Model model) {//@PathVariable(name = "user") User user, Model model
+                                              @PathVariable(value = "pageSize") int pageSize,
+                                              @RequestParam(value = "sortField") String sortField,
+                                              @RequestParam(value = "sortDirection") String sortDirection,
+                                              Model model) {//@PathVariable(name = "user") User user, Model model
         User user = userService.getUserByUsername(getCurrentUsername());
 
         Page<Publication> page = publicationService.findPublicationPageByUser(user, pageNum, pageSize, sortField, sortDirection);
-        List<Publication> publicationList = page.getContent();
+        model = addModelAttributes(model, pageNum, page, pageSize, sortField, sortDirection);
 
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDirection", sortDirection);
-        model.addAttribute("reverseSortDirection", sortDirection.equals(String.valueOf(Sort.Direction.ASC)) ? String.valueOf(Sort.Direction.DESC) : String.valueOf(Sort.Direction.ASC));
-        model.addAttribute("publications", publicationList);
+        return "my-publications-page";
+    }
+
+    @GetMapping(value = "/my-publications/page/{pageNum}/size/{pageSize}/search")
+    public String showMyPublicationsPaginatedSearchResults(@PathVariable(value = "pageNum") int pageNum,
+                                                           @PathVariable(value = "pageSize") int pageSize,
+                                                           @RequestParam(value = "searchValue") String searchValue,
+                                                           @RequestParam(value = "sortField") String sortField,
+                                                           @RequestParam(value = "sortDirection") String sortDirection,
+                                                           Model model) {
+        User user = userService.getUserByUsername(getCurrentUsername());
+
+        Page<Publication> page = publicationService.findPublicationPageByUserISSNisbnOrTitle(user, pageNum, pageSize, sortField, sortDirection, searchValue);
+        model = addModelAttributes(model, pageNum, page, pageSize, sortField, sortDirection);
 
         return "my-publications-page";
     }
@@ -300,8 +375,26 @@ public class PublicationController {
                                 Model model) {
 
         Page<Publication> page = publicationService.findPublicationPage(pageNum, pageSize, sortField, sortDirection);
-        List<Publication> publicationList = page.getContent();
+        model = addModelAttributes(model, pageNum, page, pageSize, sortField, sortDirection);
+        return "publication-list-page";
+    }
 
+
+    @GetMapping(value = "/page/{pageNum}/size/{pageSize}/search")
+    public String getPublicationsSearchResults(@PathVariable(value = "pageNum") int pageNum,
+                                               @PathVariable(value = "pageSize") int pageSize,
+                                               @RequestParam(value = "searchValue") String searchValue,
+                                               @RequestParam(value = "sortField") String sortField,
+                                               @RequestParam(value = "sortDirection") String sortDirection,
+                                               Model model) {
+
+        Page<Publication> page = publicationService.findPublicationPageByISSNisbnOrTitle(pageNum, pageSize, sortField, sortDirection, searchValue);
+        model = addModelAttributes(model, pageNum, page, pageSize, sortField, sortDirection);
+
+        return "publication-list-page";
+    }
+
+    public Model addModelAttributes(Model model, int pageNum, Page page, int pageSize, String sortField, String sortDirection) {
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("pageSize", pageSize);
@@ -310,9 +403,32 @@ public class PublicationController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDirection", sortDirection);
         model.addAttribute("reverseSortDirection", sortDirection.equals(String.valueOf(Sort.Direction.ASC)) ? String.valueOf(Sort.Direction.DESC) : String.valueOf(Sort.Direction.ASC));
-        model.addAttribute("publications", publicationList);
+        model.addAttribute("publications", page.getContent());
         model.addAttribute("allowedPageSizes", PAGE_SIZES);
+        return model;
+    }
 
-        return "publication-list-page";
+    //http://localhost:8080/publications           /page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC
+    //http://localhost:8080/publications/authors/43/page/1/size/5?sortField=publicationTitleOrigin&sortDirection=ASC
+    @GetMapping(value = "authors/{id}/page/{pageNum}/size/{pageSize}")
+    public String showAuthorPageById(@PathVariable(name = "id") long id,
+                                     @PathVariable(value = "pageNum") int pageNum,
+                                     @PathVariable(value = "pageSize") int pageSize,
+                                     @RequestParam(value = "sortField") String sortField,
+                                     @RequestParam(value = "sortDirection") String sortDirection,
+                                     Model model) {
+        Author author = authorService.getAuthorById(id);
+        System.out.println(author);
+        //int pageSize = 5;
+//        int pageNum = 1;
+//        String sortField = "ASC";
+//        String sortDirection = "ASC";
+
+        Page<Publication> page = publicationService.findPublicationPageByAuthor(author, pageNum, pageSize, sortField, sortDirection);
+        model = addModelAttributes(model, pageNum, page, pageSize, sortField, sortDirection);
+        model.addAttribute("author", author);
+        model.addAttribute("id", id);
+
+        return "author-page";
     }
 }
