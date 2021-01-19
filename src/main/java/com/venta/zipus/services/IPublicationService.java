@@ -17,9 +17,11 @@ public interface IPublicationService {
 
     Page<Publication> findPublicationPage(int pageNum, int pageSize, String sortField, String sortDirection);
     Page<Publication> findPublicationPageByUser(User user, int pageNum, int pageSize, String sortField, String sortDirection);
+    boolean isThisMyPublication(User user, long pubId);
     Page<Publication> findPublicationPageByAuthor(Author author, int pageNum, int pageSize, String sortField, String sortDirection);
     Page<Publication> findPublicationPageByISSNisbnOrTitle(int pageNum, int pageSize, String sortField, String sortDirection, String searchText);
     Page<Publication> findPublicationPageByUserISSNisbnOrTitle(User user, int pageNum, int pageSize, String sortField, String sortDirection, String searchText);
     List<Publication> getPublicationsByUser(User user);
     List<Publication> getPublicationsByUser(ArrayList<User> users);
+    void deletePublication(Publication pub);
 }

@@ -114,6 +114,25 @@ public class PublicationService implements IPublicationService {
         ArrayList<User> users = new ArrayList<>(Arrays.asList(user));
         return publicationRepo.findByUsersIn(users, pageable);
     }
+
+    public boolean isThisMyPublication(User user, long pubId) {
+        ArrayList<User> users = new ArrayList<>(Arrays.asList(user));
+        List<Publication> publications = publicationRepo.findByUsersIn(users);
+        boolean isThisMyPublication = false;
+        for (Publication publication : publications) {
+            if (publication.getPub_ID() == pubId) {
+                isThisMyPublication = true;
+                return isThisMyPublication;
+            }
+        }
+        return isThisMyPublication;
+    }
+
+    public void deletePublication(Publication pub) {
+        publicationRepo.delete(pub);
+        System.out.println("publication with id " + pub.getPub_ID() + "deleted");
+    }
+
     public Page<Publication> findPublicationPageByAuthor(Author author, int pageNum, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortField).ascending()

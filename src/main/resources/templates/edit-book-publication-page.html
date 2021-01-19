@@ -1,0 +1,21 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div class="card-2 topnav">
+    <div class="bar left green">
+        <a class="bar-item button" th:href="@{/home}">Home</a>
+        <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
+    </div>
+</div>
+
+<div>
+    <form th:action="@{/publications/{id}/edit/(id=${pubID})}" method="post" enctype="utf8">
+            <button type="" class="btn">Apstiprināt</button>
+    </form>
+
+    <form th:action="@{/publications/{id}(id=${pubID})}" enctype="utf8">
+            <button type="" class="btn">Atcelt</button>
+    </form>
+</div>
+</body>
+</html>

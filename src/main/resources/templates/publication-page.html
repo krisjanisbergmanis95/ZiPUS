@@ -9,6 +9,8 @@
     <div class="bar left green">
         <a class="bar-item button" th:href="@{/home}">Home</a>
         <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
+        <a class="bar-item button" th:if="${isThisMyPublication}" th:href="@{/publications/{id}/edit/(id=${publication.getPub_ID()})}">Rediģēt publikāciju</a>
+        <a class="bar-item button" th:if="${isThisMyPublication}" th:href="@{/publications/{id}/delete-confirm/(id=${publication.getPub_ID()})}">Dzēst publikāciju</a>
     </div>
 </div>
 </body>

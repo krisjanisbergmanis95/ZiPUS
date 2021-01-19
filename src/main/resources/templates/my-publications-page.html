@@ -11,13 +11,6 @@
 </title>
 <h1 > Manas publikācijas</h1>
 
-<form th:action="@{/publications/my-publications/page/{currentPage}/size/{selectedPageSize}/search(currentPage=${currentPage}, selectedPageSize=${selectedPageSize}, searchValue='${searchValue}', sortField='publicationTitleOrigin', sortDirection='${sortDirection}')}">
-    <input th:name="searchValue" type="text" placeholder="ISBN/ISSN vai nosaukums">
-    <input th:type = "hidden" th:name="sortField" type="text" th:value="publicationTitleOrigin">
-    <input th:type = "hidden" th:name="sortDirection" type="text" th:value="${sortDirection}">
-    <button>Meklēt manu publikāciju</button>
-</form>
-
 <body th:object="${publications}">
 <div class="card-2 topnav">
     <div class="bar left green">
@@ -30,6 +23,12 @@
     <a th:href="@{/publications/add}">Pievienot jaunu publikāciju</a>
 </div>
 
+<form th:action="@{/publications/my-publications/page/{currentPage}/size/{selectedPageSize}/search(currentPage=${currentPage}, selectedPageSize=${selectedPageSize}, searchValue='${searchValue}', sortField='publicationTitleOrigin', sortDirection='${sortDirection}')}">
+    <input th:name="searchValue" type="text" placeholder="ISBN/ISSN vai nosaukums">
+    <input th:type = "hidden" th:name="sortField" type="text" th:value="publicationTitleOrigin">
+    <input th:type = "hidden" th:name="sortDirection" type="text" th:value="${sortDirection}">
+    <button>Meklēt manu publikāciju</button>
+</form>
 
 <table border="1" class="table table-striped table-responsive-md">
     <thead>

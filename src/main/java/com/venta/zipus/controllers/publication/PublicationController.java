@@ -1,6 +1,5 @@
 package com.venta.zipus.controllers.publication;
 
-import com.venta.zipus.controllers.user.UserController;
 import com.venta.zipus.helpers.SelectValues;
 import com.venta.zipus.models.authors.Author;
 import com.venta.zipus.models.publications.Publication;
@@ -38,6 +37,7 @@ import java.io.*;
 import java.util.List;
 
 import static com.venta.zipus.helpers.SelectValues.PAGE_SIZES;
+import static com.venta.zipus.helpers.SelectValues.PUBLICATION_TYPES;
 import static com.venta.zipus.helpers.UserHelper.getCurrentUsername;
 import static java.util.Arrays.asList;
 
@@ -253,9 +253,8 @@ public class PublicationController {
             }
 
             String spliter = publication.getAuthorsInput().contains(", ") ? ", " : ",";
-            System.out.println("input : " + publication.getAuthorsInput());
             List<String> authorList = asList(publication.getAuthorsInput().split(spliter));
-            System.out.println("list" + authorList);
+
             for (String listEntry : authorList) {
                 String name = listEntry.split(" ")[0];
                 String surname = listEntry.split(" ")[1];
@@ -263,7 +262,6 @@ public class PublicationController {
                 authorService.addNewAuthor(tempAuthor);
                 Author theNewAuthor = authorService.findAuthorByNameAndSurname(name, surname);
 
-                System.out.println("Author in db : " + theNewAuthor);
                 try {
                     publication.addAuthor(theNewAuthor);
                 } catch (Exception e) {
@@ -298,8 +296,13 @@ public class PublicationController {
 
     @GetMapping(value = "/{id}") // id for added publication
     public String getPublicationById(@PathVariable(name = "id") long id, Model model) throws IOException {
+
         Publication pub = publicationService.getPublicationById(id);
+        User user = userService.getUserByUsername(getCurrentUsername());
+        boolean isThisMyPublication = publicationService.isThisMyPublication(user, id);
+
         model.addAttribute("publication", pub);
+        model.addAttribute("isThisMyPublication", isThisMyPublication);
 
         try (InputStream inputStream = new ByteArrayInputStream(pub.getPubFile());
              ByteArrayOutputStream targetStream = new ByteArrayOutputStream()) {
@@ -309,6 +312,55 @@ public class PublicationController {
 
 
         return "publication-page";
+    }
+
+    @GetMapping(value = "{id}/delete") // id for added publication
+    public String publicationDelete(@PathVariable(name = "id") long id, Model model) throws IOException {
+        Publication pub = publicationService.getPublicationById(id);
+        User user = userService.getUserByUsername(getCurrentUsername());
+        boolean isThisMyPublication = publicationService.isThisMyPublication(user, id);
+
+        if (isThisMyPublication) {
+            //here should be deletion
+            publicationService.deletePublication(pub);
+            return "redirect:/publications/my-publications/";
+        }
+
+        return "redirect:/publications/{id}";
+    }
+
+    @GetMapping(value = "{id}/edit")
+    public String getPublicationEdit(@PathVariable(name = "id") long id, Model model) {
+        Publication publication = publicationService.getPublicationById(id);
+        model.addAttribute("pub", publication);
+        String groupName = publication.getPubType().getPublicationGroup().getPubTypeGroupName();
+        if (groupName.equals(PublicationTypeGroupTitles.GROUP_BOOK)) {
+            return "edit-book-publication-page";
+        } else if (groupName.equals(PublicationTypeGroupTitles.GROUP_MAGAZINE)) {
+            return "edit-magazine-publication-page";
+        } else {
+            return "edit-conference-publication-page";
+        }
+    }
+
+    @PostMapping(value = "{id}/edit")
+    public String publicationEdit(@PathVariable(name = "id") long id, Model model) {
+
+        return "redirect:/publications/{id}";
+    }
+
+    @GetMapping(value = "{id}/delete-confirm") // id for added publication
+    public String confirmPublicationDelete(@PathVariable(name = "id") long id, Model model) {
+        User user = userService.getUserByUsername(getCurrentUsername());
+        Publication pub = publicationService.getPublicationById(id);
+        boolean isThisMyPublication = publicationService.isThisMyPublication(user, id);
+        if (isThisMyPublication) {
+            model.addAttribute("publication", pub);
+            model.addAttribute("pubID", id);
+            model.addAttribute("isThisMyPublication", true);
+            return "confirmation-delete";
+        }
+        return "redirect:/publications/{id}";
     }
 
     @GetMapping("/downloadFile/{pubId}")
