@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mans profils</title>
+</head>
+<body th:object="${user}">
+<div class="card-2 topnav">
+    <div class="bar left green">
+        <a class="bar-item button" th:href="@{/home}">Home</a>
+        <a class="topnav-icons fa right bar-item button" th:href="@{/logout}">Izlogoties</a>
+    </div>
+</div>
+</body>
+<h2 th:text="${user.getUsername()}"></h2>
+
+<div>
+    <label>Vārds</label>
+    <p th:text="${user.getName()}"></p>
+</div>
+
+<div>
+    <label>Uzvārds</label>
+    <p th:text="${user.getSurname()}"></p>
+</div>
+
+<div>
+    <label>E-pasts</label>
+    <p th:text="${user.getEmail()}"></p>
+</div>
+
+<div>
+    <label>Lietotāja tips</label>
+    <p th:each="auth : ${user.getAuthorities()}
+				" th:text="${auth.getRoleTitle()}"></p>
+</div>
+
+<div>
+    <label>Manas publikācijas</label>
+    <p>IEVIEST NĀKOTNĒ</p>
+</div>
+
+
+<a th:href="@{/home}">Uz sākumu</a>
+
+</body>
+</html>

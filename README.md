@@ -41,10 +41,10 @@ package com.bergmanis.SimpleApplication.controllers;
    import org.springframework.web.bind.annotation.GetMapping;
    @Controller
    public class SimpleController {
-       @GetMapping("/hello") // endpoint for localhost:8080
+       @GetMapping("/login") // endpoint for localhost:8080
        public String showHelloPage() {
-           System.out.println("showHelloPage");
-           return "hellopage";// this should show html "Hello my dude"
+           System.out.println("showLoginPage");
+           return "login-page";// this should show html "Hello my dude"
        }
    }
 ```
@@ -80,3 +80,18 @@ Many to Many
 
 ##Lombok
 
+##Dependency issues
+
+```<dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+```
+
+will fix `import org.apache.commons.io.IOUtils;` not being found
+
+# building urls withs thymeleaf
+
+th:form action doesn't use `'` when using url an url with params
+th:href uses `'` when adding url and url with parameters

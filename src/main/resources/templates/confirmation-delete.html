@@ -1,0 +1,23 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+    <title tiles:fragment="title">Login user</title>
+</head>
+<body>
+<div tiles:fragment="content">
+    <span th:text="'Vai dzēst publikāciju ar nosaukumu: ' + ${publication.getPublicationTitleOrigin()} + ' ?'"></span>
+    <form th:action="@{/publications/{id}/delete/(id=${pubID})}" enctype="utf8">
+        <fieldset>
+            <legend>Apstiprināt publikācijas dzēšanu</legend>
+            <button type="" class="btn">Apstiprināt</button>
+        </fieldset>
+    </form>
+
+    <form th:action="@{/publications/{id}(id=${pubID})}" enctype="utf8">
+        <fieldset>
+            <legend>Atcelt</legend>
+            <button type="" class="btn">Atcelt</button>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>
